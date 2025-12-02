@@ -24,13 +24,108 @@ document.addEventListener('DOMContentLoaded', () => {
     initMagneticButtons();
 });
 
-// Loader
+// Loader with Progress
 function initLoader() {
     const loader = document.querySelector('.loader');
+    const percentEl = document.getElementById('loader-percent');
+    const fillEl = document.getElementById('loader-fill');
+    const binaryEl = document.getElementById('binary-text');
+    const hexEl = document.getElementById('hex-text');
+    
+    let progress = 0;
+    const totalAssets = document.querySelectorAll('img').length + 5; // images + other assets
+    let loadedAssets = 0;
+    
+    // ASCII binary of "VIKASH GUPTA" - each character converted to 8-bit binary
+    const name = "VIKASH GUPTA";
+    const binaryChars = name.split('').map(char => char.charCodeAt(0).toString(2).padStart(8, '0'));
+    let binaryIndex = 0;
+    
+    // Generate scrolling binary from name ASCII
+    function generateBinary() {
+        // Show 4 characters worth of binary (32 bits) at a time, scrolling through
+        let result = '';
+        for (let i = 0; i < 4; i++) {
+            result += binaryChars[(binaryIndex + i) % binaryChars.length];
+        }
+        binaryIndex = (binaryIndex + 1) % binaryChars.length;
+        return result;
+    }
+    
+    // Generate random hex string
+    function generateHex() {
+        const hex = Math.floor(Math.random() * 0xFFFFFFFF).toString(16).toUpperCase().padStart(8, '0');
+        return '0x ' + hex;
+    }
+    
+    // Update binary and hex text periodically
+    const binaryInterval = setInterval(() => {
+        if (binaryEl) binaryEl.textContent = generateBinary();
+        if (hexEl) hexEl.textContent = generateHex();
+    }, 150);
+    
+    // Track image loading
+    const images = document.querySelectorAll('img');
+    images.forEach(img => {
+        if (img.complete) {
+            loadedAssets++;
+        } else {
+            img.addEventListener('load', () => {
+                loadedAssets++;
+                updateProgress();
+            });
+            img.addEventListener('error', () => {
+                loadedAssets++;
+                updateProgress();
+            });
+        }
+    });
+    
+    // Simulate progress for non-trackable assets
+    function simulateProgress() {
+        if (progress < 100) {
+            // Speed up as we get closer to completion
+            const increment = progress < 70 ? Math.random() * 3 + 1 : Math.random() * 5 + 2;
+            progress = Math.min(progress + increment, 100);
+            updateDisplay();
+            
+            if (progress < 100) {
+                setTimeout(simulateProgress, 50 + Math.random() * 100);
+            } else {
+                finishLoading();
+            }
+        }
+    }
+    
+    function updateProgress() {
+        const imageProgress = (loadedAssets / totalAssets) * 100;
+        progress = Math.max(progress, imageProgress);
+        updateDisplay();
+    }
+    
+    function updateDisplay() {
+        const displayProgress = Math.floor(progress);
+        if (percentEl) percentEl.textContent = String(displayProgress).padStart(3, '0');
+        if (fillEl) fillEl.style.width = progress + '%';
+    }
+    
+    function finishLoading() {
+        clearInterval(binaryInterval);
+        setTimeout(() => {
+            loader.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }, 300);
+    }
+    
+    // Start simulated progress
+    simulateProgress();
+    
+    // Fallback: force hide after max time
     setTimeout(() => {
-        loader.classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    }, 2500);
+        progress = 100;
+        updateDisplay();
+        finishLoading();
+    }, 4000);
 }
 
 // Custom Cursor
