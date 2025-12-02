@@ -1,214 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vikash's Portfolio</title>
-    <link rel="icon" href="images/icons8-working-with-a-laptop-64.png" type="image/png">
+    <meta name="description" content="Vikash Gupta - Full Stack Developer Portfolio">
+    <title>Vikash Gupta | Developer Portfolio</title>
+    <link rel="icon" href="assests/images/icons8-developer-64.png" type="image/png">
     <link rel="stylesheet" href="style.css">
-    <!-- icon -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
+<body class="dark-mode">
+    <div class="scroll-progress"></div>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
 
-<body>
-<!-- Include click sound -->
-    <audio id="click-sound" src="assests/mixkit-sci-fi-click-900.mp3" preload="auto"></audio>
-    <!-- scrol top  -->
-    <a href="#home" class="scroll-top">
-        <i class='bx bx-up-arrow-alt'></i>
-    </a>
-    <header>
-        <!-- nav  -->
-        <div class="nav contatiner">
-            <!-- logo -->
-                <div class="logo-container">
-    <a href="#" class="logo">VIKASH</a>
-    <span class="separator">|</span>
-    <a href="https://alpha-coders.vercel.app/" class="logo" target="_blank" rel="noopener noreferrer">Alpha Coders</a>
-    <a href="https://vikash-dev-portfolio.vercel.app/" class="latest-portfolio-btn" target="_blank" rel="noopener noreferrer">Latest Portfolio</a>
+    <!-- Loader -->
+    <div class="loader">
+        <div class="loader-terminal">
+            <div class="terminal-header">
+                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                <span class="terminal-title">vikash@portfolio ~</span>
+            </div>
+            <div class="terminal-body">
+                <div class="terminal-line"><span class="prompt">$</span> <span class="typing-loader">initializing portfolio...</span></div>
+            </div>
+            <div class="loader-bar"></div>
+        </div>
     </div>
-<style>
-  .latest-portfolio-btn {
-    display: inline-block;
-    margin-left: 15px;
-    padding: 6px 16px;
-    background: linear-gradient(90deg, #0f2027 0%, #2c5364 100%);
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    font-weight: bold;
-    text-decoration: none;
-    transition: background 0.3s, color 0.3s;
-    box-shadow: 0 2px 8px rgba(44,83,100,0.15);
-  }
-  .latest-portfolio-btn:hover {
-    background: linear-gradient(90deg, #2c5364 0%, #0f2027 100%);
-    color: #ffd700;
-  }
-</style>
 
+    <!-- Controls -->
+    <div class="music-toggle" title="Toggle Music"><i class="bx bx-volume-mute" id="music-icon"></i></div>
+    <audio id="lofi-music" loop src="assests/Sound/333039__christopherderp__videogame-menu-button-clicking-sound-12.mp3"></audio>
+    <div class="theme-toggle" title="Toggle Theme"><i class="bx bx-moon" id="theme-icon"></i></div>
 
-
-            <!-- navigation bar -->
-            <ul class="navbar">
-                <li><img src="images/sun.png" id="icon"></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
-                <li><a href="#portfolio" class="nav-link">Skills</a></li>
-                <li><a href="#services" class="nav-link">Services</a></li>
+    <!-- Navigation -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="#home" class="nav-logo"><span class="bracket">&lt;</span>Vikash<span class="slash">/</span><span class="bracket">&gt;</span></a>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#experience" class="nav-link">Experience</a></li>
+                <li><a href="#github" class="nav-link">GitHub</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
-            <!-- menu icon -->
-            <div class="menu-icon">
-                <div class="line1"></div>
-                <div class="line2"></div>
-                <div class="line3"></div>
-            </div>
-        </div>
+            <div class="nav-toggle" id="nav-toggle"><span></span><span></span><span></span></div>
+        </nav>
     </header>
-    <section class="home contatiner=" id="home">
-        <div class="home-content">
-            <div class="home-img">
-                <img src="images/VikashG2-fotor-20250112134234-removebg-preview.png" alt="">
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+        <div class="hero-bg"><div class="floating-shapes"><div class="shape s1"></div><div class="shape s2"></div><div class="shape s3"></div><div class="shape s4"></div></div><div class="grid-overlay"></div></div>
+        <div class="hero-container container">
+            <div class="hero-content">
+                <div class="hero-badge animate"><span class="badge-dot"></span>Available for work</div>
+                <h1 class="hero-title animate">Hello, I am<br><span class="name">Vikash Gupta</span></h1>
+                <div class="hero-subtitle animate"><span>I build </span><span class="typed-text"></span><span class="cursor-blink">|</span></div>
+                <p class="hero-desc animate">A passionate <span class="highlight">Full Stack Developer</span> crafting beautiful, functional & user-centric digital experiences.</p>
+                <div class="hero-btns animate">
+                    <a href="#projects" class="btn btn-primary magnetic"><span>View My Work</span><i class="bx bx-right-arrow-alt"></i></a>
+                    <a href="#contact" class="btn btn-secondary magnetic"><span>Let us Talk</span><i class="bx bx-message-dots"></i></a>
+                </div>
+                <div class="hero-social animate">
+                    <a href="https://github.com/Vortex-16" target="_blank" class="social-link magnetic"><i class="bx bxl-github"></i></a>
+                    <a href="https://www.linkedin.com/in/vikash-gupta-16devlop/" target="_blank" class="social-link magnetic"><i class="bx bxl-linkedin-square"></i></a>
+                    <a href="https://x.com/GUPTA16VIKASH" target="_blank" class="social-link magnetic"><i class="bx bxl-twitter"></i></a>
+                    <a href="https://www.instagram.com/gupta.16.vikash/" target="_blank" class="social-link magnetic"><i class="bx bxl-instagram"></i></a>
+                </div>
             </div>
-            <div class="home-text">
-                <h3>
-                    HELLO
-                </h3>
-                <h2>I'm <span class="color">Vikash</span></h2>
-                <p>
-                   <span class="color"> "Welcome to my Website!" </span><br> As a passionate student, <p> <span class="color"> I am thrilled to extend my knowledge and expertise in Web Devlopment. </span> <br> Through my website, I aim to showcase the skills I have Mastered,<span class="color"> and a glimpse into the exciting world of technology.</span> </p>
-                </p>
-                <div class="social">
-                        <a href="https://x.com/GUPTA16VIKASH"><i class='bx bxl-twitter'></i></a>
-                            <a href="https://www.instagram.com/gupta.16.vikash/"><i class='bx bxl-instagram'></i>
-                            <a href="https://www.linkedin.com/in/vikash-gupta-16devlop/"><i class='bx bxl-linkedin-square' style='color:#ffffff' ></i></a>
+            <div class="hero-visual animate">
+                <div class="hero-img-wrapper">
+                    <div class="hero-glow"></div>
+                    <img src="assests/images/VikashG BG.jpeg" alt="Vikash" class="hero-img hero-img-dark" loading="eager">
+                    <img src="assests/images/VikashG BGW.jpeg" alt="Vikash" class="hero-img hero-img-light" loading="eager">
+                </div>
+                <div class="orbit"><div class="orbit-icon o1"><i class="bx bxl-react"></i></div><div class="orbit-icon o2"><i class="bx bxl-nodejs"></i></div><div class="orbit-icon o3"><i class="bx bxl-javascript"></i></div><div class="orbit-icon o4"><i class="bx bxl-python"></i></div></div>
+            </div>
+        </div>
+        <div class="scroll-indicator"><div class="mouse"><div class="wheel"></div></div><span>Scroll Down</span></div>
+    </section>
+
+    <!-- About -->
+    <section class="about section" id="about">
+        <div class="container">
+            <div class="section-header"><span class="subtitle animate">Get to know me</span><h2 class="title animate">About Me</h2><div class="title-line"></div></div>
+            <div class="about-content">
+                <div class="about-img-wrap animate-left">
+                    <div class="about-img-container"><div class="about-glow"></div><img src="assests/images/VikashG2.JPG" alt="Vikash" class="about-img" loading="lazy"><div class="exp-badge glass"><span class="exp-num">3+</span><span class="exp-txt">Years of<br>Coding</span></div></div>
+                </div>
+                <div class="about-text animate-right">
+                    <div class="about-card glass">
+                        <div class="card-header"><div class="dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div><span>about_vikash.md</span></div>
+                        <div class="card-body">
+                            <p><span class="comment">// Who am I?</span><br>Hey there! I am a <span class="hl">Computer Science Engineer</span> and <span class="hl">Full Stack Developer</span> with a burning passion for building digital solutions.</p>
+                            <p><span class="comment">// My journey</span><br>Currently pursuing engineering at STCET. From crafting pixel-perfect UIs to architecting robust backend systems, I love every aspect of development.</p>
+                            <p><span class="comment">// What drives me</span><br>I believe in writing clean, maintainable code and creating experiences users love.</p>
+                            <div class="about-tags"><span><i class="bx bx-terminal"></i>Linux Enthusiast</span><span><i class="bx bx-code-block"></i>MERN Stack</span><span><i class="bx bx-brain"></i>Problem Solver</span><span><i class="bx bx-coffee"></i>Coffee Addict</span></div>
+                        </div>
+                    </div>
+                    <a href="assests/doc/Vikash Kumar Gupta.pdf" download class="btn btn-primary magnetic animate"><span>Download Resume</span><i class="bx bx-download"></i></a>
                 </div>
             </div>
         </div>
     </section>
-    <!-- about  -->
-    <section class="about container" id="about">
-        <!-- heading  -->
-        <h2 class="heading">About
-        </h2>
-        <!-- About content  -->
-        <div class="about-content">
-            <div class="about-data">
-                <span>About Me</span>
-                <h2>SOFTWARE DEVELOPER && COMPUTER SCIENCE ENGINEER</h2>
-                <a href="assests/Black Blue Neon Creative Graphic Designer Resume.pdf" class="btn">
-                    Download CV
-                    <i class='bx bxs-download'></i>
-                </a>
-            </div>
-            <div class="about-text">
-                <p>Frontend of My Experinces</p>
-                <p>A deep passion in coding. Over the years, I have expanded my skill set to become a proficient Frontend Developer.</p>
-                <p>This unique blend of engineering principles allows me to approach problems with both analytical rigor and creative solutions.<br>I enjoy transforming complex ideas into functional, user-friendly web applications, bridging the gap between design and technology.</p>
+
+    <!-- Skills -->
+    <section class="skills section" id="skills">
+        <div class="container">
+            <div class="section-header"><span class="subtitle animate">What I know</span><h2 class="title animate">Skills & Technologies</h2><div class="title-line"></div></div>
+            <div class="skills-tabs animate"><button class="tab-btn active" data-tab="languages">Languages</button><button class="tab-btn" data-tab="frontend">Frontend</button><button class="tab-btn" data-tab="backend">Backend</button><button class="tab-btn" data-tab="tools">Tools</button></div>
+            <div class="skills-content">
+                <div class="skills-grid tab-content active" id="languages">
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-java"></i></div><h3>Java</h3><div class="skill-bar"><div class="skill-progress" data-progress="85"></div></div><span class="level">Advanced</span></div>
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-python"></i></div><h3>Python</h3><div class="skill-bar"><div class="skill-progress" data-progress="80"></div></div><span class="level">Advanced</span></div>
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-javascript"></i></div><h3>JavaScript</h3><div class="skill-bar"><div class="skill-progress" data-progress="90"></div></div><span class="level">Advanced</span></div>
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-c-plus-plus"></i></div><h3>C/C++</h3><div class="skill-bar"><div class="skill-progress" data-progress="75"></div></div><span class="level">Intermediate</span></div>
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-typescript"></i></div><h3>TypeScript</h3><div class="skill-bar"><div class="skill-progress" data-progress="70"></div></div><span class="level">Beginner</span></div>
+                </div>
+                <div class="skills-grid tab-content" id="frontend">
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-react"></i></div><h3>React.js</h3><div class="skill-bar"><div class="skill-progress" data-progress="88"></div></div><span class="level">Advanced</span></div>
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-html5"></i></div><h3>HTML5</h3><div class="skill-bar"><div class="skill-progress" data-progress="95"></div></div><span class="level">Expert</span></div>
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-css3"></i></div><h3>CSS3/SCSS</h3><div class="skill-bar"><div class="skill-progress" data-progress="92"></div></div><span class="level">Expert</span></div>
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-tailwind-css"></i></div><h3>Tailwind</h3><div class="skill-bar"><div class="skill-progress" data-progress="85"></div></div><span class="level">Advanced</span></div>
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-bootstrap"></i></div><h3>Bootstrap</h3><div class="skill-bar"><div class="skill-progress" data-progress="80"></div></div><span class="level">Advanced</span></div>
+                </div>
+                <div class="skills-grid tab-content" id="backend">
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-nodejs"></i></div><h3>Node.js</h3><div class="skill-bar"><div class="skill-progress" data-progress="82"></div></div><span class="level">Advanced</span></div>
+                    <div class="skill-card glass animate"><div class="skill-icon express">Ex</div><h3>Express.js</h3><div class="skill-bar"><div class="skill-progress" data-progress="80"></div></div><span class="level">Advanced</span></div>
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-mongodb"></i></div><h3>MongoDB</h3><div class="skill-bar"><div class="skill-progress" data-progress="78"></div></div><span class="level">Intermediate</span></div>
+                    <div class="skill-card glass animate"><div class="skill-icon api">API</div><h3>REST APIs</h3><div class="skill-bar"><div class="skill-progress" data-progress="85"></div></div><span class="level">Advanced</span></div>
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-firebase"></i></div><h3>Firebase</h3><div class="skill-bar"><div class="skill-progress" data-progress="72"></div></div><span class="level">Intermediate</span></div>
+                </div>
+                <div class="skills-grid tab-content" id="tools">
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-git"></i></div><h3>Git</h3><div class="skill-bar"><div class="skill-progress" data-progress="88"></div></div><span class="level">Advanced</span></div>
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-github"></i></div><h3>GitHub</h3><div class="skill-bar"><div class="skill-progress" data-progress="90"></div></div><span class="level">Expert</span></div>
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bxl-visual-studio"></i></div><h3>VS Code</h3><div class="skill-bar"><div class="skill-progress" data-progress="95"></div></div><span class="level">Expert</span></div>
+                    <div class="skill-card glass animate"><div class="skill-icon"><i class="bx bx-terminal"></i></div><h3>Linux</h3><div class="skill-bar"><div class="skill-progress" data-progress="80"></div></div><span class="level">Intermediate</span></div>
+                </div>
             </div>
         </div>
     </section>
-    <section class="services container" id="services">
-        <h2 class="heading">Services</h2>
-        <div class="services-content">
-            <div class="services-box"><i class='bx bx-code-alt'></i>
-                <h2>Web Development</h2>
-                <p>I specialize in HTML5,CSS,React JS,having developed over 12 dynamic and responsive websites in the past three months, delivering efficient, user-centric designs with seamless functionality.</p>
+
+    <!-- Projects -->
+    <section class="projects section" id="projects">
+        <div class="container">
+            <div class="section-header"><span class="subtitle animate">My recent work</span><h2 class="title animate">Featured Projects</h2><div class="title-line"></div></div>
+            <div class="projects-filter animate"><button class="filter-btn active" data-filter="all">All</button><button class="filter-btn" data-filter="web">Web Dev</button><button class="filter-btn" data-filter="app">Applications</button><button class="filter-btn" data-filter="other">Other</button></div>
+            <div class="projects-grid">
+                <article class="project-card glass animate" data-category="web"><div class="project-img"><img src="assests/images/dev.jpg" alt="Web Dev" loading="lazy"><div class="project-overlay"><a href="https://Vortex-16.github.io/web_devlopment/" target="_blank" class="proj-link magnetic"><i class="bx bx-link-external"></i></a><a href="https://github.com/Vortex-16" target="_blank" class="proj-link magnetic"><i class="bx bxl-github"></i></a></div></div><div class="project-content"><div class="tags"><span>HTML5</span><span>CSS3</span><span>JS</span></div><h3>Web Development Portfolio</h3><p>Collection of responsive web projects with modern design patterns.</p></div></article>
+                <article class="project-card glass animate" data-category="app"><div class="project-img"><img src="assests/images/java.png" alt="Java" loading="lazy"><div class="project-overlay"><a href="https://github.com/Vortex-16/JAVA.git" target="_blank" class="proj-link magnetic"><i class="bx bxl-github"></i></a></div></div><div class="project-content"><div class="tags"><span>Java</span><span>OOP</span><span>DSA</span></div><h3>Java Code Repository</h3><p>Comprehensive Java projects covering OOP and algorithms.</p></div></article>
+                <article class="project-card glass animate" data-category="other"><div class="project-img"><img src="assests/images/software.png" alt="Software" loading="lazy"><div class="project-overlay"><a href="#" class="proj-link magnetic"><i class="bx bx-time"></i></a></div></div><div class="project-content"><div class="tags"><span>MERN</span><span>Full Stack</span><span>APIs</span></div><h3>Software Solutions</h3><p>End-to-end software development with scalability focus.</p></div></article>
+                <article class="project-card glass animate" data-category="app"><div class="project-img"><img src="assests/images/c.png" alt="C" loading="lazy"><div class="project-overlay"><a href="https://github.com/Vortex-16/C" target="_blank" class="proj-link magnetic"><i class="bx bxl-github"></i></a></div></div><div class="project-content"><div class="tags"><span>C</span><span>Systems</span><span>Algorithms</span></div><h3>C Programming Projects</h3><p>Low-level programming with memory management.</p></div></article>
+                <article class="project-card glass animate" data-category="web"><div class="project-img placeholder"><i class="bx bx-code-alt"></i><span>Alpha Coders</span></div><div class="project-overlay"><a href="https://alpha-coders.vercel.app/" target="_blank" class="proj-link magnetic"><i class="bx bx-link-external"></i></a></div><div class="project-content"><div class="tags"><span>React</span><span>Vercel</span><span>Team</span></div><h3>Alpha Coders Platform</h3><p>Collaborative coding platform for developers.</p></div></article>
+                <article class="project-card glass animate" data-category="web"><div class="project-img placeholder gradient"><i class="bx bx-user-circle"></i><span>Portfolio v2</span></div><div class="project-overlay"><a href="https://vikash-dev-portfolio.vercel.app/" target="_blank" class="proj-link magnetic"><i class="bx bx-link-external"></i></a></div><div class="project-content"><div class="tags"><span>Modern CSS</span><span>Animations</span><span>Responsive</span></div><h3>Latest Portfolio</h3><p>Modern developer portfolio with smooth animations.</p></div></article>
             </div>
-            <div class="services-box"><a href="https://github.com/vikashgupta16/JAVA.git"><i class='bx bx-code-alt'></i></a>
-            <h2>JAVA CODING</h2>
-                <p>I specialize JAVA in my ICSE && ISC.</p>
-            </div>
-            <div class="services-box"><i class='bx bx-code-alt'></i>
-                <h2>Software Development</h2>
-                <p>I am first year student recently joined STCET. My dream and passion is to be a SOFTWARE DEVELOPER, so I am continuing to learn and apply in my Software Development.</p>
-            </div>
-            
+            <div class="projects-cta animate"><a href="https://github.com/Vortex-16" target="_blank" class="btn btn-secondary magnetic"><span>View All Projects</span><i class="bx bx-right-arrow-alt"></i></a></div>
+        </div>
+    </section>
+
+    <!-- Experience -->
+    <section class="experience section" id="experience">
+        <div class="container">
+            <div class="section-header"><span class="subtitle animate">My journey</span><h2 class="title animate">Experience & Activities</h2><div class="title-line"></div></div>
+            <div class="timeline">
+                <div class="timeline-item animate-left"><div class="timeline-marker"><i class="bx bx-code-alt"></i></div><div class="timeline-content glass"><span class="date">2024 - Present</span><h3>Computer Science Student</h3><p class="place">STCET, Kolkata</p><p>Pursuing B.Tech in CSE. Active in coding clubs, technical events, and hackathons.</p><div class="timeline-tags"><span>DSA</span><span>Web Dev</span><span>Open Source</span></div></div></div>
+                <div class="timeline-item animate-right"><div class="timeline-marker"><i class="bx bx-trophy"></i></div><div class="timeline-content glass"><span class="date">2025 - Present</span><h3>Hackathon Participant</h3><p class="place">Multiple Events</p><p>Built innovative solutions under time constraints. Experience in rapid prototyping.</p><div class="timeline-tags"><span>Team Lead</span><span>Innovation</span><span>Problem Solving</span></div></div></div>
+                <div class="timeline-item animate-left"><div class="timeline-marker"><i class="bx bx-group"></i></div><div class="timeline-content glass"><span class="date">2025</span><h3>Alpha Coders Core Team Member</h3><p class="place">Coding Community</p><p>Contributing to community projects, mentoring beginners, organizing sessions.</p><div class="timeline-tags"><span>Community</span><span>Mentoring</span><span>Collaboration</span></div></div></div>
+                <div class="timeline-item animate-right"><div class="timeline-marker"><i class="bx bx-rocket"></i></div><div class="timeline-content glass"><span class="date">2024 - 2025</span><h3>Self-Taught Developer</h3><p class="place">Online Learning</p><p>Started coding journey with web development. Built 12+ projects in 3 months.</p><div class="timeline-tags"><span>Self-Learning</span><span>Projects</span><span>Growth</span></div></div></div>
             </div>
         </div>
     </section>
-    <section class="portfolio container" id="portfolio">
-        <h2 class="heading">Skills</h2>
-        <div class="portfolio-content">
-            <div class="portfolio-box">
-                <img src="images/dev.jpg" alt="" class="portfolio-img">
-                <div class="portfolio-overlay">
-                    <h2>Web Development</h2>
-                    <a href="https://vikashgupta16.github.io/web_devlopment/">
-                        <i class='bx bx-link-alt'></i>
-                    </a>
+
+    <!-- GitHub -->
+    <section class="github section" id="github">
+        <div class="container">
+            <div class="section-header"><span class="subtitle animate">My contributions</span><h2 class="title animate">GitHub Activity</h2><div class="title-line"></div></div>
+            <div class="github-content">
+                <div class="github-stats animate">
+                    <div class="stat-card glass"><div class="stat-icon"><i class="bx bx-git-repo-forked"></i></div><div class="stat-info"><span class="stat-num" id="github-repos" data-count="0"><i class="bx bx-loader-alt bx-spin"></i></span><span class="stat-label">Public Repos</span></div></div>
+                    <div class="stat-card glass"><div class="stat-icon"><i class="bx bx-git-commit"></i></div><div class="stat-info"><span class="stat-num" id="github-commits" data-count="0"><i class="bx bx-loader-alt bx-spin"></i></span><span class="stat-label">Commits</span></div></div>
+                    <div class="stat-card glass"><div class="stat-icon"><i class="bx bx-star"></i></div><div class="stat-info"><span class="stat-num" id="github-stars" data-count="0"><i class="bx bx-loader-alt bx-spin"></i></span><span class="stat-label">Stars Earned</span></div></div>
+                    <div class="stat-card glass"><div class="stat-icon"><i class="bx bx-git-pull-request"></i></div><div class="stat-info"><span class="stat-num" id="github-prs" data-count="0"><i class="bx bx-loader-alt bx-spin"></i></span><span class="stat-label">Pull Requests</span></div></div>
                 </div>
-            </div> 
-            <div class="portfolio-box">
-                <img src="images/java.png" alt="" class="portfolio-img">
-                <div class="portfolio-overlay">
-                    <h2>JAVA CODE'S</h2>
-                    <a href="https://github.com/vikashgupta16/JAVA.git">
-                        <i class='bx bx-link-alt'></i>
-                    </a>
+                <div class="github-chart animate">
+                    <div class="chart-header"><h3>Contribution Graph</h3></div>
+                    <div class="contribution-graph">
+                        <picture>
+                            <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-activity-graph.vercel.app/graph?username=Vortex-16&theme=github-dark&hide_border=true&area=true">
+                            <source media="(prefers-color-scheme: light)" srcset="https://github-readme-activity-graph.vercel.app/graph?username=Vortex-16&theme=github-light&hide_border=true&area=true">
+                            <img src="https://github-readme-activity-graph.vercel.app/graph?username=Vortex-16&theme=github-dark&hide_border=true&area=true&bg_color=1a1a1a" width="100%" alt="Contribution Graph" class="activity-graph" id="github-activity-graph">
+                        </picture>
+                    </div>
                 </div>
-            </div> 
-            <div class="portfolio-box">
-                <img src="images/software.png" alt="" class="portfolio-img">
-                <div class="portfolio-overlay">
-                    <h2>SOFTWARE DEVLOPING</h2>
-                    <a href="">
-                        <i class='bx bx-link-alt'></i>
-                    </a>
-                </div>
-            </div> 
-            <div class="portfolio-box">
-                <img src="images/c.png" alt="" class="portfolio-img">
-                <div class="portfolio-overlay">
-                    <h2>C CODE'S</h2>
-                    <a href="https://github.com/vikashgupta16/C">
-                        <i class='bx bx-link-alt'></i>
-                    </a>
-                </div>
-            </div>            
-       </div>
+                <div class="github-cta animate"><a href="https://github.com/Vortex-16" target="_blank" class="btn btn-primary magnetic"><i class="bx bxl-github"></i><span>View GitHub Profile</span></a></div>
+            </div>
+        </div>
     </section>
-        <!-- contact  -->
-    <section class="contact conatiner" id="contact">
-        <h2 class="heading">Contact</h2>
-        <!-- contact form  -->
-        <form action="" class="contact-form" id="conatct-form">
-            <input type="text" placeholder="Your Name" class="name" required>
-            <input type="email" name="" id="" placeholder="Email adress" class="email" required>
-            <textarea name="" id="" cols="30" rows="10" placeholder="Enter Your Message" class="message" required></textarea>
-            <input type="submit" value="Send" class="send-btn">
-        </form>
+
+    <!-- Contact -->
+    <section class="contact section" id="contact">
+        <div class="container">
+            <div class="section-header"><span class="subtitle animate">Get in touch</span><h2 class="title animate">Contact Me</h2><div class="title-line"></div></div>
+            <div class="contact-content">
+                <div class="contact-info animate-left">
+                    <div class="info-card glass">
+                        <h3>Let us work together!</h3>
+                        <p>Have a project in mind or just want to chat? Feel free to reach out.</p>
+                        <div class="contact-details">
+                            <div class="contact-item"><div class="c-icon"><i class="bx bx-envelope"></i></div><div class="c-text"><span>Email</span><a href="mailto:vikasharmy811@gmail.com">vikasharmy811@gmail.com</a></div></div>
+                            <div class="contact-item"><div class="c-icon"><i class="bx bx-map"></i></div><div class="c-text"><span>Location</span><span>Kolkata, India</span></div></div>
+                            <div class="contact-item"><div class="c-icon"><i class="bx bx-time"></i></div><div class="c-text"><span>Availability</span><span>Open for opportunities</span></div></div>
+                        </div>
+                        <div class="contact-social">
+                            <a href="https://github.com/Vortex-16" target="_blank" class="social-btn magnetic"><i class="bx bxl-github"></i></a>
+                            <a href="https://www.linkedin.com/in/vikash-gupta-16devlop/" target="_blank" class="social-btn magnetic"><i class="bx bxl-linkedin-square"></i></a>
+                            <a href="https://x.com/GUPTA16VIKASH" target="_blank" class="social-btn magnetic"><i class="bx bxl-twitter"></i></a>
+                            <a href="https://www.instagram.com/gupta.16.vikash/" target="_blank" class="social-btn magnetic"><i class="bx bxl-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form-wrap animate-right">
+                    <form class="contact-form glass" id="contact-form">
+                        <div class="form-group"><label for="name">Your Name</label><input type="text" id="name" name="name" placeholder="John Doe" required><span class="focus-border"></span></div>
+                        <div class="form-group"><label for="email">Your Email</label><input type="email" id="email" name="email" placeholder="john@example.com" required><span class="focus-border"></span></div>
+                        <div class="form-group"><label for="subject">Subject</label><input type="text" id="subject" name="subject" placeholder="Project Discussion" required><span class="focus-border"></span></div>
+                        <div class="form-group"><label for="message">Message</label><textarea id="message" name="message" placeholder="Tell me about your project..." required></textarea><span class="focus-border"></span></div>
+                        <button type="submit" class="btn btn-primary btn-submit magnetic"><span>Send Message</span><i class="bx bx-send"></i></button>
+                    </form>
+                    <div class="form-mascot" id="form-mascot"><div class="car"><div class="car-body"><div class="car-top"></div><div class="car-window"></div></div><div class="wheel wf"></div><div class="wheel wb"></div><div class="exhaust"></div></div><div class="speech-bubble"><span id="mascot-msg">Let us go! </span></div></div>
+                </div>
+            </div>
+        </div>
     </section>
-    <!-- footer  -->
-    <section class="footer container" id="footer">
-        <div class="social">
-        <a href="mailto:vikasharmy811@gmail.com"><i class='bx bxl-gmail'></i></a>
-    <a href="https://www.instagram.com/gupta.16.vikash/?__pwa=1"><i class='bx bxl-instagram'></i></a>
-    <a href="https://github.com/vikashgupta16"><i class='bx bxl-github'></i></a>
-</div>
-<!-- footer link  -->
-<div class="footer-links">
-    <a href="https://www.termsfeed.com/live/519dcaeb-31e5-4104-84e8-fd63bec32dc4">Privacy Policy</a>
-    <a href="https://www.termsfeed.com/live/b5af9c0f-de99-4b72-a24e-61f444baebbb">Terms of use</a>
-    <a href="https://www.termsfeed.com/live/248271ed-09ed-4acf-b163-9879949c475a">Disclaimer</a>
-</div>
-<!-- copyright  -->
-<p>&#169; Vikash Gupta</p>
-    </section>
-    <!-- email js  -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo"><span class="bracket">&lt;</span>Vikash<span class="slash">/</span><span class="bracket">&gt;</span></div>
+                <div class="footer-social">
+                    <a href="mailto:vikasharmy811@gmail.com" class="footer-link magnetic"><i class="bx bxl-gmail"></i></a>
+                    <a href="https://www.instagram.com/gupta.16.vikash/" target="_blank" class="footer-link magnetic"><i class="bx bxl-instagram"></i></a>
+                    <a href="https://github.com/Vortex-16" target="_blank" class="footer-link magnetic"><i class="bx bxl-github"></i></a>
+                    <a href="https://www.linkedin.com/in/vikash-gupta-16devlop/" target="_blank" class="footer-link magnetic"><i class="bx bxl-linkedin-square"></i></a>
+                </div>
+                <div class="footer-links"><a href="https://www.termsfeed.com/live/519dcaeb-31e5-4104-84e8-fd63bec32dc4" target="_blank">Privacy Policy</a><a href="https://www.termsfeed.com/live/b5af9c0f-de99-4b72-a24e-61f444baebbb" target="_blank">Terms of Use</a><a href="https://www.termsfeed.com/live/248271ed-09ed-4acf-b163-9879949c475a" target="_blank">Disclaimer</a></div>
+                <p class="copyright">Crafted with <i class="bx bxs-heart"></i> by Vikash Gupta 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <button class="scroll-top-btn" id="scroll-top"><i class="bx bx-chevron-up"></i></button>
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
- 
-    <script type="text/javascript">
-   (function(){
-      emailjs.init({
-        publicKey: "jS_OjCoYjCk6NEZxd",
-      });
-   })();
-</script>
-    <!-- link to js -->
+    <script>emailjs.init({publicKey:"jS_OjCoYjCk6NEZxd"});</script>
     <script src="script.js"></script>
 </body>
 </html>
