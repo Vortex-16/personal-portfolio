@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initSkillsTabs();
     initProjectsFilter();
     initSkillBars();
-    initGitHubHeatmap();
+    initGitHubStats();    // Fetch real GitHub stats
+    initGitHubGraph();    // Initialize contribution graph with theme support
     initCountUp();
     initContactForm();
     initMascot();
@@ -133,6 +134,9 @@ function initThemeToggle() {
         body.classList.add('light-mode');
         themeIcon.classList.replace('bx-moon', 'bx-sun');
     }
+    
+    // Update graph on initial load
+    updateGitHubGraph(savedTheme);
 
     themeToggle.addEventListener('click', () => {
         body.classList.toggle('dark-mode');
@@ -141,9 +145,11 @@ function initThemeToggle() {
         if (body.classList.contains('light-mode')) {
             themeIcon.classList.replace('bx-moon', 'bx-sun');
             localStorage.setItem('theme', 'light');
+            updateGitHubGraph('light');
         } else {
             themeIcon.classList.replace('bx-sun', 'bx-moon');
             localStorage.setItem('theme', 'dark');
+            updateGitHubGraph('dark');
         }
     });
 }
@@ -305,55 +311,180 @@ function initSkillBars() {
     });
 }
 
-// GitHub Heatmap
-function initGitHubHeatmap() {
-    const heatmap = document.getElementById('heatmap');
-    if (!heatmap) return;
+// ========================================
+// GITHUB API INTEGRATION
+// ========================================
 
-    // Generate random contribution data
-    for (let week = 0; week < 52; week++) {
-        for (let day = 0; day < 7; day++) {
-            const dayEl = document.createElement('div');
-            dayEl.classList.add('heatmap-day');
-            
-            // Random level (0-4)
-            const level = Math.floor(Math.random() * 5);
-            if (level > 0) dayEl.classList.add('l' + level);
-            
-            heatmap.appendChild(dayEl);
+const GITHUB_USERNAME = 'Vortex-16';
+const GITHUB_API_BASE = 'https://api.github.com';
+
+// Cache for GitHub data (localStorage with expiry)
+const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
+
+function getCachedData(key) {
+    const cached = localStorage.getItem(`github_${key}`);
+    if (cached) {
+        const { data, timestamp } = JSON.parse(cached);
+        if (Date.now() - timestamp < CACHE_DURATION) {
+            return data;
         }
+    }
+    return null;
+}
+
+function setCachedData(key, data) {
+    localStorage.setItem(`github_${key}`, JSON.stringify({
+        data,
+        timestamp: Date.now()
+    }));
+}
+
+// Fetch GitHub Stats
+async function initGitHubStats() {
+    try {
+        // Check cache first
+        const cachedStats = getCachedData('stats');
+        if (cachedStats) {
+            updateStatsUI(cachedStats);
+            return;
+        }
+
+        // Fetch user data
+        const userResponse = await fetch(`${GITHUB_API_BASE}/users/${GITHUB_USERNAME}`);
+        const userData = await userResponse.json();
+
+        // Fetch all repositories to calculate stars
+        const reposResponse = await fetch(`${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`);
+        const reposData = await reposResponse.json();
+
+        // Calculate total stars
+        const totalStars = reposData.reduce((acc, repo) => acc + repo.stargazers_count, 0);
+
+        // Fetch commits count (using search API for current year)
+        const currentYear = new Date().getFullYear();
+        const commitsResponse = await fetch(
+            `${GITHUB_API_BASE}/search/commits?q=author:${GITHUB_USERNAME}+committer-date:${currentYear}-01-01..${currentYear}-12-31`,
+            { headers: { 'Accept': 'application/vnd.github.cloak-preview' } }
+        );
+        const commitsData = await commitsResponse.json();
+
+        // Fetch PRs count
+        const prsResponse = await fetch(
+            `${GITHUB_API_BASE}/search/issues?q=author:${GITHUB_USERNAME}+type:pr`
+        );
+        const prsData = await prsResponse.json();
+
+        const stats = {
+            repos: userData.public_repos || 0,
+            stars: totalStars,
+            commits: commitsData.total_count || 0,
+            prs: prsData.total_count || 0
+        };
+
+        // Cache the data
+        setCachedData('stats', stats);
+        updateStatsUI(stats);
+
+    } catch (error) {
+        console.error('Error fetching GitHub stats:', error);
+        // Use fallback values if API fails
+        updateStatsUI({ repos: 20, stars: 15, commits: 500, prs: 30 }, true);
     }
 }
 
-// Count Up Animation
+function updateStatsUI(stats, isFallback = false) {
+    const reposEl = document.getElementById('github-repos');
+    const starsEl = document.getElementById('github-stars');
+    const commitsEl = document.getElementById('github-commits');
+    const prsEl = document.getElementById('github-prs');
+
+    if (reposEl) {
+        reposEl.dataset.count = stats.repos;
+        animateCountUp(reposEl, stats.repos);
+    }
+    if (starsEl) {
+        starsEl.dataset.count = stats.stars;
+        animateCountUp(starsEl, stats.stars);
+    }
+    if (commitsEl) {
+        commitsEl.dataset.count = stats.commits;
+        animateCountUp(commitsEl, stats.commits);
+    }
+    if (prsEl) {
+        prsEl.dataset.count = stats.prs;
+        animateCountUp(prsEl, stats.prs);
+    }
+
+    // Add fallback indicator if using cached/fallback data
+    if (isFallback) {
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.title = 'Using cached data';
+        });
+    }
+}
+
+function animateCountUp(element, target) {
+    element.innerHTML = '0';
+    let current = 0;
+    const duration = 2000;
+    const steps = 60;
+    const increment = target / steps;
+    const stepTime = duration / steps;
+
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            element.textContent = target.toLocaleString() + '+';
+            clearInterval(timer);
+        } else {
+            element.textContent = Math.floor(current).toLocaleString();
+        }
+    }, stepTime);
+}
+
+// GitHub Activity Graph (using github-readme-activity-graph)
+function initGitHubGraph() {
+    const graphImg = document.getElementById('github-activity-graph');
+    if (!graphImg) return;
+    
+    // Set initial theme based on saved preference
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    updateGitHubGraph(savedTheme);
+}
+
+function updateGitHubGraph(theme) {
+    const graphImg = document.getElementById('github-activity-graph');
+    if (!graphImg) return;
+    
+    const username = 'Vortex-16';
+    const baseUrl = 'https://github-readme-activity-graph.vercel.app/graph';
+    
+    if (theme === 'light') {
+        graphImg.src = `${baseUrl}?username=${username}&theme=github-light&hide_border=true&area=true`;
+    } else {
+        graphImg.src = `${baseUrl}?username=${username}&theme=github-dark&hide_border=true&area=true&bg_color=1a1a1a`;
+    }
+}
+
+// Count Up Animation (legacy support for non-GitHub stats)
 function initCountUp() {
-    const counters = document.querySelectorAll('.stat-num');
+    // GitHub stats are handled by initGitHubStats
+    // This function now only handles non-GitHub counters if any exist
+    const counters = document.querySelectorAll('.stat-num:not([id^="github-"])');
     
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const target = parseInt(entry.target.dataset.count);
-                animateCount(entry.target, target);
+                if (target > 0) {
+                    animateCountUp(entry.target, target);
+                }
                 observer.unobserve(entry.target);
             }
         });
     }, { threshold: 0.5 });
 
     counters.forEach(counter => observer.observe(counter));
-}
-
-function animateCount(element, target) {
-    let current = 0;
-    const increment = target / 50;
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            element.textContent = target + '+';
-            clearInterval(timer);
-        } else {
-            element.textContent = Math.floor(current);
-        }
-    }, 30);
 }
 
 // Contact Form

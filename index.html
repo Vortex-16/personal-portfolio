@@ -186,12 +186,21 @@
             <div class="section-header"><span class="subtitle animate">My contributions</span><h2 class="title animate">GitHub Activity</h2><div class="title-line"></div></div>
             <div class="github-content">
                 <div class="github-stats animate">
-                    <div class="stat-card glass"><div class="stat-icon"><i class="bx bx-git-repo-forked"></i></div><div class="stat-info"><span class="stat-num" data-count="20">0</span><span class="stat-label">Public Repos</span></div></div>
-                    <div class="stat-card glass"><div class="stat-icon"><i class="bx bx-git-commit"></i></div><div class="stat-info"><span class="stat-num" data-count="500">0</span><span class="stat-label">Commits</span></div></div>
-                    <div class="stat-card glass"><div class="stat-icon"><i class="bx bx-star"></i></div><div class="stat-info"><span class="stat-num" data-count="15">0</span><span class="stat-label">Stars Earned</span></div></div>
-                    <div class="stat-card glass"><div class="stat-icon"><i class="bx bx-git-pull-request"></i></div><div class="stat-info"><span class="stat-num" data-count="30">0</span><span class="stat-label">Pull Requests</span></div></div>
+                    <div class="stat-card glass"><div class="stat-icon"><i class="bx bx-git-repo-forked"></i></div><div class="stat-info"><span class="stat-num" id="github-repos" data-count="0"><i class="bx bx-loader-alt bx-spin"></i></span><span class="stat-label">Public Repos</span></div></div>
+                    <div class="stat-card glass"><div class="stat-icon"><i class="bx bx-git-commit"></i></div><div class="stat-info"><span class="stat-num" id="github-commits" data-count="0"><i class="bx bx-loader-alt bx-spin"></i></span><span class="stat-label">Commits</span></div></div>
+                    <div class="stat-card glass"><div class="stat-icon"><i class="bx bx-star"></i></div><div class="stat-info"><span class="stat-num" id="github-stars" data-count="0"><i class="bx bx-loader-alt bx-spin"></i></span><span class="stat-label">Stars Earned</span></div></div>
+                    <div class="stat-card glass"><div class="stat-icon"><i class="bx bx-git-pull-request"></i></div><div class="stat-info"><span class="stat-num" id="github-prs" data-count="0"><i class="bx bx-loader-alt bx-spin"></i></span><span class="stat-label">Pull Requests</span></div></div>
                 </div>
-                <div class="github-chart animate"><div class="chart-header"><h3>Contribution Graph</h3><span>2024</span></div><div class="heatmap" id="heatmap"></div><div class="heatmap-legend"><span>Less</span><div class="legend-colors"><span class="l0"></span><span class="l1"></span><span class="l2"></span><span class="l3"></span><span class="l4"></span></div><span>More</span></div></div>
+                <div class="github-chart animate">
+                    <div class="chart-header"><h3>Contribution Graph</h3></div>
+                    <div class="contribution-graph">
+                        <picture>
+                            <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-activity-graph.vercel.app/graph?username=Vortex-16&theme=github-dark&hide_border=true&area=true&bg_color=1a1a1a">
+                            <source media="(prefers-color-scheme: light)" srcset="https://github-readme-activity-graph.vercel.app/graph?username=Vortex-16&theme=github-light&hide_border=true&area=true">
+                            <img src="https://github-readme-activity-graph.vercel.app/graph?username=Vortex-16&theme=github-dark&hide_border=true&area=true&bg_color=1a1a1a" width="100%" alt="Contribution Graph" class="activity-graph" id="github-activity-graph">
+                        </picture>
+                    </div>
+                </div>
                 <div class="github-cta animate"><a href="https://github.com/Vortex-16" target="_blank" class="btn btn-primary magnetic"><i class="bx bxl-github"></i><span>View GitHub Profile</span></a></div>
             </div>
         </div>
