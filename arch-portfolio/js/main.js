@@ -20,6 +20,8 @@ const bootMessages = [
 
 class BootSequence {
     constructor() {
+        this.powerScreen = document.getElementById('power-on-screen');
+        this.powerBtn = document.getElementById('power-on-btn');
         this.bootScreen = document.getElementById('boot-screen');
         this.bootText = document.getElementById('boot-text');
         this.progressBar = document.getElementById('boot-progress');
@@ -33,9 +35,26 @@ class BootSequence {
             return;
         }
 
-        // Wait a moment before starting boot
-        await this.delay(300);
+        // If power screen exists, wait for power button click
+        if (this.powerScreen && this.powerBtn) {
+            this.powerBtn.addEventListener('click', () => this.powerOn());
+        } else {
+            // No power screen, go directly to boot
+            await this.runBootSequence();
+        }
+    }
 
+    async powerOn() {
+        // Hide power screen with animation
+        this.powerScreen.classList.add('hidden');
+
+        // Show and run boot sequence
+        this.bootScreen.style.display = 'flex';
+        await this.delay(500);
+        await this.runBootSequence();
+    }
+
+    async runBootSequence() {
         const totalMessages = bootMessages.length;
 
         // Display boot messages
@@ -390,11 +409,11 @@ function renderSkills() {
 
 function initSkillsTabs() {
     const tabs = document.querySelectorAll('.skill-tab');
-    const contents = document.querySelectorAll('.skills-content');
+    const contents = document.querySelectorAll('.skill-group');
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            const category = tab.dataset.category;
+            const category = tab.dataset.tab;
 
             tabs.forEach(t => t.classList.remove('active'));
             contents.forEach(c => c.classList.remove('active'));

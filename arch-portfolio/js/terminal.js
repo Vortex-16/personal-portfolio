@@ -11,22 +11,22 @@ class Terminal {
         this.commandHistory = [];
         this.historyIndex = -1;
         this.currentPath = '/home/vikash';
-        
+
         if (this.input) {
             this.init();
         }
     }
-    
+
     init() {
         this.input.addEventListener('keydown', (e) => this.handleInput(e));
         this.container?.addEventListener('click', () => this.input.focus());
     }
-    
+
     handleInput(e) {
         if (e.key === 'Enter') {
             const command = this.input.value.trim();
             this.input.value = '';
-            
+
             if (command) {
                 this.commandHistory.push(command);
                 this.historyIndex = this.commandHistory.length;
@@ -62,16 +62,16 @@ class Terminal {
             this.addPrompt();
         }
     }
-    
+
     executeCommand(cmdLine) {
         // Add command to history display
         this.addCommand(cmdLine);
-        
+
         // Parse command and arguments
         const parts = cmdLine.split(/\s+/);
         const cmd = parts[0].toLowerCase();
         const args = parts.slice(1);
-        
+
         // Execute command
         switch (cmd) {
             case 'help':
@@ -149,13 +149,21 @@ class Terminal {
             case 'pacman':
                 this.cmdPacman(args);
                 break;
+            case 'poweroff':
+            case 'shutdown':
+                this.cmdPoweroff();
+                return;
+            case 'reboot':
+            case 'restart':
+                this.cmdReboot();
+                return;
             default:
                 this.addOutput(`bash: ${cmd}: command not found\nType 'help' for available commands.`, 'error');
         }
-        
+
         this.scrollToBottom();
     }
-    
+
     addCommand(cmd) {
         const entry = document.createElement('div');
         entry.className = 'history-entry';
@@ -166,7 +174,7 @@ class Terminal {
         `;
         this.history.appendChild(entry);
     }
-    
+
     addOutput(content, type = '') {
         const lastEntry = this.history.lastElementChild;
         if (lastEntry) {
@@ -176,35 +184,35 @@ class Terminal {
             lastEntry.appendChild(output);
         }
     }
-    
+
     addPrompt() {
         // Just scroll to bottom, prompt is always visible
         this.scrollToBottom();
     }
-    
+
     scrollToBottom() {
         this.history.scrollTop = this.history.scrollHeight;
     }
-    
+
     clearTerminal() {
         this.history.innerHTML = '';
     }
-    
+
     getShortPath() {
         return this.currentPath.replace('/home/vikash', '~');
     }
-    
+
     escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
-    
+
     autoComplete() {
         const currentValue = this.input.value;
         const commands = Object.keys(TERMINAL_COMMANDS);
         const matches = commands.filter(cmd => cmd.startsWith(currentValue));
-        
+
         if (matches.length === 1) {
             this.input.value = matches[0] + ' ';
         } else if (matches.length > 1) {
@@ -212,11 +220,11 @@ class Terminal {
             this.addOutput(matches.join('  '));
         }
     }
-    
+
     // ============================================
     // COMMAND IMPLEMENTATIONS
     // ============================================
-    
+
     cmdHelp(args) {
         if (args.length > 0 && TERMINAL_COMMANDS[args[0]]) {
             const cmd = TERMINAL_COMMANDS[args[0]];
@@ -236,13 +244,13 @@ class Terminal {
             `);
             return;
         }
-        
+
         let output = `
 <div class="help-output">
     <div class="help-section">
         <div class="help-title">Available Commands</div>
 `;
-        
+
         Object.entries(TERMINAL_COMMANDS).forEach(([cmd, info]) => {
             output += `
         <div class="help-cmd">
@@ -251,15 +259,15 @@ class Terminal {
         </div>
 `;
         });
-        
+
         output += `
     </div>
 </div>
         `;
-        
+
         this.addOutput(output);
     }
-    
+
     cmdNeofetch() {
         this.addOutput(`
 <div class="neofetch-output" style="display: flex; gap: 20px;">
@@ -299,89 +307,89 @@ class Terminal {
 </div>
         `);
     }
-    
+
     cmdLs(args) {
         const path = args[0] || this.currentPath;
         const fullPath = this.resolvePath(path);
         const dir = FILE_SYSTEM[fullPath];
-        
+
         if (!dir || dir.type !== 'dir') {
             this.addOutput(`ls: cannot access '${path}': No such file or directory`, 'error');
             return;
         }
-        
+
         let output = '<div class="ls-output">';
         dir.children.forEach(item => {
             const itemPath = fullPath + '/' + item;
             const itemData = FILE_SYSTEM[itemPath];
             const isDir = item.endsWith('/') || (itemData && itemData.type === 'dir');
-            
+
             output += `<span class="ls-item ${isDir ? 'dir' : 'file'}">${item}${isDir && !item.endsWith('/') ? '/' : ''}</span>`;
         });
         output += '</div>';
-        
+
         this.addOutput(output);
     }
-    
+
     cmdCat(args) {
         if (args.length === 0) {
             this.addOutput('cat: missing file operand', 'error');
             return;
         }
-        
+
         const path = this.resolvePath(args[0]);
         const file = FILE_SYSTEM[path];
-        
+
         if (!file) {
             this.addOutput(`cat: ${args[0]}: No such file or directory`, 'error');
             return;
         }
-        
+
         if (file.type === 'dir') {
             this.addOutput(`cat: ${args[0]}: Is a directory`, 'error');
             return;
         }
-        
+
         this.addOutput(`<div class="cat-output">${this.escapeHtml(file.content)}</div>`);
     }
-    
+
     cmdCd(args) {
         if (args.length === 0 || args[0] === '~') {
             this.currentPath = '/home/vikash';
             return;
         }
-        
+
         const newPath = this.resolvePath(args[0]);
         const dir = FILE_SYSTEM[newPath];
-        
+
         if (!dir || dir.type !== 'dir') {
             this.addOutput(`cd: ${args[0]}: No such file or directory`, 'error');
             return;
         }
-        
+
         this.currentPath = newPath;
     }
-    
+
     cmdPwd() {
         this.addOutput(this.currentPath);
     }
-    
+
     cmdWhoami() {
         this.addOutput(USER_DATA.username);
     }
-    
+
     cmdDate() {
         this.addOutput(new Date().toString());
     }
-    
+
     cmdUptime() {
         this.addOutput(`up ${USER_DATA.experience}, 1 user, load average: 0.42, 0.38, 0.35`);
     }
-    
+
     cmdSkills(args) {
         const category = args[0] || 'all';
         let skills = [];
-        
+
         if (category === 'all') {
             skills = [
                 ...SKILLS_DATA.languages,
@@ -395,7 +403,7 @@ class Terminal {
             this.addOutput(`skills: unknown category '${category}'\nAvailable: languages, frontend, backend, tools, all`, 'error');
             return;
         }
-        
+
         let output = `
 <table class="table-output">
     <tr>
@@ -404,7 +412,7 @@ class Terminal {
         <th>Level</th>
     </tr>
 `;
-        
+
         skills.forEach(skill => {
             output += `
     <tr>
@@ -414,26 +422,26 @@ class Terminal {
     </tr>
 `;
         });
-        
+
         output += '</table>';
         this.addOutput(output);
     }
-    
+
     cmdProjects(args) {
         const filter = args[0] || 'all';
         let projects = PROJECTS_DATA;
-        
+
         if (filter !== 'all') {
             projects = PROJECTS_DATA.filter(p => p.category === filter);
         }
-        
+
         if (projects.length === 0) {
             this.addOutput(`No projects found for filter: ${filter}`, 'warning');
             return;
         }
-        
+
         let output = `Found ${projects.length} projects:\n\n`;
-        
+
         projects.forEach((p, i) => {
             output += `<span style="color: var(--accent)">${i + 1}.</span> <span style="color: var(--text); font-weight: 600;">${p.title}</span>\n`;
             output += `   ${p.description}\n`;
@@ -443,10 +451,10 @@ class Terminal {
             }
             output += '\n';
         });
-        
+
         this.addOutput(output);
     }
-    
+
     cmdContact() {
         this.addOutput(`
 <div style="padding: 10px 0;">
@@ -457,12 +465,12 @@ class Terminal {
 </div>
         `);
     }
-    
+
     cmdGithub() {
         window.open(SOCIAL_LINKS.github.url, '_blank');
         this.addOutput(`Opening GitHub profile: ${SOCIAL_LINKS.github.url}`, 'success');
     }
-    
+
     cmdResume() {
         const link = document.createElement('a');
         link.href = '../assests/doc/Vikash-Kr-Gupta-Resume (2).pdf';
@@ -470,25 +478,25 @@ class Terminal {
         link.click();
         this.addOutput('Downloading resume...', 'success');
     }
-    
+
     cmdSocial() {
         let output = '<div style="padding: 10px 0;">';
         output += '<div style="color: var(--accent); font-weight: 600; margin-bottom: 10px;">Social Links</div>';
-        
+
         Object.entries(SOCIAL_LINKS).forEach(([name, data]) => {
             output += `<div><span style="color: var(--mauve)">${name}:</span> <a href="${data.url}" target="_blank" style="color: var(--text)">${data.url}</a></div>`;
         });
-        
+
         output += '</div>';
         this.addOutput(output);
     }
-    
+
     cmdOpen(args) {
         if (args.length === 0) {
             this.addOutput('open: missing window name\nUsage: open <neofetch|terminal|skills|projects|github|mail|files|experience>', 'error');
             return;
         }
-        
+
         const windowId = args[0].toLowerCase();
         if (windowManager && windowManager.windows.has(windowId)) {
             windowManager.openWindow(windowId);
@@ -497,21 +505,21 @@ class Terminal {
             this.addOutput(`open: window '${windowId}' not found`, 'error');
         }
     }
-    
+
     cmdExit() {
         if (windowManager) {
             windowManager.closeWindow('terminal');
         }
     }
-    
+
     cmdSudo(args) {
         if (args.length === 0) {
             this.addOutput('sudo: missing command', 'error');
             return;
         }
-        
+
         const cmd = args.join(' ');
-        
+
         if (cmd.includes('rm -rf /')) {
             this.addOutput(`
 <span style="color: var(--red);">Nice try! 😏</span>
@@ -523,7 +531,7 @@ class Terminal {
             `);
             return;
         }
-        
+
         this.addOutput(`[sudo] password for ${USER_DATA.username}: `, '');
         setTimeout(() => {
             this.addOutput(`
@@ -531,7 +539,7 @@ class Terminal {
             `);
         }, 500);
     }
-    
+
     cmdCowsay(args) {
         const message = args.join(' ') || 'Moo! Hire Vikash!';
         this.addOutput(`
@@ -539,20 +547,20 @@ class Terminal {
  ${'_'.repeat(message.length + 2)}
 < ${message} >
  ${'-'.repeat(message.length + 2)}
-        \\   ^__^
-         \\  (oo)\\_______
-            (__)\\       )\\/\\
-                ||----w |
-                ||     ||
+        \\   ^__^                   ||   || ||----  |        |             @
+         \\  (oo)\\_______          ||   || ||      |        |         (      )
+            (__)\\       )\\/  //   ||___|| ||----  |        |      (           )
+                ||----w |   \\//    ||   || ||      |        |         (     )
+                ||     ||           ||   || ||----  |_______ |______      u
 </pre>
         `);
     }
-    
+
     cmdFortune() {
         const fortune = FORTUNE_MESSAGES[Math.floor(Math.random() * FORTUNE_MESSAGES.length)];
         this.addOutput(`<div style="color: var(--text); font-style: italic; padding: 10px 0;">"${fortune}"</div>`);
     }
-    
+
     cmdMatrix() {
         this.addOutput('<span style="color: var(--green);">Wake up, Neo...</span>');
         setTimeout(() => {
@@ -562,11 +570,11 @@ class Terminal {
             this.addOutput('<span style="color: var(--green);">Follow the white rabbit. 🐰</span>');
         }, 2000);
     }
-    
+
     cmdEcho(args) {
         this.addOutput(args.join(' '));
     }
-    
+
     cmdUname(args) {
         if (args.includes('-a')) {
             this.addOutput('Linux arch 6.7.0-arch1 #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux');
@@ -574,7 +582,7 @@ class Terminal {
             this.addOutput('Linux');
         }
     }
-    
+
     cmdPacman(args) {
         if (args[0] === '-Qi') {
             this.cmdSkills(args.slice(1));
@@ -598,22 +606,56 @@ Operations:
             `);
         }
     }
-    
+
+    cmdPoweroff() {
+        this.addOutput(`
+<span style="color: var(--yellow);">::  Stopping all running processes...</span>
+<span style="color: var(--green);">[  OK  ]</span> Stopped portfolio services.
+<span style="color: var(--green);">[  OK  ]</span> Saved session state.
+<span style="color: var(--text);">::  System is powering off...</span>
+        `);
+
+        setTimeout(() => {
+            document.body.style.transition = 'all 1.5s ease';
+            document.body.style.opacity = '0';
+            document.body.style.filter = 'brightness(0)';
+
+            setTimeout(() => {
+                document.body.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #000; color: #888; font-family: monospace;"><div style="font-size: 14px; margin-bottom: 20px;">System is powered off.</div><button onclick="location.reload()" style="padding: 10px 24px; background: #1a1a2e; color: #cdd6f4; border: 1px solid #45475a; border-radius: 6px; cursor: pointer; font-family: monospace;">⏻ Power On</button></div>';
+                document.body.style.opacity = '1';
+                document.body.style.filter = '';
+            }, 1500);
+        }, 800);
+    }
+
+    cmdReboot() {
+        this.addOutput(`
+<span style="color: var(--yellow);">::  Rebooting system...</span>
+<span style="color: var(--green);">[  OK  ]</span> Stopped portfolio services.
+<span style="color: var(--green);">[  OK  ]</span> Saved session state.
+<span style="color: var(--text);">::  System is rebooting...</span>
+        `);
+
+        setTimeout(() => {
+            location.reload();
+        }, 1200);
+    }
+
     resolvePath(path) {
         if (path.startsWith('/')) {
             return path;
         }
-        
+
         if (path.startsWith('~')) {
             return '/home/vikash' + path.slice(1);
         }
-        
+
         if (path === '..') {
             const parts = this.currentPath.split('/');
             parts.pop();
             return parts.join('/') || '/';
         }
-        
+
         return this.currentPath + '/' + path;
     }
 }

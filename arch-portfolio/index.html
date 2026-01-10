@@ -28,9 +28,26 @@
 <body class="hyprland-desktop">
 
     <!-- ============================================
+         POWER ON SCREEN - Entry Point
+    ============================================ -->
+    <div class="power-on-screen" id="power-on-screen">
+        <div class="pc-monitor">
+            <div class="monitor-frame">
+                <div class="monitor-screen">
+                    <div class="power-off-text">Press power to boot</div>
+                </div>
+                <div class="monitor-stand"></div>
+            </div>
+            <button class="power-on-btn" id="power-on-btn" title="Power On">
+                <span class="power-icon-glow">⏻</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ============================================
          BOOT SEQUENCE - Arch Linux Style
     ============================================ -->
-    <div class="boot-screen" id="boot-screen">
+    <div class="boot-screen" id="boot-screen" style="display: none;">
         <div class="boot-content">
             <pre class="boot-logo">
                    -`                    
@@ -194,7 +211,7 @@
                                 </pre>
                             </div>
                             <div class="neofetch-right">
-                                <div class="neofetch-line"><span class="neo-user">vikash</span><span
+                                <div class="neofetch-line"><span class="neo-user">vortex</span><span
                                         class="neo-at">@</span><span class="neo-host">arch</span></div>
                                 <div class="neofetch-separator">----------------</div>
                                 <div class="neofetch-line"><span class="neo-label">OS:</span> <span
@@ -274,7 +291,7 @@
                     <div class="window-titlebar">
                         <div class="titlebar-left">
                             <i data-lucide="terminal" class="window-icon"></i>
-                            <span class="window-title">kitty - vikash@arch:~</span>
+                            <span class="window-title">kitty - vortex@arch:~</span>
                         </div>
                         <div class="titlebar-controls">
                             <button class="control minimize" title="Minimize"><i data-lucide="minus"></i></button>
@@ -352,7 +369,7 @@
                                     <div class="package-item">
                                         <div class="package-header">
                                             <span class="pkg-name">python</span>
-                                            <span class="pkg-version">3.11.4-1</span>
+                                            <span class="pkg-version">3.14</span>
                                         </div>
                                         <div class="package-info">
                                             <span class="info-label">Description :</span> High-level programming
@@ -385,7 +402,7 @@
                                     </div>
                                     <div class="package-item">
                                         <div class="package-header">
-                                            <span class="pkg-name">c-cpp</span>
+                                            <span class="pkg-name">C</span>
                                             <span class="pkg-version">20-1</span>
                                         </div>
                                         <div class="package-info">
@@ -742,21 +759,21 @@
                                     <div class="meter-bar">
                                         <div class="meter-fill commits" id="commits-meter"></div>
                                     </div>
-                                    <span class="meter-value" id="github-commits">0</span>
+                                    <span class="meter-value" id="github-commits">1880+</span>
                                 </div>
                                 <div class="meter">
                                     <span class="meter-label">Stars</span>
                                     <div class="meter-bar">
                                         <div class="meter-fill stars" id="stars-meter"></div>
                                     </div>
-                                    <span class="meter-value" id="github-stars">0</span>
+                                    <span class="meter-value" id="github-stars">31+</span>
                                 </div>
                                 <div class="meter">
                                     <span class="meter-label">PRs</span>
                                     <div class="meter-bar">
                                         <div class="meter-fill prs" id="prs-meter"></div>
                                     </div>
-                                    <span class="meter-value" id="github-prs">0</span>
+                                    <span class="meter-value" id="github-prs">18</span>
                                 </div>
                             </div>
                         </div>
@@ -941,7 +958,7 @@
 ║  SKILLS                                  ║
 ║  ──────                                  ║
 ║  Languages: Java, Python, JavaScript,    ║
-║             C/C++, TypeScript            ║
+║             C, TypeScript                ║
 ║  Frontend:  React, HTML5, CSS3,          ║
 ║             Tailwind, Bootstrap          ║
 ║  Backend:   Node.js, Express, MongoDB    ║
@@ -949,7 +966,7 @@
 ║                                          ║
 ║  PROJECTS                                ║
 ║  ────────                                ║
-║  • 12+ Web Development Projects          ║
+║  • 32+ Web Development Projects          ║
 ║  • Real-time Chat Applications           ║
 ║  • AI-Powered Web Apps                   ║
 ║  • Educational Platforms                 ║
@@ -996,7 +1013,7 @@
                                 <div class="timeline-content">
                                     <div class="timeline-date">2024 - Present</div>
                                     <div class="timeline-title">Computer Science Student</div>
-                                    <div class="timeline-place">󰑴 STCET, Kolkata</div>
+                                    <div class="timeline-place">🎓 STCET, Kolkata</div>
                                     <div class="timeline-desc">Pursuing B.Tech in CSE. Active in coding clubs, technical
                                         events, and hackathons.</div>
                                     <div class="timeline-tags">
@@ -1011,7 +1028,7 @@
                                 <div class="timeline-content">
                                     <div class="timeline-date">2025 - Present</div>
                                     <div class="timeline-title">Hackathon Participant</div>
-                                    <div class="timeline-place">󰆧 Multiple Events</div>
+                                    <div class="timeline-place">⚜️ Multiple Events</div>
                                     <div class="timeline-desc">Built innovative solutions under time constraints.
                                         Experience in rapid prototyping.</div>
                                     <div class="timeline-tags">
@@ -1026,7 +1043,7 @@
                                 <div class="timeline-content">
                                     <div class="timeline-date">2025</div>
                                     <div class="timeline-title">Alpha Coders Core Team Member</div>
-                                    <div class="timeline-place">󰡉 Coding Community</div>
+                                    <div class="timeline-place">💻 Coding Community</div>
                                     <div class="timeline-desc">Contributing to community projects, mentoring beginners,
                                         organizing sessions.</div>
                                     <div class="timeline-tags">
@@ -1041,7 +1058,7 @@
                                 <div class="timeline-content">
                                     <div class="timeline-date">2024 - 2025</div>
                                     <div class="timeline-title">Self-Taught Developer</div>
-                                    <div class="timeline-place">󰌢 Online Learning</div>
+                                    <div class="timeline-place">🕵️ Online Learning</div>
                                     <div class="timeline-desc">Started coding journey with web development. Built 12+
                                         projects in 3 months.</div>
                                     <div class="timeline-tags">

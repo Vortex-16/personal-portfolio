@@ -31,19 +31,15 @@ class WindowManager {
             this.addResizeHandles(window);
         });
 
-        // Setup desktop icons
+
         this.setupDesktopIcons();
 
-        // Setup dock
         this.setupDock();
 
-        // Position windows initially
         this.positionWindows();
 
-        // Open neofetch by default
         setTimeout(() => this.openWindow('neofetch'), 100);
 
-        // Workspace State
         this.currentWorkspace = 1;
         this.windowWorkspaces = new Map(); // windowId -> workspaceNum
         this.switchWorkspace(1);
@@ -53,31 +49,24 @@ class WindowManager {
         if (this.currentWorkspace !== workspaceNum) {
             this.currentWorkspace = workspaceNum;
 
-            // Update Waybar UI
             document.querySelectorAll('.workspace').forEach(ws => {
                 ws.classList.toggle('active', parseInt(ws.textContent) === workspaceNum);
             });
         }
 
-        // Show/Hide windows based on workspace
         this.windows.forEach((data, windowId) => {
             const windowWs = this.windowWorkspaces.get(windowId) || 1; // Default to WS 1
             const windowEl = data.element;
 
             if (windowWs === workspaceNum) {
-                windowEl.style.display = 'flex'; // Restore display
+                windowEl.style.display = 'flex'; 
                 if (data.minimized) {
                     windowEl.classList.add('minimized');
                 } else {
                     windowEl.classList.remove('workspace-hidden');
-                    // data.visible check is managed by open/close logic, 
-                    // but we ensure it's not hidden by display:none unless closed
                 }
             } else {
-                // Hide window from other workspaces
                 windowEl.classList.add('workspace-hidden');
-                // We don't change 'display' to none directly if we want to keep animations, 
-                // but for simple hiding, a class is best.
             }
         });
     }
@@ -248,34 +237,26 @@ class WindowManager {
     }
 
     setupDesktopIcons() {
-        // Desktop icons only (not mobile drawer)
         const desktopIcons = document.querySelectorAll('#desktop-icons .desktop-icon');
 
         desktopIcons.forEach(icon => {
-            // Mobile tap support & Desktop selection
             let tapCount = 0;
 
             icon.addEventListener('click', (e) => {
                 e.preventDefault();
-                // Remove active class from other icons
                 desktopIcons.forEach(i => i.classList.remove('active'));
-                // Add active class to clicked icon
                 icon.classList.add('active');
 
-                // Open window on single click (Dock/Launcher behavior)
                 const windowId = icon.dataset.window;
 
-                // Add launch animation class
                 icon.classList.add('launching');
                 setTimeout(() => icon.classList.remove('launching'), 600);
 
                 this.openWindow(windowId);
             });
 
-            // Removed double-click listener as we now use single-click
         });
 
-        // Deselect on desktop click
         const desktopArea = document.getElementById('desktop-area');
         if (desktopArea) {
             desktopArea.addEventListener('click', (e) => {
@@ -324,11 +305,9 @@ class WindowManager {
 
         const window = windowData.element;
 
-        // Assign to current workspace if not assigned
         if (!this.windowWorkspaces.has(windowId)) {
             this.assignWindowToWorkspace(windowId, this.currentWorkspace);
         } else {
-            // If already assigned, switch to that workspace
             const targetWs = this.windowWorkspaces.get(windowId);
             if (targetWs && targetWs !== this.currentWorkspace) {
                 this.switchWorkspace(targetWs);
@@ -336,25 +315,25 @@ class WindowManager {
         }
 
         if (windowData.minimized) {
-            // restoreWindow handles workspace switching too, but redundant check doesn't hurt
             this.restoreWindow(windowId);
             return;
         }
 
         window.style.display = 'flex';
 
-        // Remove workspace-hidden if it was there (should be handled by switchWorkspace but safe to ensure)
         window.classList.remove('workspace-hidden');
 
         window.classList.add('opening');
 
+        // Force reflow
+        void window.offsetWidth;
+
         setTimeout(() => {
-            window.classList.add('visible');
-            window.classList.remove('opening', 'closed');
+            window.classList.add('active');
+            window.classList.remove('opening');
         }, 10);
 
         setTimeout(() => {
-            // Cleanup animation class if needed, strictly
         }, 300);
 
         this.focusWindow(windowId);
@@ -368,6 +347,7 @@ class WindowManager {
         const windowData = this.windows.get(windowId);
 
         const window = windowData.element;
+        window.classList.remove('active');
         window.classList.add('closing');
 
         setTimeout(() => {
@@ -382,7 +362,7 @@ class WindowManager {
                 this.activeWindow = null;
                 this.updateActiveWindowTitle(null);
             }
-        }, 200);
+        }, 300);
     }
 
     minimizeWindow(windowId) {
@@ -437,7 +417,6 @@ class WindowManager {
             window.style.height = windowData.size.height + 'px';
             windowData.maximized = false;
         } else {
-            // Save current position/size
             windowData.position = {
                 x: window.offsetLeft,
                 y: window.offsetTop
@@ -447,7 +426,6 @@ class WindowManager {
                 height: window.offsetHeight
             };
 
-            // Maximize
             window.classList.add('fullscreen', 'maximizing');
             setTimeout(() => window.classList.remove('maximizing'), 200);
             windowData.maximized = true;
@@ -458,12 +436,11 @@ class WindowManager {
         const windowData = this.windows.get(windowId);
         if (!windowData) return;
 
-        // Remove focus from all windows
         this.windows.forEach((data) => {
             data.element.classList.remove('focused');
         });
 
-        // Focus the target window
+        // Focus target window
         this.highestZIndex++;
         windowData.element.style.zIndex = this.highestZIndex;
         windowData.element.classList.add('focused');
@@ -476,13 +453,11 @@ class WindowManager {
         const dock = document.getElementById('dock-items');
         if (!dock) return;
 
-        // Check if already exists
         if (dock.querySelector(`[data-window="${windowId}"]`)) return;
 
         const windowData = this.windows.get(windowId);
         const window = windowData.element;
 
-        // Get icon name from data-lucide attribute
         const iconEl = window.querySelector('.window-icon');
         const iconName = iconEl?.getAttribute('data-lucide');
         const title = window.querySelector('.window-title')?.textContent || windowId;
@@ -495,14 +470,12 @@ class WindowManager {
         if (iconName) {
             dockItem.innerHTML = `<i data-lucide="${iconName}" class="dock-icon"></i>`;
         } else {
-            // Fallback for non-lucide or text icons
-            const iconText = iconEl?.textContent || '󰣇';
+            const iconText = iconEl?.textContent || '🪟';
             dockItem.innerHTML = `<span class="dock-icon">${iconText}</span>`;
         }
 
         dock.appendChild(dockItem);
 
-        // Render the new icon
         if (typeof lucide !== 'undefined') {
             lucide.createIcons({
                 root: dockItem
@@ -511,7 +484,6 @@ class WindowManager {
     }
 
     restoreWindow(windowId) {
-        // Switch to window's workspace if needed
         const targetWs = this.windowWorkspaces.get(windowId);
         if (targetWs && targetWs !== this.currentWorkspace) {
             this.switchWorkspace(targetWs);
@@ -551,22 +523,11 @@ class WindowManager {
         if (!windowData) return;
 
         const window = windowData.element;
-        // Looking for icon inside window-titlebar -> titlebar-left -> window-icon (lucide)
         const iconEl = window.querySelector('.window-titlebar .window-icon');
-        // We need to clone it or get its content. Lucide icons are SVGs. 
-        // We can just grab the outerHTML or if it's text content (legacy).
-        // Since we switched to Lucide, we should copy the SVG or create a new one.
-        // For simplicity in this text context, we'll try to match the data-lucide attribute.
 
-        const title = windowId; // Or get from window title text
+        const title = windowId; 
 
         titleEl.querySelector('.window-name').textContent = title;
-        // For icon, if it's lucide, we need to re-render or copy.
-        // Simplified: just update text if it was text, or re-run lucide if needed.
-        // But active-window-title has an i tag with data-lucide presumably. 
-        // We'll update that data-lucide attribute.
-
-        // Let's check what the window icon has.
         const winIconAttr = iconEl?.getAttribute('data-lucide');
         const targetIcon = titleEl.querySelector('.window-icon');
 
@@ -584,11 +545,9 @@ class WindowManager {
     }
 
     updateWorkspaces(windowId) {
-        // Mark workspace 1 as occupied when any window is open
         const workspaces = document.querySelectorAll('.workspace');
         workspaces[0]?.classList.add('occupied');
     }
 }
 
-// Export for global access
 window.WindowManager = WindowManager;

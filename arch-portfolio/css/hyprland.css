@@ -120,25 +120,42 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+/* ============================================
+   WORKSPACES
+   ============================================ */
+.workspaces {
+    display: flex;
+    gap: var(--gap-xs);
+    background: var(--surface0);
+    padding: 2px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--glass-border);
 }
 
-::-webkit-scrollbar-track {
-    background: var(--mantle);
-    border-radius: 4px;
+.workspace {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-xs);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--overlay1);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-::-webkit-scrollbar-thumb {
+.workspace:hover {
     background: var(--surface1);
-    border-radius: 4px;
-    transition: background var(--transition-fast);
+    color: var(--text);
+    transform: translateY(-1px);
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: var(--surface2);
+.workspace.active {
+    background: var(--accent);
+    color: var(--base);
+    box-shadow: 0 0 10px var(--accent-dim);
 }
 
 /* Selection */
@@ -156,6 +173,23 @@ a {
 
 a:hover {
     color: var(--lavender);
+}
+
+/* Dock & Tray Animations */
+.dock-item {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dock-item:hover {
+    transform: translateY(-4px) scale(1.1);
+}
+
+.tray-item {
+    transition: background-color 0.2s ease;
+}
+
+.tray-item:hover {
+    background-color: var(--surface1);
 }
 
 /* Lucide Icons */
@@ -1216,5 +1250,168 @@ button {
     to {
         opacity: 0;
         transform: translateX(100px);
+    }
+}
+
+/* ============================================
+   POWER ON ENTRY SCREEN
+   ============================================ */
+.power-on-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.power-on-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.pc-monitor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.monitor-frame {
+    position: relative;
+    width: 600px;
+    max-width: 90vw;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+    border: 3px solid #333;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.monitor-screen {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #222;
+}
+
+/* CRT scanline effect */
+.monitor-screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg,
+            rgba(0, 0, 0, 0.15) 0px,
+            rgba(0, 0, 0, 0.15) 1px,
+            transparent 1px,
+            transparent 2px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Screen glow when off */
+.monitor-screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(30, 30, 60, 0.3) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.power-off-text {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: textFlicker 3s infinite;
+}
+
+@keyframes textFlicker {
+
+    0%,
+    90%,
+    100% {
+        opacity: 0.3;
+    }
+
+    92%,
+    98% {
+        opacity: 0.5;
+    }
+}
+
+.monitor-stand {
+    width: 80px;
+    height: 60px;
+    background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+    margin: 0 auto;
+    margin-top: 10px;
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+    border-radius: 0 0 4px 4px;
+}
+
+.power-on-btn {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+    border: 2px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.power-on-btn:hover {
+    transform: scale(1.05);
+    border-color: var(--accent);
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.5),
+        0 0 40px var(--accent-dim);
+}
+
+.power-on-btn:active {
+    transform: scale(0.98);
+}
+
+.power-icon-glow {
+    font-size: 32px;
+    color: #444;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 10px transparent;
+}
+
+.power-on-btn:hover .power-icon-glow {
+    color: var(--accent);
+    text-shadow: 0 0 20px var(--accent-glow), 0 0 40px var(--accent-dim);
+    animation: powerPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes powerPulse {
+
+    0%,
+    100% {
+        text-shadow: 0 0 20px var(--accent-glow), 0 0 40px var(--accent-dim);
+    }
+
+    50% {
+        text-shadow: 0 0 30px var(--accent-glow), 0 0 60px var(--accent);
     }
 }

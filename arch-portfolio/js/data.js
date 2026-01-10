@@ -111,7 +111,7 @@ const PROJECTS_DATA = [
         description: 'Responsive portfolio with dark/light mode, smooth animations, and interactive 3D background effects.',
         image: '../assests/images/Project/modernPortfolio.jpeg',
         tags: ['React', 'Tailwind', '3D Effects'],
-        liveUrl: 'https://portfolio-six-navy-90.vercel.app',
+        liveUrl: 'https://vikash.is-a.dev',
         githubUrl: null
     },
     {
@@ -124,13 +124,14 @@ const PROJECTS_DATA = [
         liveUrl: 'https://alpha-chats.vercel.app',
         githubUrl: null
     },
+
     {
         id: 3,
-        category: 'web',
-        title: 'D2C CAD Service',
+        category: 'web 3',
+        title: 'Chain Torque',
         description: 'Revolutionary platform with Web3 Marketplace, in-browser CAD editor & AI Copilot.',
         image: null,
-        placeholder: { icon: '󰆧', text: 'CAD Service' },
+        placeholder: { icon: '⛓️', text: 'CAD Service' },
         tags: ['Web3', 'CAD Editor', 'AI Copilot'],
         liveUrl: '#',
         githubUrl: null
@@ -266,6 +267,18 @@ const PROJECTS_DATA = [
         tags: ['C', 'Systems', 'Algorithms'],
         liveUrl: null,
         githubUrl: 'https://github.com/Vortex-16/C'
+    },
+    // DEVTRACK PROJECT
+    {
+        id: 18,
+        category: 'web',
+        title: 'DevTrack',
+        description: 'AI-powered developer growth platform that combines GitHub analytics, learning streaks, and intelligent insights to showcase consistency, real-world progress, and engineering maturity.',
+        image: null,
+        placeholder: { icon: '📊', text: 'DevTrack' },
+        tags: ['Web', 'AI/ML', 'App'],
+        liveUrl: 'https://devtrack-pwkj.onrender.com/',
+        githubUrl: 'https://github.com/Alpha4Coders/DevTrack'
     },
     // OTHER PROJECTS
     {
