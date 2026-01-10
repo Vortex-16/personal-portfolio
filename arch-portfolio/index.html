@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vikash Gupta - Full Stack Developer Portfolio | Arch Linux Style">
+    <title>vikash@arch:~$ whoami</title>
+    <link rel="icon" href="../assests/images/icons8-working-with-a-laptop-64.png" type="image/png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/hyprland.css">
+    <link rel="stylesheet" href="css/windows.css">
+    <link rel="stylesheet" href="css/terminal.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="hyprland-desktop">
+    
+    <!-- ============================================
+         BOOT SEQUENCE - Arch Linux Style
+    ============================================ -->
+    <div class="boot-screen" id="boot-screen">
+        <div class="boot-content">
+            <pre class="boot-logo">
+                   -`                    
+                  .o+`                   
+                 `ooo/                   
+                `+oooo:                  
+               `+oooooo:                 
+               -+oooooo+:                
+             `/:-:++oooo+:               
+            `/++++/+++++++:              
+           `/++++++++++++++:             
+          `/+++ooooooooooooo/`           
+         ./ooosssso++osssssso+`          
+        .oossssso-````/ossssss+`         
+       -osssssso.      :ssssssso.        
+      :osssssss/        osssso+++.       
+     /ossssssss/        +ssssooo/-       
+   `/ossssso+/:-        -:/+osssso+-     
+  `+sso+:-`                 `.-/+oso:    
+ `++:.                           `-/+/   
+ .`                                 `/   
+            </pre>
+            <div class="boot-text" id="boot-text"></div>
+            <div class="boot-progress">
+                <div class="boot-progress-bar" id="boot-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         DESKTOP ENVIRONMENT
+    ============================================ -->
+    <div class="desktop-environment" id="desktop">
+        
+        <!-- Top Bar (Waybar Style) -->
+        <header class="waybar" id="waybar">
+            <div class="waybar-left">
+                <div class="workspace-indicator">
+                    <span class="workspace active" data-ws="1">1</span>
+                    <span class="workspace" data-ws="2">2</span>
+                    <span class="workspace" data-ws="3">3</span>
+                    <span class="workspace" data-ws="4">4</span>
+                    <span class="workspace" data-ws="5">5</span>
+                </div>
+                <div class="active-window-title" id="active-window-title">
+                    <i data-lucide="monitor" class="window-icon"></i>
+                    <span class="window-name">Desktop</span>
+                </div>
+            </div>
+            
+            <div class="waybar-center">
+                <div class="clock" id="clock">
+                    <span class="time" id="waybar-time">00:00 AM</span>
+                    <span class="date" id="waybar-date">Jan 09</span>
+                </div>
+            </div>
+            
+            <div class="waybar-right">
+                <div class="system-tray">
+                    <button class="tray-item" id="music-toggle" title="Toggle Lo-Fi Music">
+                        <i data-lucide="music" class="tray-icon"></i>
+                    </button>
+                    <button class="tray-item wifi-btn" title="Network: Connected">
+                        <i data-lucide="wifi" class="tray-icon"></i>
+                    </button>
+                    <button class="tray-item volume-btn" title="Volume">
+                        <i data-lucide="volume-2" class="tray-icon"></i>
+                    </button>
+                    <button class="tray-item battery-btn" title="Battery">
+                        <i data-lucide="battery-full" class="tray-icon"></i>
+                    </button>
+                </div>
+                <button class="mobile-menu-toggle" id="mobile-menu-btn" title="Apps">
+                    <i data-lucide="grid-3x3"></i>
+                </button>
+                <button class="power-menu" id="power-btn" title="Power Menu">
+                    <i data-lucide="power" class="power-icon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Desktop Wallpaper & Grid -->
+        <div class="desktop-area" id="desktop-area">
+            <!-- Desktop Icons (App Launcher) -->
+            <div class="desktop-icons" id="desktop-icons">
+                <button class="desktop-icon" data-window="neofetch" title="System Info">
+                    <div class="icon-img"><i data-lucide="user"></i></div>
+                    <span class="icon-label">neofetch</span>
+                </button>
+                <button class="desktop-icon" data-window="terminal" title="Terminal">
+                    <div class="icon-img"><i data-lucide="terminal"></i></div>
+                    <span class="icon-label">kitty</span>
+                </button>
+                <button class="desktop-icon" data-window="skills" title="Installed Packages">
+                    <div class="icon-img"><i data-lucide="package"></i></div>
+                    <span class="icon-label">pacman</span>
+                </button>
+                <button class="desktop-icon" data-window="projects" title="Projects">
+                    <div class="icon-img"><i data-lucide="folder-code"></i></div>
+                    <span class="icon-label">~/projects</span>
+                </button>
+                <button class="desktop-icon" data-window="github" title="GitHub Stats">
+                    <div class="icon-img"><i data-lucide="github"></i></div>
+                    <span class="icon-label">htop</span>
+                </button>
+                <button class="desktop-icon" data-window="mail" title="Contact">
+                    <div class="icon-img"><i data-lucide="mail"></i></div>
+                    <span class="icon-label">neomutt</span>
+                </button>
+                <button class="desktop-icon" data-window="files" title="File Manager">
+                    <div class="icon-img"><i data-lucide="folder-open"></i></div>
+                    <span class="icon-label">ranger</span>
+                </button>
+                <button class="desktop-icon" data-window="experience" title="Experience">
+                    <div class="icon-img"><i data-lucide="briefcase"></i></div>
+                    <span class="icon-label">timeline</span>
+                </button>
+            </div>
+
+            <!-- Windows Container -->
+            <div class="windows-container" id="windows-container">
+                
+                <!-- ============================================
+                     NEOFETCH WINDOW - About Me / System Info
+                ============================================ -->
+                <div class="window" id="window-neofetch" data-window="neofetch">
+                    <div class="window-titlebar">
+                        <div class="titlebar-left">
+                            <i data-lucide="user" class="window-icon"></i>
+                            <span class="window-title">neofetch - vikash@arch</span>
+                        </div>
+                        <div class="titlebar-controls">
+                            <button class="control minimize" title="Minimize"><i data-lucide="minus"></i></button>
+                            <button class="control maximize" title="Maximize"><i data-lucide="square"></i></button>
+                            <button class="control close" title="Close"><i data-lucide="x"></i></button>
+                        </div>
+                    </div>
+                    <div class="window-content terminal-content">
+                        <div class="neofetch-output">
+                            <div class="neofetch-left">
+                                <pre class="ascii-art arch-logo">
+                   -`                    
+                  .o+`                   
+                 `ooo/                   
+                `+oooo:                  
+               `+oooooo:                 
+               -+oooooo+:                
+             `/:-:++oooo+:               
+            `/++++/+++++++:              
+           `/++++++++++++++:             
+          `/+++ooooooooooooo/`           
+         ./ooosssso++osssssso+`          
+        .oossssso-````/ossssss+`         
+       -osssssso.      :ssssssso.        
+      :osssssss/        osssso+++.       
+     /ossssssss/        +ssssooo/-       
+   `/ossssso+/:-        -:/+osssso+-     
+  `+sso+:-`                 `.-/+oso:    
+ `++:.                           `-/+/   
+ .`                                 `/   
+                                </pre>
+                            </div>
+                            <div class="neofetch-right">
+                                <div class="neofetch-line"><span class="neo-user">vikash</span><span class="neo-at">@</span><span class="neo-host">arch</span></div>
+                                <div class="neofetch-separator">----------------</div>
+                                <div class="neofetch-line"><span class="neo-label">OS:</span> <span class="neo-value">Arch Linux x86_64</span></div>
+                                <div class="neofetch-line"><span class="neo-label">Host:</span> <span class="neo-value">Full Stack Developer</span></div>
+                                <div class="neofetch-line"><span class="neo-label">Kernel:</span> <span class="neo-value">MERN Stack v3.0+</span></div>
+                                <div class="neofetch-line"><span class="neo-label">Uptime:</span> <span class="neo-value">3+ years coding</span></div>
+                                <div class="neofetch-line"><span class="neo-label">Packages:</span> <span class="neo-value">20+ (pacman)</span></div>
+                                <div class="neofetch-line"><span class="neo-label">Shell:</span> <span class="neo-value">zsh 5.9</span></div>
+                                <div class="neofetch-line"><span class="neo-label">Resolution:</span> <span class="neo-value">Problem Solver</span></div>
+                                <div class="neofetch-line"><span class="neo-label">DE:</span> <span class="neo-value">Hyprland</span></div>
+                                <div class="neofetch-line"><span class="neo-label">WM:</span> <span class="neo-value">Hyprland</span></div>
+                                <div class="neofetch-line"><span class="neo-label">Terminal:</span> <span class="neo-value">kitty</span></div>
+                                <div class="neofetch-line"><span class="neo-label">CPU:</span> <span class="neo-value">Brain @ Creative Mode</span></div>
+                                <div class="neofetch-line"><span class="neo-label">GPU:</span> <span class="neo-value">Visual Designer 3D</span></div>
+                                <div class="neofetch-line"><span class="neo-label">Memory:</span> <span class="neo-value">Endless Coffee ☕</span></div>
+                                <div class="neofetch-separator"></div>
+                                <div class="neofetch-line location"><span class="neo-label">Location:</span> <span class="neo-value">Kolkata, India</span></div>
+                                <div class="neofetch-line status"><span class="neo-label">Status:</span> <span class="neo-value available">● Available for work</span></div>
+                                <div class="neofetch-colors">
+                                    <span class="color c0"></span>
+                                    <span class="color c1"></span>
+                                    <span class="color c2"></span>
+                                    <span class="color c3"></span>
+                                    <span class="color c4"></span>
+                                    <span class="color c5"></span>
+                                    <span class="color c6"></span>
+                                    <span class="color c7"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="about-details">
+                            <div class="terminal-prompt">
+                                <span class="prompt-user">vikash@arch</span>:<span class="prompt-path">~</span>$ cat about.md
+                            </div>
+                            <div class="terminal-output about-text">
+                                <p class="comment"># Who am I?</p>
+                                <p>Hey there! I am a <span class="highlight">Computer Science Engineer</span> and <span class="highlight">Full Stack Developer</span> with a burning passion for building digital solutions.</p>
+                                <p class="comment"># My journey</p>
+                                <p>Currently pursuing engineering at STCET. From crafting pixel-perfect UIs to architecting robust backend systems, I love every aspect of development.</p>
+                                <p class="comment"># What drives me</p>
+                                <p>I believe in writing clean, maintainable code and creating experiences users love.</p>
+                            </div>
+                            <div class="about-tags">
+                                <span class="tag"><i data-lucide="terminal"></i> Linux Enthusiast</span>
+                                <span class="tag"><i data-lucide="layers"></i> MERN Stack</span>
+                                <span class="tag"><i data-lucide="lightbulb"></i> Problem Solver</span>
+                                <span class="tag"><i data-lucide="coffee"></i> Coffee Addict</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     TERMINAL WINDOW - Interactive Shell
+                ============================================ -->
+                <div class="window" id="window-terminal" data-window="terminal" style="display: none;">
+                    <div class="window-titlebar">
+                        <div class="titlebar-left">
+                            <i data-lucide="terminal" class="window-icon"></i>
+                            <span class="window-title">kitty - vikash@arch:~</span>
+                        </div>
+                        <div class="titlebar-controls">
+                            <button class="control minimize" title="Minimize"><i data-lucide="minus"></i></button>
+                            <button class="control maximize" title="Maximize"><i data-lucide="square"></i></button>
+                            <button class="control close" title="Close"><i data-lucide="x"></i></button>
+                        </div>
+                    </div>
+                    <div class="window-content terminal-content interactive-terminal" id="interactive-terminal">
+                        <div class="terminal-history" id="terminal-history">
+                            <div class="terminal-welcome">
+                                <pre class="welcome-text">
+╔══════════════════════════════════════════════════════════════╗
+║  Welcome to Vikash's Interactive Portfolio Terminal          ║
+║  Type 'help' to see available commands                       ║
+╚══════════════════════════════════════════════════════════════╝
+                                </pre>
+                            </div>
+                        </div>
+                        <div class="terminal-input-line">
+                            <span class="prompt-user">vikash@arch</span>:<span class="prompt-path">~</span>$ 
+                            <input type="text" class="terminal-input" id="terminal-input" autocomplete="off" spellcheck="false" autofocus>
+                            <span class="cursor-blink">▋</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     SKILLS WINDOW - pacman -Qi Style
+                ============================================ -->
+                <div class="window" id="window-skills" data-window="skills" style="display: none;">
+                    <div class="window-titlebar">
+                        <div class="titlebar-left">
+                            <i data-lucide="package" class="window-icon"></i>
+                            <span class="window-title">pacman -Qi installed-skills</span>
+                        </div>
+                        <div class="titlebar-controls">
+                            <button class="control minimize" title="Minimize"><i data-lucide="minus"></i></button>
+                            <button class="control maximize" title="Maximize"><i data-lucide="square"></i></button>
+                            <button class="control close" title="Close"><i data-lucide="x"></i></button>
+                        </div>
+                    </div>
+                    <div class="window-content terminal-content">
+                        <div class="skills-tabs">
+                            <button class="skill-tab active" data-tab="languages">core/languages</button>
+                            <button class="skill-tab" data-tab="frontend">extra/frontend</button>
+                            <button class="skill-tab" data-tab="backend">extra/backend</button>
+                            <button class="skill-tab" data-tab="tools">community/tools</button>
+                        </div>
+                        <div class="skills-content">
+                            <!-- Languages -->
+                            <div class="skill-group active" id="skills-languages">
+                                <div class="terminal-prompt">
+                                    <span class="prompt-user">vikash@arch</span>:<span class="prompt-path">~</span>$ pacman -Qi languages
+                                </div>
+                                <div class="package-list">
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">java</span>
+                                            <span class="pkg-version">17.0.1-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> High-level, class-based, object-oriented language
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 85%"></div></div>
+                                            <span class="skill-level">Advanced</span>
+                                        </div>
+                                    </div>
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">python</span>
+                                            <span class="pkg-version">3.11.4-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> High-level programming language for general-purpose
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 80%"></div></div>
+                                            <span class="skill-level">Advanced</span>
+                                        </div>
+                                    </div>
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">javascript</span>
+                                            <span class="pkg-version">ES2024-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> High-level, interpreted scripting language
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 90%"></div></div>
+                                            <span class="skill-level">Advanced</span>
+                                        </div>
+                                    </div>
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">c-cpp</span>
+                                            <span class="pkg-version">20-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> Low-level systems programming language
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 75%"></div></div>
+                                            <span class="skill-level">Intermediate</span>
+                                        </div>
+                                    </div>
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">typescript</span>
+                                            <span class="pkg-version">5.0-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> Typed superset of JavaScript
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 70%"></div></div>
+                                            <span class="skill-level">Beginner</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Frontend -->
+                            <div class="skill-group" id="skills-frontend">
+                                <div class="terminal-prompt">
+                                    <span class="prompt-user">vikash@arch</span>:<span class="prompt-path">~</span>$ pacman -Qi frontend
+                                </div>
+                                <div class="package-list">
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">react</span>
+                                            <span class="pkg-version">18.2.0-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> JavaScript library for building user interfaces
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 88%"></div></div>
+                                            <span class="skill-level">Advanced</span>
+                                        </div>
+                                    </div>
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">html5</span>
+                                            <span class="pkg-version">5.3-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> Markup language for structuring web content
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 95%"></div></div>
+                                            <span class="skill-level">Expert</span>
+                                        </div>
+                                    </div>
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">css3-scss</span>
+                                            <span class="pkg-version">3.0-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> Stylesheet language with SCSS preprocessor
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 92%"></div></div>
+                                            <span class="skill-level">Expert</span>
+                                        </div>
+                                    </div>
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">tailwindcss</span>
+                                            <span class="pkg-version">3.4-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> Utility-first CSS framework
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 85%"></div></div>
+                                            <span class="skill-level">Advanced</span>
+                                        </div>
+                                    </div>
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">bootstrap</span>
+                                            <span class="pkg-version">5.3-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> CSS framework for responsive design
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 80%"></div></div>
+                                            <span class="skill-level">Advanced</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Backend -->
+                            <div class="skill-group" id="skills-backend">
+                                <div class="terminal-prompt">
+                                    <span class="prompt-user">vikash@arch</span>:<span class="prompt-path">~</span>$ pacman -Qi backend
+                                </div>
+                                <div class="package-list">
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">nodejs</span>
+                                            <span class="pkg-version">20.10.0-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> JavaScript runtime built on Chrome's V8 engine
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 82%"></div></div>
+                                            <span class="skill-level">Advanced</span>
+                                        </div>
+                                    </div>
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">expressjs</span>
+                                            <span class="pkg-version">4.18-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> Fast, unopinionated web framework for Node.js
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 80%"></div></div>
+                                            <span class="skill-level">Advanced</span>
+                                        </div>
+                                    </div>
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">mongodb</span>
+                                            <span class="pkg-version">7.0-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> Document-oriented NoSQL database
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 78%"></div></div>
+                                            <span class="skill-level">Intermediate</span>
+                                        </div>
+                                    </div>
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">rest-api</span>
+                                            <span class="pkg-version">2.0-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> RESTful API design and implementation
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 85%"></div></div>
+                                            <span class="skill-level">Advanced</span>
+                                        </div>
+                                    </div>
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">firebase</span>
+                                            <span class="pkg-version">10.0-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> Backend-as-a-Service platform by Google
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 72%"></div></div>
+                                            <span class="skill-level">Intermediate</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Tools -->
+                            <div class="skill-group" id="skills-tools">
+                                <div class="terminal-prompt">
+                                    <span class="prompt-user">vikash@arch</span>:<span class="prompt-path">~</span>$ pacman -Qi tools
+                                </div>
+                                <div class="package-list">
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">git</span>
+                                            <span class="pkg-version">2.43-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> Distributed version control system
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 88%"></div></div>
+                                            <span class="skill-level">Advanced</span>
+                                        </div>
+                                    </div>
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">github</span>
+                                            <span class="pkg-version">cli-2.40-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> Web-based Git repository hosting
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 90%"></div></div>
+                                            <span class="skill-level">Expert</span>
+                                        </div>
+                                    </div>
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">vscode</span>
+                                            <span class="pkg-version">1.85-1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> Code editor by Microsoft
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 95%"></div></div>
+                                            <span class="skill-level">Expert</span>
+                                        </div>
+                                    </div>
+                                    <div class="package-item">
+                                        <div class="package-header">
+                                            <span class="pkg-name">linux</span>
+                                            <span class="pkg-version">6.7-arch1</span>
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Description :</span> Unix-like operating system
+                                        </div>
+                                        <div class="package-info">
+                                            <span class="info-label">Proficiency :</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 80%"></div></div>
+                                            <span class="skill-level">Intermediate</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     PROJECTS WINDOW - App Launcher / Tiles
+                ============================================ -->
+                <div class="window wide" id="window-projects" data-window="projects" style="display: none;">
+                    <div class="window-titlebar">
+                        <div class="titlebar-left">
+                            <i data-lucide="folder-code" class="window-icon"></i>
+                            <span class="window-title">~/projects - ranger</span>
+                        </div>
+                        <div class="titlebar-controls">
+                            <button class="control minimize" title="Minimize"><i data-lucide="minus"></i></button>
+                            <button class="control maximize" title="Maximize"><i data-lucide="square"></i></button>
+                            <button class="control close" title="Close"><i data-lucide="x"></i></button>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <div class="projects-filter">
+                            <button class="filter-btn active" data-filter="all">all</button>
+                            <button class="filter-btn" data-filter="web">web-dev</button>
+                            <button class="filter-btn" data-filter="app">applications</button>
+                            <button class="filter-btn" data-filter="other">other</button>
+                        </div>
+                        <div class="projects-grid" id="projects-grid">
+                            <!-- Projects will be dynamically loaded -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     GITHUB WINDOW - htop / System Monitor Style
+                ============================================ -->
+                <div class="window" id="window-github" data-window="github" style="display: none;">
+                    <div class="window-titlebar">
+                        <div class="titlebar-left">
+                            <i data-lucide="github" class="window-icon"></i>
+                            <span class="window-title">htop - GitHub Activity Monitor</span>
+                        </div>
+                        <div class="titlebar-controls">
+                            <button class="control minimize" title="Minimize"><i data-lucide="minus"></i></button>
+                            <button class="control maximize" title="Maximize"><i data-lucide="square"></i></button>
+                            <button class="control close" title="Close"><i data-lucide="x"></i></button>
+                        </div>
+                    </div>
+                    <div class="window-content terminal-content">
+                        <div class="htop-header">
+                            <div class="htop-meters">
+                                <div class="meter">
+                                    <span class="meter-label">Repos</span>
+                                    <div class="meter-bar">
+                                        <div class="meter-fill repos" id="repos-meter"></div>
+                                    </div>
+                                    <span class="meter-value" id="github-repos">0</span>
+                                </div>
+                                <div class="meter">
+                                    <span class="meter-label">Commits</span>
+                                    <div class="meter-bar">
+                                        <div class="meter-fill commits" id="commits-meter"></div>
+                                    </div>
+                                    <span class="meter-value" id="github-commits">0</span>
+                                </div>
+                                <div class="meter">
+                                    <span class="meter-label">Stars</span>
+                                    <div class="meter-bar">
+                                        <div class="meter-fill stars" id="stars-meter"></div>
+                                    </div>
+                                    <span class="meter-value" id="github-stars">0</span>
+                                </div>
+                                <div class="meter">
+                                    <span class="meter-label">PRs</span>
+                                    <div class="meter-bar">
+                                        <div class="meter-fill prs" id="prs-meter"></div>
+                                    </div>
+                                    <span class="meter-value" id="github-prs">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="htop-processes">
+                            <div class="process-header">
+                                <span>PID</span>
+                                <span>USER</span>
+                                <span>REPO</span>
+                                <span>%CPU</span>
+                                <span>%MEM</span>
+                                <span>TIME+</span>
+                                <span>COMMAND</span>
+                            </div>
+                            <div class="process-list" id="github-repos-list">
+                                <!-- Repos will be dynamically loaded -->
+                            </div>
+                        </div>
+                        <div class="github-graph">
+                            <div class="graph-title">Contribution Graph (Vortex-16)</div>
+                            <img src="https://github-readme-activity-graph.vercel.app/graph?username=Vortex-16&theme=github-dark&hide_border=true&area=true&bg_color=1e1e2e" 
+                                 alt="GitHub Contribution Graph" 
+                                 class="contribution-graph"
+                                 id="github-graph-img">
+                        </div>
+                        <div class="github-link">
+                            <a href="https://github.com/Vortex-16" target="_blank" class="github-btn">
+                                <i data-lucide="github" class="btn-icon"></i>
+                                <span>View Full Profile on GitHub</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     MAIL WINDOW - Contact Form (neomutt style)
+                ============================================ -->
+                <div class="window" id="window-mail" data-window="mail" style="display: none;">
+                    <div class="window-titlebar">
+                        <div class="titlebar-left">
+                            <i data-lucide="mail" class="window-icon"></i>
+                            <span class="window-title">neomutt - Compose Mail</span>
+                        </div>
+                        <div class="titlebar-controls">
+                            <button class="control minimize" title="Minimize"><i data-lucide="minus"></i></button>
+                            <button class="control maximize" title="Maximize"><i data-lucide="square"></i></button>
+                            <button class="control close" title="Close"><i data-lucide="x"></i></button>
+                        </div>
+                    </div>
+                    <div class="window-content terminal-content">
+                        <div class="mail-header">
+                            <div class="mail-info">
+                                <div class="mail-row">
+                                    <span class="mail-label">To:</span>
+                                    <span class="mail-value">vikasharmy811@gmail.com</span>
+                                </div>
+                                <div class="mail-row">
+                                    <span class="mail-label">Subject:</span>
+                                    <input type="text" id="mail-subject" placeholder="Enter subject..." class="mail-input">
+                                </div>
+                            </div>
+                        </div>
+                        <form id="contact-form" class="mail-compose">
+                            <div class="mail-fields">
+                                <div class="field-row">
+                                    <label class="field-label">From:</label>
+                                    <input type="text" id="sender-name" placeholder="Your name" required>
+                                </div>
+                                <div class="field-row">
+                                    <label class="field-label">Reply-To:</label>
+                                    <input type="email" id="sender-email" placeholder="your@email.com" required>
+                                </div>
+                            </div>
+                            <div class="mail-body">
+                                <label class="body-label">-- Message Body --</label>
+                                <textarea id="mail-message" placeholder="Type your message here..." required></textarea>
+                            </div>
+                            <div class="mail-actions">
+                                <button type="submit" class="mail-btn send">
+                                    <i data-lucide="send" class="btn-icon"></i>
+                                    <span>Send (y)</span>
+                                </button>
+                                <button type="button" class="mail-btn draft">
+                                    <i data-lucide="save" class="btn-icon"></i>
+                                    <span>Draft (d)</span>
+                                </button>
+                                <button type="reset" class="mail-btn cancel">
+                                    <i data-lucide="x" class="btn-icon"></i>
+                                    <span>Cancel (q)</span>
+                                </button>
+                            </div>
+                        </form>
+                        <div class="contact-info-panel">
+                            <div class="info-title">-- Contact Information --</div>
+                            <div class="info-item">
+                                <i data-lucide="mail" class="info-icon"></i>
+                                <span class="info-text">vikasharmy811@gmail.com</span>
+                            </div>
+                            <div class="info-item">
+                                <i data-lucide="map-pin" class="info-icon"></i>
+                                <span class="info-text">Kolkata, India</span>
+                            </div>
+                            <div class="info-item">
+                                <i data-lucide="github" class="info-icon"></i>
+                                <a href="https://github.com/Vortex-16" target="_blank" class="info-link">github.com/Vortex-16</a>
+                            </div>
+                            <div class="info-item">
+                                <i data-lucide="linkedin" class="info-icon"></i>
+                                <a href="https://www.linkedin.com/in/vikash-gupta-16devlop/" target="_blank" class="info-link">linkedin.com/in/vikash-gupta-16devlop</a>
+                            </div>
+                            <div class="info-item">
+                                <i data-lucide="twitter" class="info-icon"></i>
+                                <a href="https://x.com/GUPTA16VIKASH" target="_blank" class="info-link">x.com/GUPTA16VIKASH</a>
+                            </div>
+                            <div class="info-item">
+                                <i data-lucide="instagram" class="info-icon"></i>
+                                <a href="https://www.instagram.com/gupta.16.vikash/" target="_blank" class="info-link">instagram.com/gupta.16.vikash</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     FILES WINDOW - Resume / Documents
+                ============================================ -->
+                <div class="window" id="window-files" data-window="files" style="display: none;">
+                    <div class="window-titlebar">
+                        <div class="titlebar-left">
+                            <i data-lucide="folder-open" class="window-icon"></i>
+                            <span class="window-title">ranger - /home/vikash</span>
+                        </div>
+                        <div class="titlebar-controls">
+                            <button class="control minimize" title="Minimize"><i data-lucide="minus"></i></button>
+                            <button class="control maximize" title="Maximize"><i data-lucide="square"></i></button>
+                            <button class="control close" title="Close"><i data-lucide="x"></i></button>
+                        </div>
+                    </div>
+                    <div class="window-content terminal-content">
+                        <div class="ranger-layout">
+                            <div class="ranger-column parent">
+                                <div class="dir-item">..</div>
+                                <div class="dir-item">bin/</div>
+                                <div class="dir-item active">Documents/</div>
+                                <div class="dir-item">Downloads/</div>
+                                <div class="dir-item">Pictures/</div>
+                                <div class="dir-item">projects/</div>
+                            </div>
+                            <div class="ranger-column current">
+                                <div class="file-item selected" data-file="resume">
+                                    <i data-lucide="file-text" class="file-icon"></i>
+                                    <span class="file-name">Vikash-Kr-Gupta-Resume.pdf</span>
+                                </div>
+                                <div class="file-item" data-file="about">
+                                    <i data-lucide="file-code" class="file-icon"></i>
+                                    <span class="file-name">about.md</span>
+                                </div>
+                                <div class="file-item" data-file="contact">
+                                    <i data-lucide="file" class="file-icon"></i>
+                                    <span class="file-name">contact.txt</span>
+                                </div>
+                            </div>
+                            <div class="ranger-column preview">
+                                <div class="file-preview" id="file-preview">
+                                    <div class="preview-header">
+                                        <i data-lucide="file-text" class="preview-icon"></i>
+                                        <span class="preview-title">Vikash-Kr-Gupta-Resume.pdf</span>
+                                    </div>
+                                    <div class="preview-content">
+                                        <pre>
+╔══════════════════════════════════════════╗
+║          VIKASH KUMAR GUPTA              ║
+║       Full Stack Developer               ║
+╠══════════════════════════════════════════╣
+║                                          ║
+║  EDUCATION                               ║
+║  ─────────                               ║
+║  B.Tech in Computer Science              ║
+║  STCET, Kolkata (2024 - Present)         ║
+║                                          ║
+║  SKILLS                                  ║
+║  ──────                                  ║
+║  Languages: Java, Python, JavaScript,    ║
+║             C/C++, TypeScript            ║
+║  Frontend:  React, HTML5, CSS3,          ║
+║             Tailwind, Bootstrap          ║
+║  Backend:   Node.js, Express, MongoDB    ║
+║  Tools:     Git, GitHub, VS Code, Linux  ║
+║                                          ║
+║  PROJECTS                                ║
+║  ────────                                ║
+║  • 12+ Web Development Projects          ║
+║  • Real-time Chat Applications           ║
+║  • AI-Powered Web Apps                   ║
+║  • Educational Platforms                 ║
+║                                          ║
+╚══════════════════════════════════════════╝
+                                        </pre>
+                                    </div>
+                                    <div class="preview-actions">
+                                        <a href="../assests/doc/Vikash-Kr-Gupta-Resume (2).pdf" download class="download-btn">
+                                            <i data-lucide="download" class="btn-icon"></i>
+                                            <span>Download Resume</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ranger-status">
+                            <span class="status-path">/home/vikash/Documents</span>
+                            <span class="status-info">3 files, 1.2MB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     EXPERIENCE WINDOW - Timeline
+                ============================================ -->
+                <div class="window" id="window-experience" data-window="experience" style="display: none;">
+                    <div class="window-titlebar">
+                        <div class="titlebar-left">
+                            <i data-lucide="briefcase" class="window-icon"></i>
+                            <span class="window-title">timeline - Experience & Activities</span>
+                        </div>
+                        <div class="titlebar-controls">
+                            <button class="control minimize" title="Minimize"><i data-lucide="minus"></i></button>
+                            <button class="control maximize" title="Maximize"><i data-lucide="square"></i></button>
+                            <button class="control close" title="Close"><i data-lucide="x"></i></button>
+                        </div>
+                    </div>
+                    <div class="window-content terminal-content">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">2024 - Present</div>
+                                    <div class="timeline-title">Computer Science Student</div>
+                                    <div class="timeline-place">󰑴 STCET, Kolkata</div>
+                                    <div class="timeline-desc">Pursuing B.Tech in CSE. Active in coding clubs, technical events, and hackathons.</div>
+                                    <div class="timeline-tags">
+                                        <span class="tag">DSA</span>
+                                        <span class="tag">Web Dev</span>
+                                        <span class="tag">Open Source</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">2025 - Present</div>
+                                    <div class="timeline-title">Hackathon Participant</div>
+                                    <div class="timeline-place">󰆧 Multiple Events</div>
+                                    <div class="timeline-desc">Built innovative solutions under time constraints. Experience in rapid prototyping.</div>
+                                    <div class="timeline-tags">
+                                        <span class="tag">Team Lead</span>
+                                        <span class="tag">Innovation</span>
+                                        <span class="tag">Problem Solving</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">2025</div>
+                                    <div class="timeline-title">Alpha Coders Core Team Member</div>
+                                    <div class="timeline-place">󰡉 Coding Community</div>
+                                    <div class="timeline-desc">Contributing to community projects, mentoring beginners, organizing sessions.</div>
+                                    <div class="timeline-tags">
+                                        <span class="tag">Community</span>
+                                        <span class="tag">Mentoring</span>
+                                        <span class="tag">Collaboration</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">2024 - 2025</div>
+                                    <div class="timeline-title">Self-Taught Developer</div>
+                                    <div class="timeline-place">󰌢 Online Learning</div>
+                                    <div class="timeline-desc">Started coding journey with web development. Built 12+ projects in 3 months.</div>
+                                    <div class="timeline-tags">
+                                        <span class="tag">Self-Learning</span>
+                                        <span class="tag">Projects</span>
+                                        <span class="tag">Growth</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Dock / Taskbar (Optional - minimized windows) -->
+        <div class="dock" id="dock">
+            <div class="dock-items" id="dock-items">
+                <!-- Minimized windows will appear here -->
+            </div>
+        </div>
+
+        <!-- Mobile App Drawer -->
+        <div class="mobile-app-drawer" id="mobile-drawer">
+            <div class="drawer-handle"></div>
+            <div class="drawer-apps">
+                <button class="desktop-icon" data-window="neofetch">
+                    <div class="icon-img"><i data-lucide="user"></i></div>
+                    <span class="icon-label">About</span>
+                </button>
+                <button class="desktop-icon" data-window="terminal">
+                    <div class="icon-img"><i data-lucide="terminal"></i></div>
+                    <span class="icon-label">Terminal</span>
+                </button>
+                <button class="desktop-icon" data-window="skills">
+                    <div class="icon-img"><i data-lucide="package"></i></div>
+                    <span class="icon-label">Skills</span>
+                </button>
+                <button class="desktop-icon" data-window="projects">
+                    <div class="icon-img"><i data-lucide="folder-code"></i></div>
+                    <span class="icon-label">Projects</span>
+                </button>
+                <button class="desktop-icon" data-window="github">
+                    <div class="icon-img"><i data-lucide="github"></i></div>
+                    <span class="icon-label">GitHub</span>
+                </button>
+                <button class="desktop-icon" data-window="mail">
+                    <div class="icon-img"><i data-lucide="mail"></i></div>
+                    <span class="icon-label">Contact</span>
+                </button>
+                <button class="desktop-icon" data-window="files">
+                    <div class="icon-img"><i data-lucide="folder-open"></i></div>
+                    <span class="icon-label">Files</span>
+                </button>
+                <button class="desktop-icon" data-window="experience">
+                    <div class="icon-img"><i data-lucide="briefcase"></i></div>
+                    <span class="icon-label">Experience</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Hidden Audio Element -->
+    <audio id="lofi-music" loop src="../assests/Sound/minimal-technology-345194.mp3"></audio>
+
+    <!-- Power Menu Modal -->
+    <div class="power-modal" id="power-modal">
+        <div class="power-modal-content">
+            <div class="power-option" data-action="logout">
+                <i data-lucide="log-out" class="power-icon"></i>
+                <span class="power-label">Logout</span>
+            </div>
+            <div class="power-option" data-action="reboot">
+                <i data-lucide="refresh-cw" class="power-icon"></i>
+                <span class="power-label">Reboot</span>
+            </div>
+            <div class="power-option" data-action="shutdown">
+                <i data-lucide="power" class="power-icon"></i>
+                <span class="power-label">Shutdown</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Area -->
+    <div class="notifications" id="notifications"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>emailjs.init({publicKey:"jS_OjCoYjCk6NEZxd"});</script>
+    <script src="js/data.js"></script>
+    <script src="js/window-manager.js"></script>
+    <script src="js/terminal.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Initialize Lucide icons after DOM loads
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

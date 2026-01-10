@@ -1,0 +1,424 @@
+/* ============================================
+   TERMINAL STYLES
+   Interactive terminal emulation
+   ============================================ */
+
+/* ============================================
+   TERMINAL PROMPT
+   ============================================ */
+.terminal-prompt {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: var(--gap-sm);
+    font-size: 13px;
+}
+
+.prompt-user {
+    color: var(--green);
+    font-weight: 600;
+}
+
+.prompt-path {
+    color: var(--blue);
+    font-weight: 600;
+}
+
+.terminal-prompt::after {
+    content: '';
+    margin-left: var(--gap-sm);
+}
+
+/* ============================================
+   TERMINAL OUTPUT
+   ============================================ */
+.terminal-output {
+    color: var(--subtext1);
+    font-size: 12px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.terminal-output .comment {
+    color: var(--overlay0);
+}
+
+.terminal-output .highlight {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.terminal-output .success {
+    color: var(--green);
+}
+
+.terminal-output .error {
+    color: var(--red);
+}
+
+.terminal-output .warning {
+    color: var(--yellow);
+}
+
+/* ============================================
+   INTERACTIVE TERMINAL
+   ============================================ */
+.interactive-terminal {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.terminal-history {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: var(--gap-md);
+}
+
+.terminal-welcome {
+    margin-bottom: var(--gap-md);
+}
+
+.welcome-text {
+    color: var(--accent);
+    font-size: 11px;
+    line-height: 1.3;
+}
+
+.history-entry {
+    margin-bottom: var(--gap-md);
+}
+
+.history-command {
+    display: flex;
+    gap: 0;
+    margin-bottom: var(--gap-xs);
+}
+
+.history-output {
+    color: var(--subtext1);
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    padding-left: var(--gap-md);
+}
+
+/* Terminal Input */
+.terminal-input-line {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding-top: var(--gap-sm);
+    border-top: 1px solid var(--surface1);
+    position: relative;
+}
+
+.terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    caret-color: transparent;
+}
+
+.cursor-blink {
+    color: var(--accent);
+    animation: cursorBlink 1s step-end infinite;
+}
+
+@keyframes cursorBlink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* ============================================
+   TERMINAL COMMAND OUTPUT STYLES
+   ============================================ */
+.cmd-output {
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* ls command output */
+.ls-output {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--gap-xs);
+}
+
+.ls-item {
+    padding: 2px 4px;
+}
+
+.ls-item.dir {
+    color: var(--blue);
+    font-weight: 600;
+}
+
+.ls-item.file {
+    color: var(--text);
+}
+
+.ls-item.exec {
+    color: var(--green);
+}
+
+.ls-item.link {
+    color: var(--teal);
+}
+
+/* cat command output */
+.cat-output {
+    background: var(--surface0);
+    border-radius: var(--radius-sm);
+    padding: var(--gap-md);
+    margin-top: var(--gap-sm);
+}
+
+/* help command output */
+.help-output {
+    padding: var(--gap-sm) 0;
+}
+
+.help-section {
+    margin-bottom: var(--gap-md);
+}
+
+.help-title {
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: var(--gap-sm);
+    border-bottom: 1px solid var(--surface1);
+    padding-bottom: var(--gap-xs);
+}
+
+.help-cmd {
+    display: flex;
+    gap: var(--gap-md);
+    padding: 2px 0;
+}
+
+.help-cmd .cmd {
+    color: var(--green);
+    min-width: 120px;
+}
+
+.help-cmd .desc {
+    color: var(--subtext0);
+}
+
+/* ASCII Art */
+.ascii-output {
+    color: var(--accent);
+    font-size: 10px;
+    line-height: 1.1;
+    white-space: pre;
+}
+
+/* Table Output */
+.table-output {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: var(--gap-sm);
+}
+
+.table-output th {
+    text-align: left;
+    color: var(--accent);
+    padding: var(--gap-xs) var(--gap-sm);
+    border-bottom: 1px solid var(--surface1);
+}
+
+.table-output td {
+    padding: var(--gap-xs) var(--gap-sm);
+    color: var(--subtext1);
+    border-bottom: 1px solid var(--surface0);
+}
+
+.table-output tr:hover td {
+    background: var(--surface0);
+}
+
+/* Progress Bar in Terminal */
+.term-progress {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
+}
+
+.term-progress-bar {
+    flex: 1;
+    height: 12px;
+    background: var(--surface0);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.term-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.3s ease;
+}
+
+.term-progress-text {
+    min-width: 60px;
+    text-align: right;
+    color: var(--subtext0);
+}
+
+/* ============================================
+   TYPED TEXT EFFECT
+   ============================================ */
+.typing-text {
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid var(--accent);
+    animation: 
+        typing 2s steps(40, end),
+        blinkCaret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blinkCaret {
+    from, to { border-color: transparent; }
+    50% { border-color: var(--accent); }
+}
+
+/* ============================================
+   CODE SYNTAX HIGHLIGHTING
+   ============================================ */
+.syntax-keyword {
+    color: var(--mauve);
+}
+
+.syntax-string {
+    color: var(--green);
+}
+
+.syntax-number {
+    color: var(--peach);
+}
+
+.syntax-comment {
+    color: var(--overlay0);
+    font-style: italic;
+}
+
+.syntax-function {
+    color: var(--blue);
+}
+
+.syntax-variable {
+    color: var(--red);
+}
+
+.syntax-operator {
+    color: var(--sky);
+}
+
+/* ============================================
+   MATRIX RAIN EFFECT (Easter Egg)
+   ============================================ */
+.matrix-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.1;
+}
+
+/* ============================================
+   GLITCH TEXT EFFECT
+   ============================================ */
+.glitch-text {
+    position: relative;
+    animation: glitch 1s infinite;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch-text::before {
+    left: 2px;
+    text-shadow: -2px 0 var(--red);
+    clip: rect(24px, 550px, 90px, 0);
+    animation: glitchAnim 2s infinite linear alternate-reverse;
+}
+
+.glitch-text::after {
+    left: -2px;
+    text-shadow: -2px 0 var(--blue);
+    clip: rect(85px, 550px, 140px, 0);
+    animation: glitchAnim2 2s infinite linear alternate-reverse;
+}
+
+@keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
+
+@keyframes glitchAnim {
+    0% { clip: rect(42px, 9999px, 44px, 0); }
+    5% { clip: rect(12px, 9999px, 59px, 0); }
+    10% { clip: rect(48px, 9999px, 29px, 0); }
+    15% { clip: rect(42px, 9999px, 73px, 0); }
+    20% { clip: rect(63px, 9999px, 27px, 0); }
+    25% { clip: rect(34px, 9999px, 55px, 0); }
+    30% { clip: rect(86px, 9999px, 73px, 0); }
+    35% { clip: rect(20px, 9999px, 20px, 0); }
+    40% { clip: rect(26px, 9999px, 60px, 0); }
+    45% { clip: rect(25px, 9999px, 66px, 0); }
+    50% { clip: rect(57px, 9999px, 98px, 0); }
+    55% { clip: rect(5px, 9999px, 46px, 0); }
+    60% { clip: rect(82px, 9999px, 31px, 0); }
+    65% { clip: rect(54px, 9999px, 27px, 0); }
+    70% { clip: rect(28px, 9999px, 99px, 0); }
+    75% { clip: rect(45px, 9999px, 69px, 0); }
+    80% { clip: rect(23px, 9999px, 30px, 0); }
+    85% { clip: rect(54px, 9999px, 39px, 0); }
+    90% { clip: rect(36px, 9999px, 98px, 0); }
+    95% { clip: rect(39px, 9999px, 43px, 0); }
+    100% { clip: rect(45px, 9999px, 60px, 0); }
+}
+
+@keyframes glitchAnim2 {
+    0% { clip: rect(65px, 9999px, 100px, 0); }
+    5% { clip: rect(52px, 9999px, 74px, 0); }
+    10% { clip: rect(79px, 9999px, 85px, 0); }
+    15% { clip: rect(75px, 9999px, 5px, 0); }
+    20% { clip: rect(67px, 9999px, 61px, 0); }
+    25% { clip: rect(14px, 9999px, 79px, 0); }
+    30% { clip: rect(1px, 9999px, 66px, 0); }
+    35% { clip: rect(86px, 9999px, 30px, 0); }
+    40% { clip: rect(23px, 9999px, 98px, 0); }
+    45% { clip: rect(85px, 9999px, 72px, 0); }
+    50% { clip: rect(71px, 9999px, 75px, 0); }
+    55% { clip: rect(2px, 9999px, 48px, 0); }
+    60% { clip: rect(30px, 9999px, 16px, 0); }
+    65% { clip: rect(59px, 9999px, 50px, 0); }
+    70% { clip: rect(41px, 9999px, 62px, 0); }
+    75% { clip: rect(2px, 9999px, 82px, 0); }
+    80% { clip: rect(47px, 9999px, 73px, 0); }
+    85% { clip: rect(3px, 9999px, 27px, 0); }
+    90% { clip: rect(26px, 9999px, 55px, 0); }
+    95% { clip: rect(42px, 9999px, 25px, 0); }
+    100% { clip: rect(38px, 9999px, 49px, 0); }
+}
