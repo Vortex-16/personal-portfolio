@@ -16,7 +16,7 @@ const USER_DATA = {
     email: 'vikasharmy811@gmail.com',
     location: 'Kolkata, India',
     availability: 'Available for work',
-    experience: '3+ years coding',
+    experience: '7+ years coding',
     education: {
         degree: 'B.Tech in Computer Science',
         institution: 'STCET',

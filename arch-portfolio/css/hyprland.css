@@ -7,75 +7,86 @@
    CSS VARIABLES - Catppuccin Mocha Palette
    ============================================ */
 :root {
-    /* Base Colors */
-    --crust: #11111b;
-    --mantle: #181825;
-    --base: #1e1e2e;
-    --surface0: #313244;
-    --surface1: #45475a;
-    --surface2: #585b70;
-    --overlay0: #6c7086;
-    --overlay1: #7f849c;
-    --overlay2: #9399b2;
-    
-    /* Text Colors */
-    --text: #cdd6f4;
-    --subtext1: #bac2de;
-    --subtext0: #a6adc8;
-    
-    /* Accent Colors - Arch Blue Theme */
-    --blue: #89b4fa;
-    --lavender: #b4befe;
-    --sapphire: #74c7ec;
-    --sky: #89dceb;
-    --teal: #94e2d5;
-    --green: #a6e3a1;
-    --yellow: #f9e2af;
-    --peach: #fab387;
-    --maroon: #eba0ac;
-    --red: #f38ba8;
-    --mauve: #cba6f7;
-    --pink: #f5c2e7;
-    --flamingo: #f2cdcd;
-    --rosewater: #f5e0dc;
-    
-    /* Primary Accent */
+    /* Base Colors - GRATS (Gray/Black) */
+    --crust: #000000;
+    --mantle: #111111;
+    --base: #000000;
+    --surface0: #222222;
+    --surface1: #333333;
+    --surface2: #444444;
+    --overlay0: #666666;
+    --overlay1: #999999;
+    --overlay2: #CCCCCC;
+
+    /* Text Colors - Grayscale */
+    --text: #FFFFFF;
+    --subtext1: #E0E0E0;
+    --subtext0: #BBBBBB;
+
+    /* Accent Colors - STRICT PALETTE (B/W/R/G/Y/B) */
+    --blue: #0000FF;
+    --lavender: #0000FF;
+    /* Mapped to Blue */
+    --sapphire: #0000FF;
+    /* Mapped to Blue */
+    --sky: #0000FF;
+    /* Mapped to Blue */
+    --teal: #008000;
+    /* Mapped to Green */
+    --green: #008000;
+    --yellow: #FFFF00;
+    --peach: #FFFF00;
+    /* Mapped to Yellow */
+    --maroon: #FF0000;
+    /* Mapped to Red */
+    --red: #FF0000;
+    --mauve: #FFFFFF;
+    /* Mapped to White (or High Contrast Blue if needed, using White for text/accents) */
+    --pink: #FF0000;
+    /* Mapped to Red */
+    --flamingo: #FF0000;
+    /* Mapped to Red */
+    --rosewater: #FF0000;
+    /* Mapped to Red */
+
+    /* Primary Accent - Blue */
     --accent: var(--blue);
-    --accent-dim: rgba(137, 180, 250, 0.2);
-    --accent-glow: rgba(137, 180, 250, 0.4);
-    
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, var(--blue), var(--mauve));
+    --accent-dim: rgba(0, 0, 255, 0.2);
+    --accent-glow: rgba(0, 0, 255, 0.4);
+
+    /* Gradients - Subtle Grayscale or Blue Tint */
+    --gradient-primary: linear-gradient(135deg, var(--blue), var(--surface2));
     --gradient-surface: linear-gradient(180deg, var(--surface0), var(--mantle));
-    
+
     /* Glass Effect */
-    --glass-bg: rgba(30, 30, 46, 0.85);
-    --glass-border: rgba(137, 180, 250, 0.15);
+    --glass-bg: rgba(0, 0, 0, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.1);
     --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-    
+
     /* Typography */
     --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    
+
     /* Spacing */
     --gap-xs: 4px;
     --gap-sm: 8px;
     --gap-md: 16px;
     --gap-lg: 24px;
     --gap-xl: 32px;
-    
+
     /* Border Radius */
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 16px;
-    --radius-xl: 24px;
-    
+    --radius-sm: 0px;
+    /* Square look for strictness */
+    --radius-md: 4px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+
     /* Transitions */
     --transition-fast: 0.15s ease;
     --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    
+
     /* Window Specific */
     --titlebar-height: 36px;
     --waybar-height: 40px;
@@ -84,7 +95,9 @@
 /* ============================================
    RESET & BASE STYLES
    ============================================ */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -235,8 +248,13 @@ button {
 }
 
 @keyframes logoGlow {
-    from { text-shadow: 0 0 10px var(--accent-dim); }
-    to { text-shadow: 0 0 30px var(--accent-glow), 0 0 60px var(--accent-dim); }
+    from {
+        text-shadow: 0 0 10px var(--accent-dim);
+    }
+
+    to {
+        text-shadow: 0 0 30px var(--accent-glow), 0 0 60px var(--accent-dim);
+    }
 }
 
 .boot-text {
@@ -318,7 +336,7 @@ button {
     align-items: center;
     justify-content: space-between;
     padding: 0 var(--gap-md);
-    z-index: 100;
+    z-index: 1000;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -477,23 +495,14 @@ button {
 .desktop-area {
     flex: 1;
     position: relative;
-    background: 
-        radial-gradient(ellipse at top, rgba(137, 180, 250, 0.05) 0%, transparent 50%),
-        radial-gradient(ellipse at bottom right, rgba(203, 166, 247, 0.03) 0%, transparent 50%),
-        linear-gradient(180deg, var(--base) 0%, var(--crust) 100%);
+    background: var(--base);
+    /* Removed neon gradients */
     overflow: hidden;
 }
 
-/* Grid Background */
+/* Grid Background Removed */
 .desktop-area::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: 
-        linear-gradient(rgba(137, 180, 250, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(137, 180, 250, 0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
+    display: none;
 }
 
 /* ============================================
@@ -501,27 +510,39 @@ button {
    ============================================ */
 .desktop-icons {
     position: absolute;
-    top: var(--gap-lg);
+    top: var(--gap-md);
     left: var(--gap-lg);
+    bottom: var(--gap-md);
     display: flex;
     flex-direction: column;
-    gap: var(--gap-md);
+    gap: 8px;
+    /* Reduced gap - compact mode */
     z-index: 10;
+    overflow-y: auto;
+    padding-right: 4px;
+    /* Space for scrollbar if visible */
+    scrollbar-width: none;
+    /* Hide scrollbar for cleaner look */
+    pointer-events: none;
 }
 
 .desktop-icon {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--gap-xs);
-    padding: var(--gap-sm);
+    gap: 4px;
+    /* Reduced gap */
+    padding: 6px;
+    /* Reduced padding */
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: all var(--transition-fast);
-    width: 80px;
+    width: 74px;
+    /* Slightly narrower */
     text-align: center;
     background: transparent;
     border: none;
+    pointer-events: auto;
 }
 
 .desktop-icon:hover {
@@ -538,8 +559,9 @@ button {
 }
 
 .icon-img {
-    width: 48px;
-    height: 48px;
+    width: 42px;
+    /* Smaller icon box */
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -551,8 +573,9 @@ button {
 }
 
 .icon-img svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    /* Smaller SVG */
+    height: 20px;
 }
 
 .desktop-icon:hover .icon-img {
@@ -561,7 +584,8 @@ button {
 }
 
 .icon-label {
-    font-size: 11px;
+    font-size: 10px;
+    /* Slightly smaller text */
     color: var(--text);
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     white-space: nowrap;
@@ -579,7 +603,7 @@ button {
     pointer-events: none;
 }
 
-.windows-container > * {
+.windows-container>* {
     pointer-events: auto;
 }
 
@@ -758,6 +782,7 @@ button {
         opacity: 0;
         transform: translateX(100%);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -813,7 +838,7 @@ button {
 /* ============================================
    RESPONSIVE ADJUSTMENTS
    ============================================ */
-   
+
 /* Mobile App Drawer Toggle */
 .mobile-menu-toggle {
     display: none;
@@ -884,11 +909,11 @@ button {
         right: var(--gap-md);
         justify-content: flex-start;
     }
-    
+
     .desktop-icon {
         width: 70px;
     }
-    
+
     .icon-img svg {
         width: 22px;
         height: 22px;
@@ -899,54 +924,54 @@ button {
     :root {
         --waybar-height: 44px;
     }
-    
+
     .waybar {
         padding: 0 var(--gap-sm);
     }
-    
+
     .waybar-center {
         display: none;
     }
-    
+
     .waybar-left .active-window-title {
         display: none;
     }
-    
+
     .workspace-indicator {
         gap: 2px;
     }
-    
+
     .workspace {
         width: 24px;
         height: 24px;
         font-size: 11px;
     }
-    
+
     .system-tray {
         gap: 4px;
     }
-    
+
     .tray-item {
         padding: 4px 6px;
     }
-    
+
     .tray-item .tray-icon {
         width: 14px;
         height: 14px;
     }
-    
+
     .mobile-menu-toggle {
         display: flex;
     }
-    
+
     .desktop-icons {
         display: none;
     }
-    
+
     .mobile-app-drawer {
         display: block;
     }
-    
+
     .desktop-icon {
         width: 100%;
         flex-direction: row;
@@ -954,22 +979,22 @@ button {
         padding: var(--gap-sm) var(--gap-md);
         border-radius: var(--radius-md);
     }
-    
+
     .icon-img {
         width: 40px;
         height: 40px;
     }
-    
+
     .icon-img svg {
         width: 20px;
         height: 20px;
     }
-    
+
     .icon-label {
         font-size: 13px;
         white-space: normal;
     }
-    
+
     /* Window fullscreen on mobile */
     .window {
         position: fixed !important;
@@ -982,18 +1007,18 @@ button {
         border-radius: 0 !important;
         z-index: 100;
     }
-    
+
     .window .window-titlebar {
         border-radius: 0;
     }
-    
+
     #notification-container {
         top: auto;
         bottom: 70px;
         right: 10px;
         left: 10px;
     }
-    
+
     .notification {
         min-width: auto;
         max-width: none;
@@ -1004,11 +1029,11 @@ button {
     .mobile-app-drawer .drawer-apps {
         grid-template-columns: repeat(3, 1fr);
     }
-    
+
     .window-titlebar {
         padding: 0 var(--gap-sm);
     }
-    
+
     .window-title {
         font-size: 11px;
         max-width: 150px;
@@ -1036,6 +1061,7 @@ button {
         opacity: 0;
         transform: scale(0.95);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -1170,6 +1196,7 @@ button {
         opacity: 0;
         transform: translateX(100px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -1185,6 +1212,7 @@ button {
         opacity: 1;
         transform: translateX(0);
     }
+
     to {
         opacity: 0;
         transform: translateX(100px);

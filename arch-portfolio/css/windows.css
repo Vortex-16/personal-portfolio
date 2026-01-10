@@ -22,7 +22,7 @@
     overflow: hidden;
     z-index: 10;
     transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
-    
+
     /* Default position - will be overridden by JS */
     top: 80px;
     left: 150px;
@@ -48,7 +48,7 @@
 /* Window Focus States */
 .window.focused {
     border-color: var(--accent);
-    box-shadow: 
+    box-shadow:
         var(--glass-shadow),
         0 0 0 1px var(--accent),
         0 0 30px var(--accent-dim);
@@ -146,6 +146,15 @@
 .control.minimize:hover {
     background: var(--yellow);
     color: var(--crust);
+}
+
+.window.workspace-hidden {
+    display: none !important;
+}
+
+.window.wide {
+    width: 900px;
+    height: 600px;
 }
 
 /* Window Icon in Titlebar */
@@ -250,14 +259,37 @@
     border-radius: 2px;
 }
 
-.color.c0 { background: var(--crust); }
-.color.c1 { background: var(--red); }
-.color.c2 { background: var(--green); }
-.color.c3 { background: var(--yellow); }
-.color.c4 { background: var(--blue); }
-.color.c5 { background: var(--mauve); }
-.color.c6 { background: var(--teal); }
-.color.c7 { background: var(--text); }
+.color.c0 {
+    background: var(--crust);
+}
+
+.color.c1 {
+    background: var(--red);
+}
+
+.color.c2 {
+    background: var(--green);
+}
+
+.color.c3 {
+    background: var(--yellow);
+}
+
+.color.c4 {
+    background: var(--blue);
+}
+
+.color.c5 {
+    background: var(--mauve);
+}
+
+.color.c6 {
+    background: var(--teal);
+}
+
+.color.c7 {
+    background: var(--text);
+}
 
 /* About Details */
 .about-details {
@@ -615,10 +647,21 @@
     border-radius: 2px;
 }
 
-.meter-fill.repos { background: var(--blue); }
-.meter-fill.commits { background: var(--green); }
-.meter-fill.stars { background: var(--yellow); }
-.meter-fill.prs { background: var(--mauve); }
+.meter-fill.repos {
+    background: var(--blue);
+}
+
+.meter-fill.commits {
+    background: var(--green);
+}
+
+.meter-fill.stars {
+    background: var(--yellow);
+}
+
+.meter-fill.prs {
+    background: var(--mauve);
+}
 
 .meter-value {
     min-width: 50px;
@@ -686,7 +729,19 @@
 
 .contribution-graph {
     width: 100%;
+    height: auto;
+    max-height: 250px;
+    /* Limit height to prevent taking over the window */
+    object-fit: contain;
+    /* Keep aspect ratio */
     border-radius: var(--radius-md);
+    display: block;
+}
+
+/* Ensure content isn't hidden behind dock when scrolling */
+.window-content {
+    padding-bottom: 80px;
+    /* Safe space for dock */
 }
 
 .github-link {
@@ -1142,14 +1197,69 @@
     z-index: 10;
 }
 
-.resize-handle.top { top: -4px; left: 10px; right: 10px; height: 8px; cursor: n-resize; }
-.resize-handle.bottom { bottom: -4px; left: 10px; right: 10px; height: 8px; cursor: s-resize; }
-.resize-handle.left { left: -4px; top: 10px; bottom: 10px; width: 8px; cursor: w-resize; }
-.resize-handle.right { right: -4px; top: 10px; bottom: 10px; width: 8px; cursor: e-resize; }
-.resize-handle.top-left { top: -4px; left: -4px; width: 12px; height: 12px; cursor: nw-resize; }
-.resize-handle.top-right { top: -4px; right: -4px; width: 12px; height: 12px; cursor: ne-resize; }
-.resize-handle.bottom-left { bottom: -4px; left: -4px; width: 12px; height: 12px; cursor: sw-resize; }
-.resize-handle.bottom-right { bottom: -4px; right: -4px; width: 12px; height: 12px; cursor: se-resize; }
+.resize-handle.top {
+    top: -4px;
+    left: 10px;
+    right: 10px;
+    height: 8px;
+    cursor: n-resize;
+}
+
+.resize-handle.bottom {
+    bottom: -4px;
+    left: 10px;
+    right: 10px;
+    height: 8px;
+    cursor: s-resize;
+}
+
+.resize-handle.left {
+    left: -4px;
+    top: 10px;
+    bottom: 10px;
+    width: 8px;
+    cursor: w-resize;
+}
+
+.resize-handle.right {
+    right: -4px;
+    top: 10px;
+    bottom: 10px;
+    width: 8px;
+    cursor: e-resize;
+}
+
+.resize-handle.top-left {
+    top: -4px;
+    left: -4px;
+    width: 12px;
+    height: 12px;
+    cursor: nw-resize;
+}
+
+.resize-handle.top-right {
+    top: -4px;
+    right: -4px;
+    width: 12px;
+    height: 12px;
+    cursor: ne-resize;
+}
+
+.resize-handle.bottom-left {
+    bottom: -4px;
+    left: -4px;
+    width: 12px;
+    height: 12px;
+    cursor: sw-resize;
+}
+
+.resize-handle.bottom-right {
+    bottom: -4px;
+    right: -4px;
+    width: 12px;
+    height: 12px;
+    cursor: se-resize;
+}
 
 /* ============================================
    RESPONSIVE WINDOW ADJUSTMENTS
@@ -1160,24 +1270,24 @@
         max-width: 600px;
         left: 20px !important;
     }
-    
+
     .window.wide {
         max-width: calc(100vw - 40px);
     }
-    
+
     .neofetch-output {
         flex-direction: column;
     }
-    
+
     .ascii-art {
         font-size: 5px;
         text-align: center;
     }
-    
+
     .ranger-layout {
         grid-template-columns: 1fr;
     }
-    
+
     .ranger-column.parent {
         display: none;
     }
@@ -1191,16 +1301,16 @@
         left: 10px !important;
         right: 10px;
     }
-    
+
     .htop-meters {
         grid-template-columns: 1fr;
     }
-    
+
     .process-header,
     .process-row {
         grid-template-columns: 50px 1fr 50px;
     }
-    
+
     .process-header span:nth-child(2),
     .process-header span:nth-child(5),
     .process-header span:nth-child(6),
@@ -1211,7 +1321,7 @@
     .process-row span:nth-child(7) {
         display: none;
     }
-    
+
     .projects-grid {
         grid-template-columns: 1fr;
     }

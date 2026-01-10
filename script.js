@@ -22,6 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initMascot();
     initScrollTop();
     initMagneticButtons();
+
+    // Initialize Icons
+    if (window.lucide) {
+        lucide.createIcons();
+    }
 });
 
 // Loader with Progress
@@ -31,16 +36,16 @@ function initLoader() {
     const fillEl = document.getElementById('loader-fill');
     const binaryEl = document.getElementById('binary-text');
     const hexEl = document.getElementById('hex-text');
-    
+
     let progress = 0;
     const totalAssets = document.querySelectorAll('img').length + 5; // images + other assets
     let loadedAssets = 0;
-    
+
     // ASCII binary of "VIKASH GUPTA" - each character converted to 8-bit binary
     const name = "VIKASH GUPTA";
     const binaryChars = name.split('').map(char => char.charCodeAt(0).toString(2).padStart(8, '0'));
     let binaryIndex = 0;
-    
+
     // Generate scrolling binary from name ASCII
     function generateBinary() {
         // Show 4 characters worth of binary (32 bits) at a time, scrolling through
@@ -51,19 +56,19 @@ function initLoader() {
         binaryIndex = (binaryIndex + 1) % binaryChars.length;
         return result;
     }
-    
+
     // Generate random hex string
     function generateHex() {
         const hex = Math.floor(Math.random() * 0xFFFFFFFF).toString(16).toUpperCase().padStart(8, '0');
         return '0x ' + hex;
     }
-    
+
     // Update binary and hex text periodically
     const binaryInterval = setInterval(() => {
         if (binaryEl) binaryEl.textContent = generateBinary();
         if (hexEl) hexEl.textContent = generateHex();
     }, 150);
-    
+
     // Track image loading
     const images = document.querySelectorAll('img');
     images.forEach(img => {
@@ -80,7 +85,7 @@ function initLoader() {
             });
         }
     });
-    
+
     // Simulate progress for non-trackable assets
     function simulateProgress() {
         if (progress < 100) {
@@ -88,7 +93,7 @@ function initLoader() {
             const increment = progress < 70 ? Math.random() * 3 + 1 : Math.random() * 5 + 2;
             progress = Math.min(progress + increment, 100);
             updateDisplay();
-            
+
             if (progress < 100) {
                 setTimeout(simulateProgress, 50 + Math.random() * 100);
             } else {
@@ -96,19 +101,19 @@ function initLoader() {
             }
         }
     }
-    
+
     function updateProgress() {
         const imageProgress = (loadedAssets / totalAssets) * 100;
         progress = Math.max(progress, imageProgress);
         updateDisplay();
     }
-    
+
     function updateDisplay() {
         const displayProgress = Math.floor(progress);
         if (percentEl) percentEl.textContent = String(displayProgress).padStart(3, '0');
         if (fillEl) fillEl.style.width = progress + '%';
     }
-    
+
     function finishLoading() {
         clearInterval(binaryInterval);
         setTimeout(() => {
@@ -116,10 +121,10 @@ function initLoader() {
             document.body.style.overflow = 'auto';
         }, 300);
     }
-    
+
     // Start simulated progress
     simulateProgress();
-    
+
     // Fallback: force hide after max time
     setTimeout(() => {
         progress = 100;
@@ -133,7 +138,7 @@ function initCursor() {
     const cursor = document.querySelector('.cursor');
     const follower = document.querySelector('.cursor-follower');
     if (!cursor || !follower) return;
-    
+
     let mouseX = 0, mouseY = 0;
     let cursorX = 0, cursorY = 0;
     let followerX = 0, followerY = 0;
@@ -148,12 +153,12 @@ function initCursor() {
         cursorY += (mouseY - cursorY) * 0.2;
         followerX += (mouseX - followerX) * 0.1;
         followerY += (mouseY - followerY) * 0.1;
-        
+
         cursor.style.left = cursorX + 'px';
         cursor.style.top = cursorY + 'px';
         follower.style.left = followerX + 'px';
         follower.style.top = followerY + 'px';
-        
+
         requestAnimationFrame(animate);
     }
     animate();
@@ -207,7 +212,7 @@ function initNavigation() {
             const sectionHeight = section.offsetHeight;
             const sectionId = section.getAttribute('id');
             const navLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
-            
+
             if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
                 navLinks.forEach(l => l.classList.remove('active'));
                 if (navLink) navLink.classList.add('active');
@@ -221,30 +226,33 @@ function initThemeToggle() {
     const themeToggle = document.querySelector('.theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     const body = document.body;
-    
+
+    // Check saved theme
     // Check saved theme
     const savedTheme = localStorage.getItem('theme') || 'dark';
     if (savedTheme === 'light') {
         body.classList.remove('dark-mode');
         body.classList.add('light-mode');
-        themeIcon.classList.replace('bx-moon', 'bx-sun');
+        // Icon update handled by initial load or simple replace if needed, but here we just set class
     }
-    
+
     // Update graph on initial load
     updateGitHubGraph(savedTheme);
 
     themeToggle.addEventListener('click', () => {
         body.classList.toggle('dark-mode');
         body.classList.toggle('light-mode');
-        
-        if (body.classList.contains('light-mode')) {
-            themeIcon.classList.replace('bx-moon', 'bx-sun');
-            localStorage.setItem('theme', 'light');
-            updateGitHubGraph('light');
-        } else {
-            themeIcon.classList.replace('bx-sun', 'bx-moon');
-            localStorage.setItem('theme', 'dark');
-            updateGitHubGraph('dark');
+
+        const isLight = body.classList.contains('light-mode');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        updateGitHubGraph(isLight ? 'light' : 'dark');
+
+        // Update Icon
+        const iconName = isLight ? 'sun' : 'moon';
+        const oldIcon = document.getElementById('theme-icon');
+        if (oldIcon) {
+            oldIcon.setAttribute('data-lucide', iconName);
+            if (window.lucide) window.lucide.createIcons();
         }
     });
 }
@@ -257,12 +265,19 @@ function initMusicToggle() {
     let isPlaying = false;
 
     musicToggle.addEventListener('click', () => {
+        const musicIcon = document.getElementById('music-icon');
         if (isPlaying) {
             audio.pause();
-            musicIcon.classList.replace('bx-volume-full', 'bx-volume-mute');
+            if (musicIcon) {
+                musicIcon.setAttribute('data-lucide', 'volume-x');
+                if (window.lucide) window.lucide.createIcons();
+            }
         } else {
             audio.play();
-            musicIcon.classList.replace('bx-volume-mute', 'bx-volume-full');
+            if (musicIcon) {
+                musicIcon.setAttribute('data-lucide', 'volume-2');
+                if (window.lucide) window.lucide.createIcons();
+            }
         }
         isPlaying = !isPlaying;
     });
@@ -271,7 +286,7 @@ function initMusicToggle() {
 // Scroll Progress
 function initScrollProgress() {
     const progressBar = document.querySelector('.scroll-progress');
-    
+
     window.addEventListener('scroll', () => {
         const scrollTop = window.scrollY;
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -283,7 +298,7 @@ function initScrollProgress() {
 // Scroll Animations
 function initScrollAnimations() {
     const animateElements = document.querySelectorAll('.animate, .animate-left, .animate-right');
-    
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -307,7 +322,7 @@ function initTypingEffect() {
         'cool experiences',
         'clean code'
     ];
-    
+
     let textIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
@@ -315,7 +330,7 @@ function initTypingEffect() {
 
     function type() {
         const currentText = texts[textIndex];
-        
+
         if (isDeleting) {
             typedText.textContent = currentText.substring(0, charIndex - 1);
             charIndex--;
@@ -337,7 +352,7 @@ function initTypingEffect() {
 
         setTimeout(type, typingSpeed);
     }
-    
+
     setTimeout(type, 1000);
 }
 
@@ -349,13 +364,13 @@ function initSkillsTabs() {
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const tab = btn.dataset.tab;
-            
+
             tabBtns.forEach(b => b.classList.remove('active'));
             tabContents.forEach(c => c.classList.remove('active'));
-            
+
             btn.classList.add('active');
             document.getElementById(tab).classList.add('active');
-            
+
             // Trigger skill bar animation
             setTimeout(() => initSkillBars(), 100);
         });
@@ -370,7 +385,7 @@ function initProjectsFilter() {
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const filter = btn.dataset.filter;
-            
+
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
@@ -390,7 +405,7 @@ function initProjectsFilter() {
 // Skill Bars Animation
 function initSkillBars() {
     const skillBars = document.querySelectorAll('.skill-progress');
-    
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -541,7 +556,7 @@ function animateCountUp(element, target) {
 function initGitHubGraph() {
     const graphImg = document.getElementById('github-activity-graph');
     if (!graphImg) return;
-    
+
     // Set initial theme based on saved preference
     const savedTheme = localStorage.getItem('theme') || 'dark';
     updateGitHubGraph(savedTheme);
@@ -550,10 +565,10 @@ function initGitHubGraph() {
 function updateGitHubGraph(theme) {
     const graphImg = document.getElementById('github-activity-graph');
     if (!graphImg) return;
-    
+
     const username = 'Vortex-16';
     const baseUrl = 'https://github-readme-activity-graph.vercel.app/graph';
-    
+
     if (theme === 'light') {
         graphImg.src = `${baseUrl}?username=${username}&theme=github-light&hide_border=true&area=true`;
     } else {
@@ -566,7 +581,7 @@ function initCountUp() {
     // GitHub stats are handled by initGitHubStats
     // This function now only handles non-GitHub counters if any exist
     const counters = document.querySelectorAll('.stat-num:not([id^="github-"])');
-    
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -589,7 +604,7 @@ function initContactForm() {
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-        
+
         const name = form.querySelector('#name').value;
         const email = form.querySelector('#email').value;
         const subject = form.querySelector('#subject').value;
@@ -632,7 +647,7 @@ function initMascot() {
     const mascot = document.getElementById('form-mascot');
     const mascotMsg = document.getElementById('mascot-msg');
     const formInputs = document.querySelectorAll('.contact-form input, .contact-form textarea');
-    
+
     if (!mascot || !mascotMsg) return;
 
     const messages = [
@@ -648,7 +663,7 @@ function initMascot() {
         input.addEventListener('focus', () => {
             mascotMsg.textContent = messages[Math.floor(Math.random() * messages.length)];
         });
-        
+
         input.addEventListener('input', () => {
             if (input.value.length > 0 && input.value.length % 10 === 0) {
                 mascotMsg.textContent = messages[Math.floor(Math.random() * messages.length)];
@@ -660,7 +675,7 @@ function initMascot() {
 // Scroll Top Button
 function initScrollTop() {
     const scrollTopBtn = document.getElementById('scroll-top');
-    
+
     window.addEventListener('scroll', () => {
         scrollTopBtn.classList.toggle('visible', window.scrollY > 500);
     });
@@ -673,16 +688,16 @@ function initScrollTop() {
 // Magnetic Buttons
 function initMagneticButtons() {
     const magneticElements = document.querySelectorAll('.magnetic');
-    
+
     magneticElements.forEach(el => {
         el.addEventListener('mousemove', (e) => {
             const rect = el.getBoundingClientRect();
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
-            
+
             el.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
         });
-        
+
         el.addEventListener('mouseleave', () => {
             el.style.transform = 'translate(0, 0)';
         });

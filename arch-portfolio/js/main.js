@@ -25,70 +25,77 @@ class BootSequence {
         this.progressBar = document.getElementById('boot-progress');
         this.desktop = document.getElementById('desktop');
     }
-    
+
     async start() {
         if (!this.bootScreen || !this.bootText || !this.desktop) {
             console.error('Boot elements not found');
             this.skipBoot();
             return;
         }
-        
+
         // Wait a moment before starting boot
         await this.delay(300);
-        
+
         const totalMessages = bootMessages.length;
-        
+
         // Display boot messages
         for (let i = 0; i < totalMessages; i++) {
             const msg = bootMessages[i];
             await this.displayMessage(msg);
-            
+
             // Update progress bar
             if (this.progressBar) {
                 const progress = ((i + 1) / totalMessages) * 100;
                 this.progressBar.style.width = `${progress}%`;
             }
         }
-        
+
         // Complete boot
         await this.delay(800);
         this.complete();
     }
-    
+
     async displayMessage(msg) {
         const line = document.createElement('div');
         line.className = 'boot-line' + (msg.success ? ' success' : '');
         line.innerHTML = msg.text;
-        
+
         this.bootText.appendChild(line);
         this.bootText.scrollTop = this.bootText.scrollHeight;
-        
+
         await this.delay(msg.delay);
     }
-    
+
     complete() {
         this.bootScreen.classList.add('fade-out');
-        
+
         setTimeout(() => {
             this.bootScreen.style.display = 'none';
             this.desktop.classList.add('loaded');
-            
+
             // Initialize terminal after boot
             if (typeof Terminal !== 'undefined') {
                 window.terminal = new Terminal('interactive-terminal');
             }
-            
+
+            // Initialize Window Manager
+            if (typeof WindowManager !== 'undefined') {
+                window.windowManager = new WindowManager();
+            }
+
             // Start background tasks
-            initializeDesktop();
+            if (typeof initializeDesktop === 'function') {
+                initializeDesktop();
+            }
         }, 500);
     }
-    
+
     skipBoot() {
         if (this.bootScreen) this.bootScreen.style.display = 'none';
         if (this.desktop) this.desktop.classList.add('loaded');
         initializeDesktop();
     }
-    
+
     delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -101,16 +108,16 @@ class BootSequence {
 function updateClock() {
     const timeEl = document.getElementById('waybar-time');
     const dateEl = document.getElementById('waybar-date');
-    
+
     if (timeEl && dateEl) {
         const now = new Date();
-        
+
         timeEl.textContent = now.toLocaleTimeString('en-US', {
             hour: '2-digit',
             minute: '2-digit',
             hour12: true
         });
-        
+
         dateEl.textContent = now.toLocaleDateString('en-US', {
             weekday: 'short',
             month: 'short',
@@ -136,17 +143,17 @@ async function fetchGitHubStats() {
             return;
         }
     }
-    
+
     try {
         const response = await fetch(`https://api.github.com/users/${GITHUB_CONFIG.username}`);
         if (!response.ok) throw new Error('GitHub API error');
-        
+
         const data = await response.json();
-        
+
         // Fetch additional repos data for languages/contributions
         const reposResponse = await fetch(`https://api.github.com/users/${GITHUB_CONFIG.username}/repos?per_page=100`);
         const repos = await reposResponse.json();
-        
+
         // Calculate stats
         const stats = {
             repos: data.public_repos,
@@ -165,13 +172,13 @@ async function fetchGitHubStats() {
                     description: r.description
                 }))
         };
-        
+
         // Cache the data
         localStorage.setItem(GITHUB_CACHE_KEY, JSON.stringify({
             data: stats,
             timestamp: Date.now()
         }));
-        
+
         displayGitHubStats(stats);
     } catch (error) {
         console.error('Failed to fetch GitHub stats:', error);
@@ -186,7 +193,7 @@ function getTopLanguages(repos) {
             langs[repo.language] = (langs[repo.language] || 0) + 1;
         }
     });
-    
+
     return Object.entries(langs)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 6)
@@ -199,29 +206,29 @@ function displayGitHubStats(stats) {
     const commitsEl = document.getElementById('github-commits');
     const starsEl = document.getElementById('github-stars');
     const prsEl = document.getElementById('github-prs');
-    
+
     if (reposEl) reposEl.textContent = stats.repos;
     if (commitsEl) commitsEl.textContent = stats.followers; // Using followers as proxy
     if (starsEl) starsEl.textContent = stats.stars;
     if (prsEl) prsEl.textContent = stats.forks; // Using forks as proxy
-    
+
     // Animate meter bars
     const reposMeter = document.getElementById('repos-meter');
     const commitsMeter = document.getElementById('commits-meter');
     const starsMeter = document.getElementById('stars-meter');
     const prsMeter = document.getElementById('prs-meter');
-    
+
     if (reposMeter) reposMeter.style.width = Math.min(stats.repos * 2, 100) + '%';
     if (commitsMeter) commitsMeter.style.width = Math.min(stats.followers * 5, 100) + '%';
     if (starsMeter) starsMeter.style.width = Math.min(stats.stars * 10, 100) + '%';
     if (prsMeter) prsMeter.style.width = Math.min(stats.forks * 5, 100) + '%';
-    
+
     // Update languages bar
     const langBar = document.getElementById('gh-languages-bar');
     if (langBar && stats.languages) {
         langBar.innerHTML = '';
         const total = stats.languages.reduce((acc, l) => acc + l.count, 0);
-        
+
         const colors = {
             'JavaScript': '#f1e05a',
             'TypeScript': '#3178c6',
@@ -236,7 +243,7 @@ function displayGitHubStats(stats) {
             'Rust': '#dea584',
             'Shell': '#89e051'
         };
-        
+
         stats.languages.forEach(lang => {
             const percent = (lang.count / total * 100).toFixed(1);
             const bar = document.createElement('div');
@@ -247,7 +254,7 @@ function displayGitHubStats(stats) {
             langBar.appendChild(bar);
         });
     }
-    
+
     // Update repo list
     const repoList = document.getElementById('github-repos-list');
     if (repoList && stats.topRepos) {
@@ -275,7 +282,7 @@ function displayGitHubFallback() {
     const commitsEl = document.getElementById('github-commits');
     const starsEl = document.getElementById('github-stars');
     const prsEl = document.getElementById('github-prs');
-    
+
     if (reposEl) reposEl.textContent = '--';
     if (commitsEl) commitsEl.textContent = '--';
     if (starsEl) starsEl.textContent = '--';
@@ -289,19 +296,19 @@ function displayGitHubFallback() {
 function renderProjects(filter = 'all') {
     const grid = document.getElementById('projects-grid');
     if (!grid) return;
-    
+
     grid.innerHTML = '';
-    
+
     let projects = PROJECTS_DATA;
     if (filter !== 'all') {
         projects = PROJECTS_DATA.filter(p => p.category === filter);
     }
-    
+
     projects.forEach((project, index) => {
         const card = document.createElement('div');
         card.className = 'project-card';
         card.style.animationDelay = `${index * 0.05}s`;
-        
+
         card.innerHTML = `
             <div class="project-icon">${project.icon || '📁'}</div>
             <div class="project-info">
@@ -324,19 +331,19 @@ function renderProjects(filter = 'all') {
                 ` : ''}
             </div>
         `;
-        
+
         grid.appendChild(card);
     });
 }
 
 function initProjectFilters() {
     const filterBtns = document.querySelectorAll('.project-filter-btn');
-    
+
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
+
             const filter = btn.dataset.filter;
             renderProjects(filter);
         });
@@ -349,13 +356,13 @@ function initProjectFilters() {
 
 function renderSkills() {
     const categories = ['languages', 'frontend', 'backend', 'tools'];
-    
+
     categories.forEach(category => {
         const container = document.getElementById(`skills-${category}`);
         if (!container) return;
-        
+
         container.innerHTML = '';
-        
+
         SKILLS_DATA[category].forEach(skill => {
             const row = document.createElement('div');
             row.className = 'pacman-pkg';
@@ -382,16 +389,16 @@ function renderSkills() {
 }
 
 function initSkillsTabs() {
-    const tabs = document.querySelectorAll('.skills-tab');
+    const tabs = document.querySelectorAll('.skill-tab');
     const contents = document.querySelectorAll('.skills-content');
-    
+
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const category = tab.dataset.category;
-            
+
             tabs.forEach(t => t.classList.remove('active'));
             contents.forEach(c => c.classList.remove('active'));
-            
+
             tab.classList.add('active');
             document.getElementById(`skills-${category}`)?.classList.add('active');
         });
@@ -405,33 +412,36 @@ function initSkillsTabs() {
 function initContactForm() {
     const form = document.getElementById('contact-form');
     if (!form) return;
-    
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
-        
+
         // Show loading state
         submitBtn.innerHTML = '<span class="loading-spinner"></span> Sending...';
         submitBtn.disabled = true;
-        
+
         const formData = {
             from_name: document.getElementById('sender-name')?.value || '',
             from_email: document.getElementById('sender-email')?.value || '',
             subject: document.getElementById('mail-subject')?.value || 'Portfolio Contact',
             message: document.getElementById('mail-message')?.value || ''
         };
-        
+
         try {
             if (typeof emailjs !== 'undefined') {
                 await emailjs.send(
                     EMAILJS_CONFIG.serviceId,
                     EMAILJS_CONFIG.templateId,
-                    formData
+                    formData,
+                    EMAILJS_CONFIG.publicKey
                 );
+            } else {
+                throw new Error('EmailJS not loaded');
             }
-            
+
             // Success
             showNotification('Message sent successfully! 📨', 'success');
             form.reset();
@@ -439,7 +449,7 @@ function initContactForm() {
             console.error('Email error:', error);
             showNotification('Failed to send message. Please try again.', 'error');
         }
-        
+
         // Reset button
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
@@ -452,20 +462,20 @@ function initContactForm() {
 
 function showNotification(message, type = 'info') {
     const container = document.getElementById('notification-container') || createNotificationContainer();
-    
+
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
-    
+
     const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
-    
+
     notification.innerHTML = `
         <span class="notif-icon">${icon}</span>
         <span class="notif-message">${message}</span>
         <button class="notif-close" onclick="this.parentElement.remove()">×</button>
     `;
-    
+
     container.appendChild(notification);
-    
+
     // Auto remove after 5 seconds
     setTimeout(() => {
         notification.classList.add('fade-out');
@@ -487,9 +497,9 @@ function createNotificationContainer() {
 function renderTimeline() {
     const container = document.getElementById('timeline-container');
     if (!container) return;
-    
+
     container.innerHTML = '';
-    
+
     EXPERIENCE_DATA.forEach((item, index) => {
         const entry = document.createElement('div');
         entry.className = 'timeline-entry';
@@ -507,36 +517,35 @@ function renderTimeline() {
 }
 
 // ============================================
-// DESKTOP ICONS
+// DESKTOP INITIALIZATION
 // ============================================
 
-function initDesktopIcons() {
-    const icons = document.querySelectorAll('.desktop-icon');
-    
-    icons.forEach(icon => {
-        icon.addEventListener('dblclick', () => {
-            const windowId = icon.dataset.window;
-            if (windowId && windowManager) {
-                windowManager.openWindow(windowId);
-            }
-        });
-        
-        // Mobile tap support
-        let tapCount = 0;
-        icon.addEventListener('click', () => {
-            tapCount++;
-            setTimeout(() => tapCount = 0, 300);
-            
-            if (tapCount === 2) {
-                const windowId = icon.dataset.window;
-                if (windowId && windowManager) {
-                    windowManager.openWindow(windowId);
-                }
-            }
-        });
-    });
-}
+function initializeDesktop() {
+    updateClock();
+    setInterval(updateClock, 1000);
 
+    fetchGitHubStats();
+    renderProjects();
+    initProjectFilters();
+    renderSkills();
+    initSkillsTabs();
+    initContactForm();
+    renderTimeline();
+
+    // Desktop icons initialized by WindowManager now
+
+    initKeyboardShortcuts();
+    initWaybar();
+    initContextMenu();
+    initMobileDrawer();
+    initPowerMenu();
+    initMusicToggle();
+
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+}
 // ============================================
 // KEYBOARD SHORTCUTS
 // ============================================
@@ -548,13 +557,13 @@ function initKeyboardShortcuts() {
             e.preventDefault();
             windowManager?.openWindow('terminal');
         }
-        
+
         // Super + E = Files
         if (e.metaKey && e.key === 'e') {
             e.preventDefault();
             windowManager?.openWindow('files');
         }
-        
+
         // Escape = Close focused window
         if (e.key === 'Escape') {
             const focused = document.querySelector('.window.focused');
@@ -562,7 +571,7 @@ function initKeyboardShortcuts() {
                 windowManager?.closeWindow(focused.id);
             }
         }
-        
+
         // Super + D = Toggle all windows (show desktop)
         if (e.metaKey && e.key === 'd') {
             e.preventDefault();
@@ -580,11 +589,13 @@ function initWaybar() {
     const workspaces = document.querySelectorAll('.workspace');
     workspaces.forEach((ws, i) => {
         ws.addEventListener('click', () => {
-            workspaces.forEach(w => w.classList.remove('active'));
-            ws.classList.add('active');
+            const workspaceNum = i + 1;
+            if (typeof windowManager !== 'undefined') {
+                windowManager.switchWorkspace(workspaceNum);
+            }
         });
     });
-    
+
     // System tray icons
     const volumeBtn = document.querySelector('.volume-btn');
     if (volumeBtn) {
@@ -592,14 +603,14 @@ function initWaybar() {
             showNotification('Volume controls would go here 🔊', 'info');
         });
     }
-    
+
     const wifiBtn = document.querySelector('.wifi-btn');
     if (wifiBtn) {
         wifiBtn.addEventListener('click', () => {
             showNotification('Connected to: GitHub_5G 📶', 'info');
         });
     }
-    
+
     const batteryBtn = document.querySelector('.battery-btn');
     if (batteryBtn) {
         batteryBtn.addEventListener('click', () => {
@@ -615,18 +626,18 @@ function initWaybar() {
 function initContextMenu() {
     const desktop = document.getElementById('desktop-area');
     if (!desktop) return;
-    
+
     desktop.addEventListener('contextmenu', (e) => {
         e.preventDefault();
-        
+
         // Remove existing menu
         document.querySelectorAll('.context-menu').forEach(m => m.remove());
-        
+
         const menu = document.createElement('div');
         menu.className = 'context-menu';
         menu.style.left = `${e.clientX}px`;
         menu.style.top = `${e.clientY}px`;
-        
+
         menu.innerHTML = `
             <div class="context-item" data-action="terminal">
                 <span class="ctx-icon">🖥️</span> Open Terminal
@@ -645,14 +656,14 @@ function initContextMenu() {
                 <span class="ctx-icon">⚙️</span> Settings
             </div>
         `;
-        
+
         document.body.appendChild(menu);
-        
+
         // Handle clicks
         menu.querySelectorAll('.context-item').forEach(item => {
             item.addEventListener('click', () => {
                 const action = item.dataset.action;
-                
+
                 switch (action) {
                     case 'terminal':
                         windowManager?.openWindow('terminal');
@@ -670,11 +681,11 @@ function initContextMenu() {
                         showNotification('Settings panel coming soon! ⚙️', 'info');
                         break;
                 }
-                
+
                 menu.remove();
             });
         });
-        
+
         // Close menu on click outside
         setTimeout(() => {
             document.addEventListener('click', function closeMenu() {
@@ -692,14 +703,14 @@ function initContextMenu() {
 function initMobileDrawer() {
     const drawer = document.getElementById('mobile-drawer');
     const toggleBtn = document.getElementById('mobile-menu-btn');
-    
+
     if (!drawer || !toggleBtn) return;
-    
+
     // Toggle drawer
     toggleBtn.addEventListener('click', () => {
         drawer.classList.toggle('open');
     });
-    
+
     // Close drawer when clicking app
     drawer.querySelectorAll('.desktop-icon').forEach(icon => {
         icon.addEventListener('click', () => {
@@ -710,13 +721,13 @@ function initMobileDrawer() {
             }
         });
     });
-    
+
     // Swipe to close (touch)
     let startY = 0;
     drawer.addEventListener('touchstart', (e) => {
         startY = e.touches[0].clientY;
     });
-    
+
     drawer.addEventListener('touchmove', (e) => {
         const currentY = e.touches[0].clientY;
         if (currentY - startY > 50) {
@@ -732,25 +743,25 @@ function initMobileDrawer() {
 function initPowerMenu() {
     const powerBtn = document.getElementById('power-btn');
     const powerModal = document.getElementById('power-modal');
-    
+
     if (!powerBtn || !powerModal) return;
-    
+
     powerBtn.addEventListener('click', () => {
         powerModal.classList.toggle('active');
     });
-    
+
     // Close on click outside
     document.addEventListener('click', (e) => {
         if (!powerBtn.contains(e.target) && !powerModal.contains(e.target)) {
             powerModal.classList.remove('active');
         }
     });
-    
+
     // Power options
     powerModal.querySelectorAll('.power-option').forEach(option => {
         option.addEventListener('click', () => {
             const action = option.dataset.action;
-            
+
             switch (action) {
                 case 'logout':
                     showNotification('Logging out... (Just kidding! 😄)', 'info');
@@ -767,7 +778,7 @@ function initPowerMenu() {
                     }, 500);
                     break;
             }
-            
+
             powerModal.classList.remove('active');
         });
     });
@@ -780,11 +791,11 @@ function initPowerMenu() {
 function initMusicToggle() {
     const musicBtn = document.getElementById('music-toggle');
     const audio = document.getElementById('lofi-music');
-    
+
     if (!musicBtn || !audio) return;
-    
+
     let isPlaying = false;
-    
+
     musicBtn.addEventListener('click', () => {
         if (isPlaying) {
             audio.pause();
@@ -799,88 +810,6 @@ function initMusicToggle() {
         }
         isPlaying = !isPlaying;
     });
-}
-
-// ============================================
-// SKILLS TABS (Fixed)
-// ============================================
-
-function initSkillsTabs() {
-    const tabs = document.querySelectorAll('.skill-tab');
-    const groups = document.querySelectorAll('.skill-group');
-    
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const targetTab = tab.dataset.tab;
-            
-            // Update active tab
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            
-            // Update active content
-            groups.forEach(g => g.classList.remove('active'));
-            const targetGroup = document.getElementById(`skills-${targetTab}`);
-            if (targetGroup) targetGroup.classList.add('active');
-        });
-    });
-}
-
-// ============================================
-// PROJECT FILTERS (Fixed)
-// ============================================
-
-function initProjectFilters() {
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            const filter = btn.dataset.filter;
-            renderProjects(filter);
-        });
-    });
-}
-
-// ============================================
-// INITIALIZATION
-// ============================================
-
-function initializeDesktop() {
-    // Start clock
-    updateClock();
-    setInterval(updateClock, 1000);
-    
-    // Initialize components
-    initDesktopIcons();
-    initKeyboardShortcuts();
-    initWaybar();
-    initContextMenu();
-    initMobileDrawer();
-    initPowerMenu();
-    initMusicToggle();
-    initProjectFilters();
-    initSkillsTabs();
-    initContactForm();
-    
-    // Render content
-    renderSkills();
-    renderProjects();
-    renderTimeline();
-    
-    // Fetch GitHub stats
-    fetchGitHubStats();
-    
-    // Re-init Lucide icons for dynamic content
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
-    
-    // Open default window
-    setTimeout(() => {
-        windowManager?.openWindow('neofetch');
-    }, 500);
 }
 
 // ============================================
