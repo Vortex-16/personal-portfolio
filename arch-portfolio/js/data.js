@@ -302,7 +302,7 @@ const EXPERIENCE_DATA = [
         period: '2024 - Present',
         title: 'Computer Science Student',
         place: 'STCET, Kolkata',
-        icon: '󰑴',
+        icon: '🎓',
         description: 'Pursuing B.Tech in CSE. Active in coding clubs, technical events, and hackathons.',
         tags: ['DSA', 'Web Dev', 'Open Source']
     },
