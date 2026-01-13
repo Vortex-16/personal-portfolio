@@ -616,16 +616,39 @@ Operations:
         `);
 
         setTimeout(() => {
-            document.body.style.transition = 'all 1.5s ease';
-            document.body.style.opacity = '0';
-            document.body.style.filter = 'brightness(0)';
+            const desktop = document.getElementById('desktop');
+            const powerScreen = document.getElementById('power-on-screen');
+            const bootScreen = document.getElementById('boot-screen');
+            const bootText = document.getElementById('boot-text');
+            const progressBar = document.getElementById('boot-progress');
 
-            setTimeout(() => {
-                document.body.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #000; color: #888; font-family: monospace;"><div style="font-size: 14px; margin-bottom: 20px;">System is powered off.</div><button onclick="location.reload()" style="padding: 10px 24px; background: #1a1a2e; color: #cdd6f4; border: 1px solid #45475a; border-radius: 6px; cursor: pointer; font-family: monospace;">⏻ Power On</button></div>';
-                document.body.style.opacity = '1';
-                document.body.style.filter = '';
-            }, 1500);
-        }, 800);
+            // Hide desktop
+            if (desktop) {
+                desktop.style.opacity = '0';
+                setTimeout(() => {
+                    desktop.style.display = 'none';
+                    desktop.classList.remove('loaded', 'visible');
+                }, 1000);
+            }
+
+            // Reset boot screen
+            if (bootScreen) {
+                bootScreen.style.display = 'none';
+                bootScreen.classList.remove('fade-out');
+            }
+            if (bootText) bootText.innerHTML = '';
+            if (progressBar) progressBar.style.width = '0%';
+
+            // Show power screen
+            if (powerScreen) {
+                // Wait for desktop fade out
+                setTimeout(() => {
+                    powerScreen.classList.remove('hidden');
+                    powerScreen.style.visibility = 'visible';
+                    powerScreen.style.opacity = '1';
+                }, 1000);
+            }
+        }, 1500);
     }
 
     cmdReboot() {

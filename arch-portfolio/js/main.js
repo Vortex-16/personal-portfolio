@@ -425,6 +425,128 @@ function initSkillsTabs() {
 }
 
 // ============================================
+// RANGER FILE MANAGER
+// ============================================
+
+function initRanger() {
+    const fileItems = document.querySelectorAll('.file-item');
+    const previewContainer = document.querySelector('.file-preview');
+
+    fileItems.forEach(item => {
+        item.addEventListener('click', () => {
+            // Active state
+            fileItems.forEach(i => i.classList.remove('selected'));
+            item.classList.add('selected');
+
+            // Update content
+            const fileType = item.dataset.file;
+            updatePreview(fileType, previewContainer);
+        });
+    });
+}
+
+function updatePreview(type, container) {
+    if (!container) return;
+
+    const titleEl = container.querySelector('.preview-title');
+    const contentEl = container.querySelector('.preview-content');
+    const actionsEl = container.querySelector('.preview-actions');
+    const iconEl = container.querySelector('.preview-icon');
+
+    // Default icon
+    if (iconEl) {
+        iconEl.setAttribute('data-lucide', 'file-text');
+    }
+
+    if (type === 'resume') {
+        if (titleEl) titleEl.textContent = 'Vikash-Kr-Gupta-Resume.pdf';
+        if (actionsEl) actionsEl.style.display = 'flex';
+        if (contentEl) {
+            contentEl.innerHTML = `
+<pre>
+╔══════════════════════════════════════════╗
+║          ${USER_DATA.name.toUpperCase()}              ║
+║       ${USER_DATA.title}               ║
+╠══════════════════════════════════════════╣
+║                                          ║
+║  EDUCATION                               ║
+║  ─────────                               ║
+║  ${USER_DATA.education.degree}              ║
+║  ${USER_DATA.education.institution}, ${USER_DATA.education.location} (${USER_DATA.education.period})         ║
+║                                          ║
+║  SKILLS                                  ║
+║  ──────                                  ║
+║  Languages: Java, Python, JavaScript,    ║
+║             C, TypeScript                ║
+║  Frontend:  React, HTML5, CSS3,          ║
+║             Tailwind, Bootstrap          ║
+║  Backend:   Node.js, Express, MongoDB    ║
+║  Tools:     Git, GitHub, VS Code, Linux  ║
+║                                          ║
+║  EXPERIENCE                              ║
+║  ──────────                              ║
+║  ${USER_DATA.experience}                         ║
+║                                          ║
+╚══════════════════════════════════════════╝
+</pre>`;
+        }
+    } else if (type === 'about') {
+        if (iconEl) iconEl.setAttribute('data-lucide', 'file-code');
+        if (titleEl) titleEl.textContent = 'about.md';
+        if (actionsEl) actionsEl.style.display = 'none';
+        if (contentEl) {
+            contentEl.innerHTML = `
+<pre style="white-space: pre-wrap; font-family: 'JetBrains Mono', monospace;">
+<span style="color: var(--accent);"># About Me</span>
+
+${ABOUT_DATA.whoAmI}
+
+<span style="color: var(--accent);">## My Journey</span>
+${ABOUT_DATA.journey}
+
+<span style="color: var(--accent);">## What Drives Me</span>
+${ABOUT_DATA.whatDrivesMe}
+
+<span style="color: var(--accent);">## Interests</span>
+${ABOUT_DATA.tags.map(t => `- [x] ${t.label}`).join('\n')}
+</pre>`;
+        }
+    } else if (type === 'contact') {
+        if (iconEl) iconEl.setAttribute('data-lucide', 'file');
+        if (titleEl) titleEl.textContent = 'contact.txt';
+        if (actionsEl) actionsEl.style.display = 'none';
+        if (contentEl) {
+            contentEl.innerHTML = `
+<pre>
+CONTACT DETAILS
+───────────────
+
+Name:    ${USER_DATA.name}
+Email:   ${USER_DATA.email}
+Loc:     ${USER_DATA.location}
+
+SOCIAL LINKS
+────────────
+GitHub:  ${SOCIAL_LINKS.github.username}
+Twitter: ${SOCIAL_LINKS.twitter.username}
+LinkedIn: ${SOCIAL_LINKS.linkedin.username}
+
+STATUS
+──────
+${USER_DATA.availability}
+</pre>`;
+        }
+    }
+
+    // Re-render icons for new content
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons({
+            root: container
+        });
+    }
+}
+
+// ============================================
 // CONTACT FORM (EmailJS)
 // ============================================
 
@@ -554,9 +676,11 @@ function initializeDesktop() {
     // Desktop icons initialized by WindowManager now
 
     initKeyboardShortcuts();
+    initRanger();
     initWaybar();
     initContextMenu();
-    initMobileDrawer();
+    // initMobileDrawer(); // Replaced by App Launcher
+    initAppLauncher();
     initPowerMenu();
     initMusicToggle();
 
@@ -596,7 +720,118 @@ function initKeyboardShortcuts() {
             e.preventDefault();
             windowManager?.minimizeAll();
         }
+
+        // Super + Space = App Launcher
+        if (e.metaKey && e.key === ' ') {
+            e.preventDefault();
+            const launcher = document.getElementById('app-launcher');
+            const searchInput = launcher?.querySelector('input');
+
+            if (launcher) {
+                if (launcher.classList.contains('active')) {
+                    launcher.classList.remove('active');
+                } else {
+                    launcher.classList.add('active');
+                    if (searchInput) {
+                        searchInput.value = '';
+                        searchInput.focus();
+                    }
+                }
+            }
+        }
     });
+}
+
+// ============================================
+// APP LAUNCHER (ROFI STYLE)
+// ============================================
+
+function initAppLauncher() {
+    const launcher = document.getElementById('app-launcher');
+    const toggleBtn = document.getElementById('mobile-menu-btn');
+    const searchInput = launcher?.querySelector('input');
+    const items = launcher?.querySelectorAll('.launcher-item');
+
+    if (!launcher) return;
+
+    // Filter function
+    function filterItems(query) {
+        if (!items) return;
+        const q = query.toLowerCase();
+
+        items.forEach(item => {
+            const text = item.innerText.toLowerCase();
+            const windowId = item.dataset.window;
+
+            if (text.includes(q)) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    // Toggle function
+    function toggleLauncher() {
+        const isActive = launcher.classList.contains('active');
+        if (isActive) {
+            launcher.classList.remove('active');
+        } else {
+            launcher.classList.add('active');
+            if (searchInput) {
+                searchInput.value = '';
+                searchInput.focus();
+                filterItems('');
+            }
+        }
+    }
+
+    // Button click
+    if (toggleBtn) {
+        // Clone button to remove old listeners (like mobile drawer)
+        const newBtn = toggleBtn.cloneNode(true);
+        toggleBtn.parentNode.replaceChild(newBtn, toggleBtn);
+
+        newBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleLauncher();
+        });
+    }
+
+    // Search input
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => filterItems(e.target.value));
+
+        // Enter key to open first visible item
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const visible = Array.from(items).find(item => item.style.display !== 'none');
+                if (visible) visible.click();
+            }
+        });
+    }
+
+    // Click outside
+    launcher.addEventListener('click', (e) => {
+        if (e.target === launcher) {
+            launcher.classList.remove('active');
+        }
+    });
+
+    // Close on Escape is handled in global shortcuts, but also good here
+
+    // Item clicks
+    if (items) {
+        items.forEach(item => {
+            item.addEventListener('click', () => {
+                const windowId = item.dataset.window;
+                if (windowManager) {
+                    windowManager.openWindow(windowId);
+                }
+                launcher.classList.remove('active');
+            });
+        });
+    }
 }
 
 // ============================================
@@ -791,10 +1026,24 @@ function initPowerMenu() {
                     break;
                 case 'shutdown':
                     showNotification('Shutting down... Visit again soon! 👋', 'info');
-                    setTimeout(() => {
-                        document.body.style.transition = 'opacity 1s';
-                        document.body.style.opacity = '0';
-                    }, 500);
+                    if (window.terminal && typeof window.terminal.cmdPoweroff === 'function') {
+                        window.terminal.cmdPoweroff();
+                    } else {
+                        // Fallback manual logic matches terminal.js
+                        setTimeout(() => {
+                            const desktop = document.getElementById('desktop');
+                            const powerScreen = document.getElementById('power-on-screen');
+                            if (desktop) desktop.style.opacity = '0';
+                            setTimeout(() => {
+                                if (desktop) desktop.style.display = 'none';
+                                if (powerScreen) {
+                                    powerScreen.classList.remove('hidden');
+                                    powerScreen.style.visibility = 'visible';
+                                    powerScreen.style.opacity = '1';
+                                }
+                            }, 1000);
+                        }, 500);
+                    }
                     break;
             }
 

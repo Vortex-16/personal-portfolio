@@ -539,93 +539,10 @@ button {
     display: none;
 }
 
-/* ============================================
-   DESKTOP ICONS
-   ============================================ */
-.desktop-icons {
-    position: absolute;
-    top: var(--gap-md);
-    left: var(--gap-lg);
-    bottom: var(--gap-md);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    /* Reduced gap - compact mode */
-    z-index: 10;
-    overflow-y: auto;
-    padding-right: 4px;
-    /* Space for scrollbar if visible */
-    scrollbar-width: none;
-    /* Hide scrollbar for cleaner look */
-    pointer-events: none;
-}
-
+/* Desktop Icons (Removed for Clean Arch Look) */
+.desktop-icons,
 .desktop-icon {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    /* Reduced gap */
-    padding: 6px;
-    /* Reduced padding */
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    width: 74px;
-    /* Slightly narrower */
-    text-align: center;
-    background: transparent;
-    border: none;
-    pointer-events: auto;
-}
-
-.desktop-icon:hover {
-    background: var(--accent-dim);
-}
-
-.desktop-icon:active {
-    transform: scale(0.95);
-}
-
-.desktop-icon.active {
-    background: var(--accent-dim);
-    box-shadow: 0 0 0 1px var(--accent);
-}
-
-.icon-img {
-    width: 42px;
-    /* Smaller icon box */
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--accent);
-    background: var(--surface0);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--glass-border);
-    transition: all var(--transition-fast);
-}
-
-.icon-img svg {
-    width: 20px;
-    /* Smaller SVG */
-    height: 20px;
-}
-
-.desktop-icon:hover .icon-img {
-    border-color: var(--accent);
-    box-shadow: 0 0 20px var(--accent-dim);
-}
-
-.icon-label {
-    font-size: 10px;
-    /* Slightly smaller text */
-    color: var(--text);
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
+    display: none;
 }
 
 /* ============================================

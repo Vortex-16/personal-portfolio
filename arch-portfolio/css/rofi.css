@@ -1,0 +1,165 @@
+/* ============================================
+   ROFI LAUNCHER STYLES (Arch Theme)
+   ============================================ */
+.app-launcher {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    /* Darker backdrop */
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-launcher.active {
+    display: flex;
+    opacity: 1;
+}
+
+.launcher-content {
+    width: 600px;
+    max-width: 90vw;
+    background: var(--base);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: var(--gap-lg);
+    box-shadow:
+        0 0 0 1px var(--mantle),
+        0 20px 50px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(0, 0, 0, 0.3);
+    /* Subtle glow */
+    transform: translateY(-20px);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+}
+
+.app-launcher.active .launcher-content {
+    transform: translateY(0);
+}
+
+.launcher-search {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-md);
+    background: var(--surface0);
+    border: 1px solid var(--surface1);
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+}
+
+.launcher-search:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent-dim);
+}
+
+.launcher-search .search-icon {
+    color: var(--accent);
+    width: 20px;
+    height: 20px;
+    opacity: 0.8;
+}
+
+.launcher-search input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 18px;
+    /* Larger font */
+    outline: none;
+    caret-color: var(--accent);
+}
+
+.launcher-search input::placeholder {
+    color: var(--overlay0);
+}
+
+.launcher-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 4px;
+    /* Space for scrollbar */
+}
+
+/* Scrollbar styling */
+.launcher-grid::-webkit-scrollbar {
+    width: 6px;
+}
+
+.launcher-grid::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.launcher-grid::-webkit-scrollbar-thumb {
+    background: var(--surface1);
+    border-radius: 3px;
+}
+
+.launcher-grid::-webkit-scrollbar-thumb:hover {
+    background: var(--overlay0);
+}
+
+.launcher-item {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-md);
+    padding: 10px 16px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.1s ease;
+    width: 100%;
+    text-align: left;
+}
+
+.launcher-item:hover,
+.launcher-item.selected {
+    background: var(--surface0);
+    border-color: var(--border-color, #333);
+    /* Fallback */
+}
+
+.launcher-item:hover .item-icon,
+.launcher-item.selected .item-icon {
+    color: var(--accent);
+    transform: scale(1.1);
+}
+
+.item-icon {
+    color: var(--overlay1);
+    width: 24px;
+    height: 24px;
+    transition: all 0.2s ease;
+}
+
+.item-label {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    color: var(--subtext1);
+    font-weight: 500;
+    flex: 1;
+    /* Take available space */
+}
+
+.launcher-item:hover .item-label {
+    color: var(--text);
+}
+
+.item-desc {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--overlay0);
+    /* font-style: italic; */
+    /* Cleaner without italic */
+}

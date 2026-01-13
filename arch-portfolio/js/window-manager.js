@@ -15,7 +15,7 @@ class WindowManager {
     }
 
     init() {
-        // Initialize all windows
+        // Initialize all windows data
         document.querySelectorAll('.window').forEach(window => {
             const windowId = window.dataset.window;
             this.windows.set(windowId, {
@@ -25,120 +25,129 @@ class WindowManager {
                 position: { x: 0, y: 0 },
                 size: { width: 0, height: 0 }
             });
-
-            this.setupWindowControls(window);
-            this.setupDragging(window);
             this.addResizeHandles(window);
         });
 
-
-        this.setupDesktopIcons();
-
+        this.setupGlobalListeners();
         this.setupDock();
-
         this.positionWindows();
 
         setTimeout(() => this.openWindow('neofetch'), 100);
 
         this.currentWorkspace = 1;
-        this.windowWorkspaces = new Map(); // windowId -> workspaceNum
+        this.windowWorkspaces = new Map();
         this.switchWorkspace(1);
     }
 
-    switchWorkspace(workspaceNum) {
-        if (this.currentWorkspace !== workspaceNum) {
-            this.currentWorkspace = workspaceNum;
+    setupGlobalListeners() {
+        // Window Controls (Delegation)
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.control');
+            if (!btn) return;
 
-            document.querySelectorAll('.workspace').forEach(ws => {
-                ws.classList.toggle('active', parseInt(ws.textContent) === workspaceNum);
+            const windowEl = btn.closest('.window');
+            if (!windowEl) return;
+
+            const windowId = windowEl.dataset.window;
+            e.stopPropagation();
+
+            if (btn.classList.contains('close')) this.closeWindow(windowId);
+            else if (btn.classList.contains('minimize')) this.minimizeWindow(windowId);
+            else if (btn.classList.contains('maximize')) this.toggleMaximize(windowId);
+        });
+
+        // Window Focus (Delegation)
+        document.addEventListener('mousedown', (e) => {
+            const windowEl = e.target.closest('.window');
+            if (windowEl) {
+                this.focusWindow(windowEl.dataset.window);
+            }
+        });
+
+        // Double Click Maximize (Delegation)
+        document.addEventListener('dblclick', (e) => {
+            const titlebar = e.target.closest('.window-titlebar');
+            if (titlebar && !e.target.closest('.control')) {
+                const windowEl = titlebar.closest('.window');
+                if (windowEl) this.toggleMaximize(windowEl.dataset.window);
+            }
+        });
+
+        // Dragging & Resizing Start (Delegation)
+        document.addEventListener('mousedown', (e) => {
+            // 1. Check for Resize Handle
+            const handleDiv = e.target.closest('.resize-handle');
+            if (handleDiv) {
+                const windowEl = handleDiv.closest('.window');
+                if (!windowEl) return;
+
+                const windowData = this.windows.get(windowEl.dataset.window);
+                if (windowData.maximized) return;
+
+                e.preventDefault();
+                this.resizeState = {
+                    windowId: windowEl.dataset.window,
+                    handle: handleDiv.dataset.handle,
+                    startX: e.clientX,
+                    startY: e.clientY,
+                    startWidth: windowEl.offsetWidth,
+                    startHeight: windowEl.offsetHeight,
+                    startLeft: windowEl.offsetLeft,
+                    startTop: windowEl.offsetTop
+                };
+                document.body.style.userSelect = 'none';
+                return;
+            }
+
+            // 2. Check for Titlebar (Dragging)
+            const titlebar = e.target.closest('.window-titlebar');
+            if (titlebar && !e.target.closest('.control')) {
+                const windowEl = titlebar.closest('.window');
+                if (!windowEl) return;
+
+                const windowId = windowEl.dataset.window;
+                const windowData = this.windows.get(windowId);
+
+                if (windowData.maximized) return;
+
+                this.dragState = {
+                    windowId: windowId,
+                    startX: e.clientX,
+                    startY: e.clientY,
+                    windowX: windowEl.offsetLeft,
+                    windowY: windowEl.offsetTop
+                };
+
+                document.body.style.userSelect = 'none';
+            }
+        });
+
+        // Global Mouse Move (Drag & Resize) using rAF for performance
+        document.addEventListener('mousemove', (e) => {
+            if (!this.dragState && !this.resizeState) return;
+
+            // Use requestAnimationFrame to throttle redraws
+            if (this.ticking) return;
+            this.ticking = true;
+
+            requestAnimationFrame(() => {
+                if (this.dragState) this.handleDrag(e);
+                if (this.resizeState) this.handleResize(e);
+                this.ticking = false;
             });
-        }
+        });
 
-        this.windows.forEach((data, windowId) => {
-            const windowWs = this.windowWorkspaces.get(windowId) || 1; // Default to WS 1
-            const windowEl = data.element;
-
-            if (windowWs === workspaceNum) {
-                windowEl.style.display = 'flex'; 
-                if (data.minimized) {
-                    windowEl.classList.add('minimized');
-                } else {
-                    windowEl.classList.remove('workspace-hidden');
-                }
-            } else {
-                windowEl.classList.add('workspace-hidden');
+        // Global Mouse Up (End Drag & Resize)
+        document.addEventListener('mouseup', () => {
+            if (this.dragState || this.resizeState) {
+                this.dragState = null;
+                this.resizeState = null;
+                document.body.style.userSelect = '';
             }
         });
     }
 
-    assignWindowToWorkspace(windowId, workspaceNum) {
-        this.windowWorkspaces.set(windowId, workspaceNum);
-    }
-
-    setupWindowControls(window) {
-        const closeBtn = window.querySelector('.control.close');
-        const minBtn = window.querySelector('.control.minimize');
-        const maxBtn = window.querySelector('.control.maximize');
-
-        if (closeBtn) {
-            closeBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.closeWindow(window.dataset.window);
-            });
-        }
-
-        if (minBtn) {
-            minBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.minimizeWindow(window.dataset.window);
-            });
-        }
-
-        if (maxBtn) {
-            maxBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.toggleMaximize(window.dataset.window);
-            });
-        }
-
-        // Focus on click
-        window.addEventListener('mousedown', () => {
-            this.focusWindow(window.dataset.window);
-        });
-
-        // Double click titlebar to maximize
-        const titlebar = window.querySelector('.window-titlebar');
-        if (titlebar) {
-            titlebar.addEventListener('dblclick', () => {
-                this.toggleMaximize(window.dataset.window);
-            });
-        }
-    }
-
-    setupDragging(window) {
-        const titlebar = window.querySelector('.window-titlebar');
-        if (!titlebar) return;
-
-        titlebar.addEventListener('mousedown', (e) => {
-            if (e.target.closest('.titlebar-controls')) return;
-
-            const windowData = this.windows.get(window.dataset.window);
-            if (windowData.maximized) return;
-
-            this.dragState = {
-                windowId: window.dataset.window,
-                startX: e.clientX,
-                startY: e.clientY,
-                windowX: window.offsetLeft,
-                windowY: window.offsetTop
-            };
-
-            document.addEventListener('mousemove', this.handleDrag);
-            document.addEventListener('mouseup', this.stopDrag);
-        });
-    }
-
-    handleDrag = (e) => {
+    handleDrag(e) {
         if (!this.dragState) return;
 
         const window = this.windows.get(this.dragState.windowId).element;
@@ -147,56 +156,28 @@ class WindowManager {
 
         const newX = Math.max(0, Math.min(
             this.dragState.windowX + deltaX,
-            document.documentElement.clientWidth - 100
+            document.documentElement.clientWidth - 50
         ));
-        const newY = Math.max(40, Math.min(
+        const newY = Math.max(25, Math.min(
             this.dragState.windowY + deltaY,
-            document.documentElement.clientHeight - 100
+            document.documentElement.clientHeight - 50
         ));
 
-        window.style.left = newX + 'px';
-        window.style.top = newY + 'px';
-    }
-
-    stopDrag = () => {
-        this.dragState = null;
-        document.removeEventListener('mousemove', this.handleDrag);
-        document.removeEventListener('mouseup', this.stopDrag);
+        window.style.left = `${newX}px`;
+        window.style.top = `${newY}px`;
     }
 
     addResizeHandles(window) {
         const handles = ['top', 'bottom', 'left', 'right', 'top-left', 'top-right', 'bottom-left', 'bottom-right'];
-
         handles.forEach(handle => {
             const div = document.createElement('div');
             div.className = `resize-handle ${handle}`;
-            div.addEventListener('mousedown', (e) => this.startResize(e, window, handle));
+            div.dataset.handle = handle;
             window.appendChild(div);
         });
     }
 
-    startResize(e, window, handle) {
-        e.preventDefault();
-
-        const windowData = this.windows.get(window.dataset.window);
-        if (windowData.maximized) return;
-
-        this.resizeState = {
-            windowId: window.dataset.window,
-            handle,
-            startX: e.clientX,
-            startY: e.clientY,
-            startWidth: window.offsetWidth,
-            startHeight: window.offsetHeight,
-            startLeft: window.offsetLeft,
-            startTop: window.offsetTop
-        };
-
-        document.addEventListener('mousemove', this.handleResize);
-        document.addEventListener('mouseup', this.stopResize);
-    }
-
-    handleResize = (e) => {
+    handleResize(e) {
         if (!this.resizeState) return;
 
         const window = this.windows.get(this.resizeState.windowId).element;
@@ -224,47 +205,10 @@ class WindowManager {
             newTop = this.resizeState.startTop + deltaY;
         }
 
-        window.style.width = newWidth + 'px';
-        window.style.height = newHeight + 'px';
-        window.style.left = newLeft + 'px';
-        window.style.top = newTop + 'px';
-    }
-
-    stopResize = () => {
-        this.resizeState = null;
-        document.removeEventListener('mousemove', this.handleResize);
-        document.removeEventListener('mouseup', this.stopResize);
-    }
-
-    setupDesktopIcons() {
-        const desktopIcons = document.querySelectorAll('#desktop-icons .desktop-icon');
-
-        desktopIcons.forEach(icon => {
-            let tapCount = 0;
-
-            icon.addEventListener('click', (e) => {
-                e.preventDefault();
-                desktopIcons.forEach(i => i.classList.remove('active'));
-                icon.classList.add('active');
-
-                const windowId = icon.dataset.window;
-
-                icon.classList.add('launching');
-                setTimeout(() => icon.classList.remove('launching'), 600);
-
-                this.openWindow(windowId);
-            });
-
-        });
-
-        const desktopArea = document.getElementById('desktop-area');
-        if (desktopArea) {
-            desktopArea.addEventListener('click', (e) => {
-                if (e.target.id === 'desktop-area' || e.target.classList.contains('windows-container')) {
-                    desktopIcons.forEach(i => i.classList.remove('active'));
-                }
-            });
-        }
+        window.style.width = `${newWidth}px`;
+        window.style.height = `${newHeight}px`;
+        window.style.left = `${newLeft}px`;
+        window.style.top = `${newTop}px`;
     }
 
     setupDock() {
@@ -297,6 +241,36 @@ class WindowManager {
                 offsetY = 80;
             }
         });
+    }
+
+    switchWorkspace(workspaceNum) {
+        if (this.currentWorkspace !== workspaceNum) {
+            this.currentWorkspace = workspaceNum;
+
+            document.querySelectorAll('.workspace').forEach(ws => {
+                ws.classList.toggle('active', parseInt(ws.textContent) === workspaceNum);
+            });
+        }
+
+        this.windows.forEach((data, windowId) => {
+            const windowWs = this.windowWorkspaces.get(windowId) || 1; // Default to WS 1
+            const windowEl = data.element;
+
+            if (windowWs === workspaceNum) {
+                windowEl.style.display = 'flex';
+                if (data.minimized) {
+                    windowEl.classList.add('minimized');
+                } else {
+                    windowEl.classList.remove('workspace-hidden');
+                }
+            } else {
+                windowEl.classList.add('workspace-hidden');
+            }
+        });
+    }
+
+    assignWindowToWorkspace(windowId, workspaceNum) {
+        this.windowWorkspaces.set(windowId, workspaceNum);
     }
 
     openWindow(windowId) {
@@ -333,9 +307,6 @@ class WindowManager {
             window.classList.remove('opening');
         }, 10);
 
-        setTimeout(() => {
-        }, 300);
-
         this.focusWindow(windowId);
         this.updateActiveWindowTitle(windowId);
         this.updateWorkspaces(windowId);
@@ -362,7 +333,7 @@ class WindowManager {
                 this.activeWindow = null;
                 this.updateActiveWindowTitle(null);
             }
-        }, 300);
+        }, 150);
     }
 
     minimizeWindow(windowId) {
@@ -382,7 +353,7 @@ class WindowManager {
                 this.activeWindow = null;
                 this.updateActiveWindowTitle(null);
             }
-        }, 300);
+        }, 150);
     }
 
     restoreWindow(windowId) {
@@ -483,22 +454,6 @@ class WindowManager {
         }
     }
 
-    restoreWindow(windowId) {
-        const targetWs = this.windowWorkspaces.get(windowId);
-        if (targetWs && targetWs !== this.currentWorkspace) {
-            this.switchWorkspace(targetWs);
-        }
-
-        const windowData = this.windows.get(windowId);
-        if (!windowData) return;
-
-        const window = windowData.element;
-        window.classList.remove('minimized');
-        windowData.minimized = false;
-
-        this.focusWindow(windowId);
-    }
-
     removeDockItem(windowId) {
         const dock = document.getElementById('dock-items');
         if (!dock) return;
@@ -525,7 +480,7 @@ class WindowManager {
         const window = windowData.element;
         const iconEl = window.querySelector('.window-titlebar .window-icon');
 
-        const title = windowId; 
+        const title = windowId;
 
         titleEl.querySelector('.window-name').textContent = title;
         const winIconAttr = iconEl?.getAttribute('data-lucide');
