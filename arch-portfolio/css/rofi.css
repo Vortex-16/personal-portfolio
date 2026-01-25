@@ -1,11 +1,7 @@
-/* ============================================
-   ROFI LAUNCHER STYLES (Arch Theme)
-   ============================================ */
 .app-launcher {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.7);
-    /* Darker backdrop */
     backdrop-filter: blur(8px);
     z-index: 9999;
     display: none;
@@ -31,7 +27,6 @@
         0 0 0 1px var(--mantle),
         0 20px 50px rgba(0, 0, 0, 0.8),
         0 0 30px rgba(0, 0, 0, 0.3);
-    /* Subtle glow */
     transform: translateY(-20px);
     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
@@ -72,7 +67,6 @@
     color: var(--text);
     font-family: var(--font-mono);
     font-size: 18px;
-    /* Larger font */
     outline: none;
     caret-color: var(--accent);
 }
@@ -88,10 +82,8 @@
     max-height: 400px;
     overflow-y: auto;
     padding-right: 4px;
-    /* Space for scrollbar */
 }
 
-/* Scrollbar styling */
 .launcher-grid::-webkit-scrollbar {
     width: 6px;
 }
@@ -127,7 +119,6 @@
 .launcher-item.selected {
     background: var(--surface0);
     border-color: var(--border-color, #333);
-    /* Fallback */
 }
 
 .launcher-item:hover .item-icon,
@@ -149,7 +140,6 @@
     color: var(--subtext1);
     font-weight: 500;
     flex: 1;
-    /* Take available space */
 }
 
 .launcher-item:hover .item-label {
@@ -160,6 +150,4 @@
     font-family: var(--font-sans);
     font-size: 12px;
     color: var(--overlay0);
-    /* font-style: italic; */
-    /* Cleaner without italic */
 }

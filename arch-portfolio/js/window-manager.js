@@ -1,8 +1,3 @@
-/* ============================================
-   WINDOW MANAGER
-   Hyprland-style window management system
-   ============================================ */
-
 class WindowManager {
     constructor() {
         this.windows = new Map();
@@ -15,7 +10,6 @@ class WindowManager {
     }
 
     init() {
-        // Initialize all windows data
         document.querySelectorAll('.window').forEach(window => {
             const windowId = window.dataset.window;
             this.windows.set(windowId, {
@@ -40,7 +34,6 @@ class WindowManager {
     }
 
     setupGlobalListeners() {
-        // Window Controls (Delegation)
         document.addEventListener('click', (e) => {
             const btn = e.target.closest('.control');
             if (!btn) return;
@@ -56,7 +49,6 @@ class WindowManager {
             else if (btn.classList.contains('maximize')) this.toggleMaximize(windowId);
         });
 
-        // Window Focus (Delegation)
         document.addEventListener('mousedown', (e) => {
             const windowEl = e.target.closest('.window');
             if (windowEl) {
@@ -64,7 +56,6 @@ class WindowManager {
             }
         });
 
-        // Double Click Maximize (Delegation)
         document.addEventListener('dblclick', (e) => {
             const titlebar = e.target.closest('.window-titlebar');
             if (titlebar && !e.target.closest('.control')) {
@@ -73,9 +64,7 @@ class WindowManager {
             }
         });
 
-        // Dragging & Resizing Start (Delegation)
         document.addEventListener('mousedown', (e) => {
-            // 1. Check for Resize Handle
             const handleDiv = e.target.closest('.resize-handle');
             if (handleDiv) {
                 const windowEl = handleDiv.closest('.window');
@@ -99,7 +88,6 @@ class WindowManager {
                 return;
             }
 
-            // 2. Check for Titlebar (Dragging)
             const titlebar = e.target.closest('.window-titlebar');
             if (titlebar && !e.target.closest('.control')) {
                 const windowEl = titlebar.closest('.window');
@@ -122,11 +110,9 @@ class WindowManager {
             }
         });
 
-        // Global Mouse Move (Drag & Resize) using rAF for performance
         document.addEventListener('mousemove', (e) => {
             if (!this.dragState && !this.resizeState) return;
 
-            // Use requestAnimationFrame to throttle redraws
             if (this.ticking) return;
             this.ticking = true;
 
@@ -137,7 +123,6 @@ class WindowManager {
             });
         });
 
-        // Global Mouse Up (End Drag & Resize)
         document.addEventListener('mouseup', () => {
             if (this.dragState || this.resizeState) {
                 this.dragState = null;
@@ -253,7 +238,7 @@ class WindowManager {
         }
 
         this.windows.forEach((data, windowId) => {
-            const windowWs = this.windowWorkspaces.get(windowId) || 1; // Default to WS 1
+            const windowWs = this.windowWorkspaces.get(windowId) || 1;
             const windowEl = data.element;
 
             if (windowWs === workspaceNum) {
@@ -299,7 +284,6 @@ class WindowManager {
 
         window.classList.add('opening');
 
-        // Force reflow
         void window.offsetWidth;
 
         setTimeout(() => {
@@ -380,7 +364,6 @@ class WindowManager {
         const window = windowData.element;
 
         if (windowData.maximized) {
-            // Restore
             window.classList.remove('fullscreen');
             window.style.left = windowData.position.x + 'px';
             window.style.top = windowData.position.y + 'px';
@@ -411,7 +394,6 @@ class WindowManager {
             data.element.classList.remove('focused');
         });
 
-        // Focus target window
         this.highestZIndex++;
         windowData.element.style.zIndex = this.highestZIndex;
         windowData.element.classList.add('focused');

@@ -1,8 +1,3 @@
-/* ============================================
-   TERMINAL.JS
-   Interactive terminal emulator
-   ============================================ */
-
 class Terminal {
     constructor(containerId) {
         this.container = document.getElementById(containerId);
@@ -64,15 +59,12 @@ class Terminal {
     }
 
     executeCommand(cmdLine) {
-        // Add command to history display
         this.addCommand(cmdLine);
 
-        // Parse command and arguments
         const parts = cmdLine.split(/\s+/);
         const cmd = parts[0].toLowerCase();
         const args = parts.slice(1);
 
-        // Execute command
         switch (cmd) {
             case 'help':
                 this.cmdHelp(args);
@@ -186,7 +178,6 @@ class Terminal {
     }
 
     addPrompt() {
-        // Just scroll to bottom, prompt is always visible
         this.scrollToBottom();
     }
 
@@ -220,10 +211,6 @@ class Terminal {
             this.addOutput(matches.join('  '));
         }
     }
-
-    // ============================================
-    // COMMAND IMPLEMENTATIONS
-    // ============================================
 
     cmdHelp(args) {
         if (args.length > 0 && TERMINAL_COMMANDS[args[0]]) {
@@ -622,7 +609,6 @@ Operations:
             const bootText = document.getElementById('boot-text');
             const progressBar = document.getElementById('boot-progress');
 
-            // Hide desktop
             if (desktop) {
                 desktop.style.opacity = '0';
                 setTimeout(() => {
@@ -631,7 +617,6 @@ Operations:
                 }, 1000);
             }
 
-            // Reset boot screen
             if (bootScreen) {
                 bootScreen.style.display = 'none';
                 bootScreen.classList.remove('fade-out');
@@ -639,9 +624,7 @@ Operations:
             if (bootText) bootText.innerHTML = '';
             if (progressBar) progressBar.style.width = '0%';
 
-            // Show power screen
             if (powerScreen) {
-                // Wait for desktop fade out
                 setTimeout(() => {
                     powerScreen.classList.remove('hidden');
                     powerScreen.style.visibility = 'visible';
@@ -683,7 +666,6 @@ Operations:
     }
 }
 
-// Initialize terminal when window opens
 let terminal;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -692,5 +674,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 3000);
 });
 
-// Export for global access
 window.Terminal = Terminal;

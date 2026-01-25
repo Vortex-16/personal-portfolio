@@ -1,12 +1,3 @@
-/* ============================================
-   DATA.JS - Extracted Portfolio Data
-   All content from original portfolio mapped 
-   to Arch Linux OS metaphor
-   ============================================ */
-
-// ============================================
-// PERSONAL INFORMATION
-// ============================================
 const USER_DATA = {
     name: 'Vikash Gupta',
     username: 'vikash',
@@ -25,9 +16,6 @@ const USER_DATA = {
     }
 };
 
-// ============================================
-// SOCIAL LINKS
-// ============================================
 const SOCIAL_LINKS = {
     github: {
         url: 'https://github.com/Vortex-16',
@@ -51,9 +39,6 @@ const SOCIAL_LINKS = {
     }
 };
 
-// ============================================
-// ABOUT SECTION
-// ============================================
 const ABOUT_DATA = {
     whoAmI: "Hey there! I am a Computer Science Engineer and Full Stack Developer with a burning passion for building digital solutions.",
     journey: "Currently pursuing engineering at STCET. From crafting pixel-perfect UIs to architecting robust backend systems, I love every aspect of development.",
@@ -66,9 +51,6 @@ const ABOUT_DATA = {
     ]
 };
 
-// ============================================
-// SKILLS - Mapped as "Installed Packages"
-// ============================================
 const SKILLS_DATA = {
     languages: [
         { name: 'java', version: '17.0.1-1', desc: 'High-level, class-based, object-oriented language', level: 85, levelText: 'Advanced' },
@@ -99,11 +81,7 @@ const SKILLS_DATA = {
     ]
 };
 
-// ============================================
-// PROJECTS - Mapped as "Applications"
-// ============================================
 const PROJECTS_DATA = [
-    // WEB DEV PROJECTS
     {
         id: 1,
         category: 'web',
@@ -227,7 +205,6 @@ const PROJECTS_DATA = [
         liveUrl: 'https://pragatipath.onrender.com/',
         githubUrl: null
     },
-    // APPLICATION PROJECTS
     {
         id: 13,
         category: 'app',
@@ -268,7 +245,6 @@ const PROJECTS_DATA = [
         liveUrl: null,
         githubUrl: 'https://github.com/Vortex-16/C'
     },
-    // DEVTRACK PROJECT
     {
         id: 18,
         category: 'web',
@@ -280,7 +256,6 @@ const PROJECTS_DATA = [
         liveUrl: 'https://devtrack-pwkj.onrender.com/',
         githubUrl: 'https://github.com/Alpha4Coders/DevTrack'
     },
-    // OTHER PROJECTS
     {
         id: 17,
         category: 'other',
@@ -294,9 +269,6 @@ const PROJECTS_DATA = [
     }
 ];
 
-// ============================================
-// EXPERIENCE - Mapped as "Timeline / Logs"
-// ============================================
 const EXPERIENCE_DATA = [
     {
         period: '2024 - Present',
@@ -332,28 +304,19 @@ const EXPERIENCE_DATA = [
     }
 ];
 
-// ============================================
-// GITHUB CONFIGURATION
-// ============================================
 const GITHUB_CONFIG = {
     username: 'Vortex-16',
     apiBase: 'https://api.github.com',
-    cacheDuration: 30 * 60 * 1000, // 30 minutes
+    cacheDuration: 30 * 60 * 1000,
     graphUrl: 'https://github-readme-activity-graph.vercel.app/graph'
 };
 
-// ============================================
-// EMAILJS CONFIGURATION
-// ============================================
 const EMAILJS_CONFIG = {
     serviceId: 'service_vikash__gupta',
     templateId: 'template_u8mh7fk',
     publicKey: 'jS_OjCoYjCk6NEZxd'
 };
 
-// ============================================
-// TYPING ANIMATION TEXTS
-// ============================================
 const TYPING_TEXTS = [
     'modern web apps',
     'beautiful UIs',
@@ -362,9 +325,6 @@ const TYPING_TEXTS = [
     'clean code'
 ];
 
-// ============================================
-// TERMINAL COMMANDS - Interactive Shell Data
-// ============================================
 const TERMINAL_COMMANDS = {
     help: {
         description: 'Show available commands',
@@ -456,9 +416,6 @@ const TERMINAL_COMMANDS = {
     }
 };
 
-// ============================================
-// FORTUNE MESSAGES
-// ============================================
 const FORTUNE_MESSAGES = [
     "The best code is no code at all.",
     "First, solve the problem. Then, write the code.",
@@ -477,9 +434,6 @@ const FORTUNE_MESSAGES = [
     "It works on my machine. ¯\\_(ツ)_/¯"
 ];
 
-// ============================================
-// FILE SYSTEM STRUCTURE (Virtual)
-// ============================================
 const FILE_SYSTEM = {
     '/': {
         type: 'dir',
@@ -516,7 +470,6 @@ const FILE_SYSTEM = {
     }
 };
 
-// Export for module usage (if needed)
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         USER_DATA,
