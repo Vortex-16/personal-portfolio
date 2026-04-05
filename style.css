@@ -31,7 +31,7 @@ svg.lucide {
 
 @font-face {
     font-family: 'Lexa';
-    src: url('assests/font/lexa.otf') format('opentype');
+    src: url('assets/font/lexa.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -39,7 +39,7 @@ svg.lucide {
 
 @font-face {
     font-family: 'Monorama';
-    src: url('assests/font/Monorama-Regular.ttf') format('truetype');
+    src: url('assets/font/Monorama-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -47,7 +47,7 @@ svg.lucide {
 
 @font-face {
     font-family: 'Monorama';
-    src: url('assests/font/Monorama-Medium.ttf') format('truetype');
+    src: url('assets/font/Monorama-Medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -55,7 +55,7 @@ svg.lucide {
 
 @font-face {
     font-family: 'Monorama';
-    src: url('assests/font/Monorama-SemiBold.ttf') format('truetype');
+    src: url('assets/font/Monorama-SemiBold.ttf') format('truetype');
     font-weight: 600;
     font-style: normal;
     font-display: swap;
@@ -63,7 +63,7 @@ svg.lucide {
 
 @font-face {
     font-family: 'Monorama';
-    src: url('assests/font/Monorama-Bold.ttf') format('truetype');
+    src: url('assets/font/Monorama-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
     font-display: swap;
@@ -71,7 +71,7 @@ svg.lucide {
 
 @font-face {
     font-family: 'OrangeAvenueOutline';
-    src: url('assests/font/Sprintura\ Demo.otf') format('opentype');
+    src: url('assets/font/Sprintura\ Demo.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;

@@ -87,7 +87,7 @@ const PROJECTS_DATA = [
         category: 'web',
         title: 'Modern Portfolio Website',
         description: 'Responsive portfolio with dark/light mode, smooth animations, and interactive 3D background effects.',
-        image: '../assests/images/Project/modernPortfolio.jpeg',
+        image: 'assets/images/Project/modernPortfolio.jpeg',
         tags: ['React', 'Tailwind', '3D Effects'],
         liveUrl: 'https://vikash.is-a.dev',
         githubUrl: null
@@ -97,7 +97,7 @@ const PROJECTS_DATA = [
         category: 'web',
         title: 'Alpha Chats Platform',
         description: 'Private chat platform for Alpha Coders to discuss projects securely.',
-        image: '../assests/images/Project/AlphaChat.png',
+        image: 'assets/images/Project/AlphaChat.png',
         tags: ['React', 'Real-time', 'Private'],
         liveUrl: 'https://alpha-chats.vercel.app',
         githubUrl: null
@@ -130,7 +130,7 @@ const PROJECTS_DATA = [
         category: 'web',
         title: 'Maa Janki Hospital',
         description: 'Hospital website with clean UI, animations, bilingual support & embedded Google Maps.',
-        image: '../assests/images/Project/MaaJankDrAmrit.png',
+        image: 'assets/images/Project/MaaJankDrAmrit.png',
         tags: ['Bilingual', 'Healthcare', 'Maps'],
         liveUrl: 'https://maa-janki-hospital-dr-amrit.vercel.app',
         githubUrl: null
@@ -140,7 +140,7 @@ const PROJECTS_DATA = [
         category: 'web',
         title: 'Alpha Coders Platform',
         description: 'A project done for the Alpha Coders team community.',
-        image: '../assests/images/Project/alpha.png',
+        image: 'assets/images/Project/alpha.png',
         tags: ['React', 'Team', 'Community'],
         liveUrl: 'https://alpha-coders.vercel.app',
         githubUrl: null
@@ -150,7 +150,7 @@ const PROJECTS_DATA = [
         category: 'web',
         title: 'Codigo - Coding Platform',
         description: 'Competitive coding challenge platform for programmers.',
-        image: '../assests/images/Project/CODIGO.png',
+        image: 'assets/images/Project/CODIGO.png',
         tags: ['Competitive', 'Coding', 'Challenges'],
         liveUrl: 'https://codigo-94nz.onrender.com/',
         githubUrl: null
@@ -160,7 +160,7 @@ const PROJECTS_DATA = [
         category: 'web',
         title: 'QuizMaster App',
         description: 'Interactive quiz application built with React.js.',
-        image: '../assests/images/Project/KTJ3.png',
+        image: 'assets/images/Project/KTJ3.png',
         tags: ['React.js', 'Interactive', 'Quiz'],
         liveUrl: 'https://quizmaster-ktj.netlify.app/',
         githubUrl: null
@@ -170,7 +170,7 @@ const PROJECTS_DATA = [
         category: 'web',
         title: 'Sudoku Game',
         description: 'Interactive Sudoku puzzle game with clean UI.',
-        image: '../assests/images/Project/KTJ2.jpeg',
+        image: 'assets/images/Project/KTJ2.jpeg',
         tags: ['JavaScript', 'Game', 'Logic'],
         liveUrl: 'https://Vortex-16.github.io/KTJ-ASS2/',
         githubUrl: null
@@ -180,7 +180,7 @@ const PROJECTS_DATA = [
         category: 'web',
         title: 'AIMS 2.0 - Education Platform',
         description: 'Modern educational platform for study materials, user access & class assignments.',
-        image: '../assests/images/Project/AIMS.png',
+        image: 'assets/images/Project/AIMS.png',
         tags: ['Next.js', 'Clerk', 'Firebase'],
         liveUrl: 'https://aims-2-0.vercel.app/',
         githubUrl: null
@@ -190,7 +190,7 @@ const PROJECTS_DATA = [
         category: 'web',
         title: 'Kshitij Summer Camp',
         description: 'Summer camp website for Kshitij 2025 Web Development & AI Workshop.',
-        image: '../assests/images/Project/KTJ1.jpeg',
+        image: 'assets/images/Project/KTJ1.jpeg',
         tags: ['Web Dev', 'AI', 'Workshop'],
         liveUrl: 'https://Vortex-16.github.io/KTJ-ASS1/',
         githubUrl: null
@@ -200,7 +200,7 @@ const PROJECTS_DATA = [
         category: 'web',
         title: 'PragatiPath',
         description: 'AI-powered personalized learning platform for farmers with progress tracking.',
-        image: '../assests/images/Project/PragtiPath.jpg',
+        image: 'assets/images/Project/PragtiPath.jpg',
         tags: ['AI', 'EdTech', 'Farmers'],
         liveUrl: 'https://pragatipath.onrender.com/',
         githubUrl: null
@@ -210,7 +210,7 @@ const PROJECTS_DATA = [
         category: 'app',
         title: 'Python Calculator',
         description: 'Feature-rich calculator application built with Python.',
-        image: '../assests/images/Project/Python.png',
+        image: 'assets/images/Project/Python.png',
         tags: ['Python', 'GUI', 'Math'],
         liveUrl: null,
         githubUrl: 'https://github.com/Vortex-16'
@@ -220,7 +220,7 @@ const PROJECTS_DATA = [
         category: 'app',
         title: 'Student Data Management',
         description: 'Student data management application with Python.',
-        image: '../assests/images/Project/Python.png',
+        image: 'assets/images/Project/Python.png',
         tags: ['Python', 'Database', 'CRUD'],
         liveUrl: null,
         githubUrl: 'https://github.com/Vortex-16'
@@ -230,7 +230,7 @@ const PROJECTS_DATA = [
         category: 'app',
         title: 'Java Code Repository',
         description: 'Coming soon: Java & C applications.',
-        image: '../assests/images/java.png',
+        image: 'assets/images/java.png',
         tags: ['Java', 'OOP', 'DSA'],
         liveUrl: null,
         githubUrl: 'https://github.com/Vortex-16/JAVA.git'
@@ -240,7 +240,7 @@ const PROJECTS_DATA = [
         category: 'app',
         title: 'C Programming Projects',
         description: 'Low-level programming with memory management.',
-        image: '../assests/images/Project/c.png',
+        image: 'assets/images/Project/c.png',
         tags: ['C', 'Systems', 'Algorithms'],
         liveUrl: null,
         githubUrl: 'https://github.com/Vortex-16/C'
@@ -261,7 +261,7 @@ const PROJECTS_DATA = [
         category: 'other',
         title: 'Software Solutions',
         description: 'Coming soon: End-to-end software development solutions.',
-        image: '../assests/images/software.png',
+        image: 'assets/images/software.png',
         tags: ['GUI', 'Solutions'],
         liveUrl: null,
         githubUrl: null,
@@ -458,7 +458,7 @@ const FILE_SYSTEM = {
     '/home/vikash/Documents/resume.pdf': {
         type: 'file',
         content: 'Resume file - Download available',
-        downloadUrl: '../assests/doc/Vikash-Kr-Gupta-Resume (2).pdf'
+        downloadUrl: 'assets/doc/Vikash_Kr_Gupta_2.pdf'
     },
     '/home/vikash/Documents/about.md': {
         type: 'file',

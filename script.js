@@ -115,11 +115,15 @@ function initLoader() {
     }
 
     function finishLoading() {
+        if (progress < 100) {
+            progress = 100;
+            updateDisplay();
+        }
         clearInterval(binaryInterval);
         setTimeout(() => {
             loader.classList.add('hidden');
             document.body.style.overflow = 'auto';
-        }, 300);
+        }, 500); // give it a slightly longer pause at 100%
     }
 
     // Start simulated progress
@@ -127,10 +131,8 @@ function initLoader() {
 
     // Fallback: force hide after max time
     setTimeout(() => {
-        progress = 100;
-        updateDisplay();
         finishLoading();
-    }, 4000);
+    }, 4000); // changed to just call finishLoading directly
 }
 
 // Custom Cursor

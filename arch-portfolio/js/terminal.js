@@ -200,15 +200,43 @@ class Terminal {
     }
 
     autoComplete() {
-        const currentValue = this.input.value;
-        const commands = Object.keys(TERMINAL_COMMANDS);
-        const matches = commands.filter(cmd => cmd.startsWith(currentValue));
-
-        if (matches.length === 1) {
-            this.input.value = matches[0] + ' ';
-        } else if (matches.length > 1) {
-            this.addCommand(currentValue);
-            this.addOutput(matches.join('  '));
+        const line = this.input.value;
+        const parts = line.split(' ');
+        
+        if (parts.length === 1) {
+            const commands = ['help', 'neofetch', 'ls', 'cat', 'cd', 'pwd', 'clear', 'whoami', 'date', 'uptime', 'skills', 'projects', 'contact', 'github', 'resume', 'social', 'open', 'exit', 'sudo', 'cowsay', 'fortune', 'matrix', 'echo', 'uname', 'pacman', 'poweroff', 'shutdown', 'reboot', 'restart'];
+            const matches = commands.filter(cmd => cmd.startsWith(parts[0]));
+            if (matches.length === 1) {
+                this.input.value = matches[0] + ' ';
+            } else if (matches.length > 1) {
+                this.addCommand(line);
+                this.addOutput(matches.join('  '));
+            }
+        } else {
+            const dirPart = parts[parts.length - 1];
+            const lastSlash = dirPart.lastIndexOf('/');
+            const parentUrl = lastSlash !== -1 ? dirPart.substring(0, lastSlash) : '';
+            const search = lastSlash !== -1 ? dirPart.substring(lastSlash + 1) : dirPart;
+            
+            const targetDir = this.resolvePath(parentUrl || this.currentPath);
+            const dirNode = FILE_SYSTEM[targetDir];
+            
+            if (dirNode && dirNode.type === 'dir' && dirNode.children) {
+                const matches = dirNode.children.filter(f => f.startsWith(search));
+                if (matches.length === 1) {
+                    const fullMatchPath = targetDir === '/' ? `/${matches[0]}` : `${targetDir}/${matches[0]}`;
+                    const isDir = FILE_SYSTEM[fullMatchPath]?.type === 'dir';
+                    parts[parts.length - 1] = (parentUrl ? parentUrl + '/' : '') + matches[0] + (isDir ? '/' : '');
+                    this.input.value = parts.join(' ');
+                } else if (matches.length > 1) {
+                    this.addCommand(line);
+                    this.addOutput('<div class="ls-output">' + matches.map(m => {
+                        const fullMatchPath = targetDir === '/' ? `/${m}` : `${targetDir}/${m}`;
+                        const isDir = FILE_SYSTEM[fullMatchPath]?.type === 'dir';
+                        return `<span class="ls-item ${isDir ? 'dir' : 'file'}">${m}${isDir ? '/' : ''}</span>`;
+                    }).join('  ') + '</div>');
+                }
+            }
         }
     }
 
@@ -337,6 +365,11 @@ class Terminal {
             return;
         }
 
+        if (file.isImage && file.url) {
+            this.addOutput(`<div class="cat-output" style="text-align: center; margin: 10px 0;"><img src="${file.url}" style="max-width: 100%; max-height: 250px; border-radius: 8px; object-fit: contain;" alt="${args[0]}"></div>`);
+            return;
+        }
+
         this.addOutput(`<div class="cat-output">${this.escapeHtml(file.content)}</div>`);
     }
 
@@ -460,7 +493,7 @@ class Terminal {
 
     cmdResume() {
         const link = document.createElement('a');
-        link.href = '../assests/doc/Vikash-Kr-Gupta-Resume (2).pdf';
+        link.href = 'assets/doc/Vikash_Kr_Gupta_2.pdf';
         link.download = 'Vikash-Gupta-Resume.pdf';
         link.click();
         this.addOutput('Downloading resume...', 'success');

@@ -89,6 +89,8 @@ class VirtualFileSystem {
         this.mkdir('/home/vikash/Pictures');
         this.mkdir('/home/vikash/Downloads');
         this.mkdir('/home/vikash/Documents');
+        this.mkdir('/home/vikash/.config');
+
 
         // Populate Projects
         if (typeof PROJECTS_DATA !== 'undefined') {
@@ -533,6 +535,23 @@ class TerminalApp {
                 }
                 break;
 
+            case 'nano':
+            case 'vim':
+                if (args[0]) {
+                    let cp = VFS.resolvePath(state.cwd, args[0]);
+                    if (VFS.isDir(cp)) {
+                        this.print(output, `${cmd}: ${args[0]}: Is a directory`, 'var(--red)');
+                    } else {
+                        if (!VFS.exists(cp)) {
+                            VFS.writeFile(cp, ''); // Create empty file
+                        }
+                        EditorApp.launch(cp);
+                    }
+                } else {
+                    this.print(output, `Usage: ${cmd} <filename>`);
+                }
+                break;
+
             case 'neofetch':
             case 'fastfetch':
                 this.print(output, this.getNeofetch());
@@ -742,27 +761,38 @@ class FileManagerApp {
                 if (window.lucide) lucide.createIcons();
             }
         } else {
-            if (path.match(/\.(jpg|jpeg|png)$/)) ImageViewerApp.launch(path, VFS.readFile(path).url);
-            else EditorApp.launch(path);
+            const fileObj = VFS.readFile(path);
+            if (path.match(/\.(jpg|jpeg|png)$/)) {
+                ImageViewerApp.launch(path, fileObj.url);
+            } else if (path.match(/\.pdf$/) && fileObj && fileObj.downloadUrl) {
+                const link = document.createElement('a');
+                link.href = fileObj.downloadUrl;
+                link.download = path.split('/').pop();
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                EditorApp.launch(path);
+            }
         }
     }
 }
 
 class ImageViewerApp {
     static launch(path, url) {
-        WindowManager.openWindow('image-viewer', () => `<div class="image-viewer"><img src="${url || '#'}" alt="${path}"></div>`, `Viewnior - ${path.split('/').pop()}`);
+        WindowManager.openWindow('image-viewer', () => `<div class="image-viewer"><img src="${url || '#'}" alt="Image"></div>`, `Viewnior - ${path.split('/').pop()}`);
     }
 }
 
 class WelcomeApp {
     static launch() {
         WindowManager.openWindow('welcome', () => `
-            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:30px; background: linear-gradient(135deg, rgba(30,30,46,0.9), rgba(17,17,27,0.9));">
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:30px; background: linear-gradient(135deg, rgba(30,30,46,0.9), rgba(17,17,27,0.9)); overflow-y: auto;">
                 <i data-lucide="monitor" style="width:64px; height:64px; color:var(--blue); margin-bottom:20px;"></i>
                 <h1 style="color:var(--mauve); margin-bottom:10px; font-size: 2rem;">Welcome to Vikash Arch</h1>
-                <p style="color:var(--subtext0); margin-bottom:30px; max-width: 400px; line-height: 1.6;">
-                    System Operational. <br>
-                    Try <b>sudo pacman -S cava</b> in terminal!
+                <p style="color:var(--subtext0); margin-bottom:20px; max-width: 400px; line-height: 1.6;">
+                    Interactive Portfolio OS <br>
+                    Explore by double-clicking icons or using the terminal. Try <b>sudo pacman -S cava</b> for magic!
                 </p>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; width: 100%; max-width: 400px;">
                     <button onclick="TerminalApp.launch()" class="welcome-btn">
@@ -772,24 +802,80 @@ class WelcomeApp {
                         <i data-lucide="folder"></i> Files
                     </button>
                 </div>
-                <div style="margin-top:20px; color:var(--subtext1); text-align:center; font-size:12px;">
-                    Tip: Use <b>Alt+Enter</b> if Super key is blocked.
+                <div style="margin-top:25px;">
+                    <button onclick="WelcomeApp.showGuidePopup()" style="padding: 10px 20px; border-radius: 8px; border: 1px solid var(--blue); background: rgba(137, 180, 250, 0.1); color: var(--blue); cursor: pointer; font-weight: 600; display:flex; align-items:center; gap:8px;">
+                        <i data-lucide="book-open"></i> Open Guide
+                    </button>
                 </div>
             </div>
             <style>
                 .welcome-btn { padding:15px; border-radius:12px; border: 1px solid var(--surface1); background:var(--surface0); color:var(--text); cursor:pointer; font-weight:600; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: all 0.2s; }
                 .welcome-btn:hover { background: var(--surface1); transform: translateY(-2px); border-color: var(--blue); }
+                .guide-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); opacity: 0; background: var(--mantle); border: 1px solid var(--surface1); padding: 30px; border-radius: 12px; z-index: 9999; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transition: all 0.3s; color: var(--text); min-width: 300px; pointer-events: none; }
+                .guide-popup.active { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
+                .guide-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+                .guide-overlay.active { opacity: 1; pointer-events: auto; }
             </style>
         `, 'Welcome');
+    }
+
+    static showGuidePopup() {
+        if (!document.getElementById('guide-popup')) {
+            const popup = document.createElement('div');
+            popup.id = 'guide-popup';
+            popup.className = 'guide-popup';
+            popup.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom: 1px solid var(--surface1); padding-bottom: 10px;">
+                    <h2 style="color:var(--blue); font-size:18px; margin:0; display:flex; align-items:center; gap:8px;"><i data-lucide="book-open"></i> User Guide</h2>
+                    <button onclick="WelcomeApp.closeGuidePopup()" style="background:transparent; border:none; color:var(--text); cursor:pointer;"><i data-lucide="x"></i></button>
+                </div>
+                <ul style="list-style:none; padding:0; margin:0; font-size:14px; line-height:1.8; color:var(--subtext1);">
+                    <li><b style="color:var(--text);">Alt+Enter:</b> Open terminal quickly.</li>
+                    <li><b style="color:var(--text);">Drag:</b> Grab the top bar to move windows.</li>
+                    <li><b style="color:var(--text);">Maximize:</b> Double-click any window's top bar.</li>
+                    <li><b style="color:var(--text);">Commands:</b> Run <b>help</b>, <b>projects</b>, or <b>ls</b>.</li>
+                </ul>
+            `;
+            const overlay = document.createElement('div');
+            overlay.id = 'guide-overlay';
+            overlay.className = 'guide-overlay';
+            overlay.onclick = WelcomeApp.closeGuidePopup;
+
+            document.body.appendChild(overlay);
+            document.body.appendChild(popup);
+            if (window.lucide) window.lucide.createIcons();
+        }
+        
+        setTimeout(() => {
+            document.getElementById('guide-popup').classList.add('active');
+            document.getElementById('guide-overlay').classList.add('active');
+        }, 10);
+    }
+
+    static closeGuidePopup() {
+        const popup = document.getElementById('guide-popup');
+        const overlay = document.getElementById('guide-overlay');
+        if (popup && overlay) {
+            popup.classList.remove('active');
+            overlay.classList.remove('active');
+            setTimeout(() => {
+                popup.remove();
+                overlay.remove();
+            }, 300);
+        }
     }
 }
 
 class EditorApp {
     static launch(path) {
         const file = VFS.readFile(path);
-        WindowManager.openWindow('editor', () => `
+        WindowManager.openWindow('editor', (id) => `
             <div style="padding:0; height:100%; display:flex; flex-direction:column;">
-                <textarea style="flex:1; background:var(--base); color:var(--text); border:none; padding:15px; font-family:var(--font-mono); resize:none; outline:none;">${file ? file.content : ''}</textarea>
+                <div style="display:flex; justify-content: space-between; padding: 5px 10px; background: var(--surface0); border-bottom: 1px solid var(--surface1);">
+                    <span style="font-size: 12px; color: var(--subtext1);">Editing: ${path}</span>
+                    <button onclick="VFS.writeFile('${path}', document.getElementById('textarea-${id}').value); this.innerText='Saved!'; setTimeout(()=>this.innerText='Save', 1000);" style="background: var(--blue); color: var(--crust); border: none; border-radius: 4px; padding: 2px 10px; cursor: pointer; font-size: 11px; font-weight: bold;">Save</button>
+                </div>
+                <textarea id="textarea-${id}" style="flex:1; background:var(--base); color:var(--text); border:none; padding:15px; font-family:var(--font-mono); resize:none; outline:none;">${file ? file.content : ''}</textarea>
             </div>
         `, `Nano - ${path.split('/').pop()}`);
     }
