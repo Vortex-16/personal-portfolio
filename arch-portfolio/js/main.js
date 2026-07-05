@@ -33,14 +33,16 @@ class BootSequence {
         // Custom ASCII Logo
         const logo = `
 <span style="color:var(--blue)">          /\\        </span>
-<span style="color:var(--blue)">         /  \\       </span>   <span style="color:var(--mauve)">V I K A S H   G U P T A</span>
+<span style="color:var(--blue)">         /  \\       </span>   <span style="color:var(--primary-color)">V I K A S H   G U P T A</span>
 <span style="color:var(--blue)">        / /\\ \\      </span>   <span style="color:var(--subtext0)">----------------------</span>
 <span style="color:var(--blue)">       / ____ \\     </span>   <span style="color:var(--text)">CSE Student | Full-Stack | Web3</span>
 <span style="color:var(--blue)">      /_/    \\_\\    </span>
 <span style="color:var(--blue)">        ARCH LINUX PORTFOLIO</span>`;
 
         const logoDiv = document.createElement('div');
-        logoDiv.innerHTML = `<pre style="font-size:10px; line-height:1.2; margin-bottom:20px;">${logo}</pre>`;
+        logoDiv.style.display = 'flex';
+        logoDiv.style.justifyContent = 'center';
+        logoDiv.innerHTML = `<pre style="font-size:10px; line-height:1.2; margin-bottom:20px; text-align: left; display: inline-block;">${logo}</pre>`;
         this.textArea.appendChild(logoDiv);
 
         for (const line of this.bootLines) {
@@ -194,6 +196,7 @@ class WindowManager {
         this.renderWorkspaces();
         setInterval(() => this.updateClock(), 1000);
         this.updateClock();
+        this.renderTaskbar();
     }
 
     static switchToWorkspace(id) {
@@ -208,6 +211,7 @@ class WindowManager {
         });
         this.renderWorkspaces();
         this.tileWindows();
+        this.renderTaskbar();
     }
 
     static toggleMinimize(id) {
@@ -228,6 +232,7 @@ class WindowManager {
             this.focusWindow(win);
         }
         this.tileWindows();
+        this.renderTaskbar();
     }
 
     static openWindow(appId, contentGenerator, title = 'Application') {
@@ -244,7 +249,7 @@ class WindowManager {
                     <span>${title}</span>
                 </div>
                 <div class="window-controls">
-                    <button class="control-btn minimize"></button>
+                    <button class="control-btn minimize" onclick="WindowManager.toggleMinimize('${id}')"></button>
                     <button class="control-btn maximize" onclick="WindowManager.toggleFullscreen('${id}')"></button>
                     <button class="control-btn close" onclick="WindowManager.closeWindowById('${id}')"></button>
                 </div>
@@ -261,6 +266,7 @@ class WindowManager {
         this.focusWindow(winObj);
         this.tileWindows();
         winEl.addEventListener('mousedown', () => this.focusWindow(winObj));
+        this.renderTaskbar();
     }
 
     static cycleFocus() {
@@ -290,6 +296,7 @@ class WindowManager {
         if (workspaceWindows.length > 0) this.focusWindow(workspaceWindows[workspaceWindows.length - 1]);
         else this.activeWindow = null;
         this.tileWindows();
+        this.renderTaskbar();
     }
 
     static focusWindow(winObj) {
@@ -298,10 +305,54 @@ class WindowManager {
         winObj.el.classList.add('focused');
         const input = winObj.el.querySelector('input');
         if (input) input.focus();
+        this.renderTaskbar();
+    }
+
+    static renderTaskbar() {
+        const taskbar = document.getElementById('active-window-title');
+        if (!taskbar) return;
+
+        const workspaceWindows = this.windows.filter(w => w.workspace === this.currentWorkspace);
+        if (workspaceWindows.length === 0) {
+            taskbar.innerHTML = `<span class="icon" data-lucide="terminal"></span><span class="text">~</span>`;
+            if (window.lucide) lucide.createIcons();
+            return;
+        }
+
+        taskbar.innerHTML = workspaceWindows.map(win => {
+            const isActive = this.activeWindow?.id === win.id;
+            const isMinimized = win.minimized;
+            const icon = this.getIconForApp(win.app);
+            const title = win.el.querySelector('.window-title-box span')?.textContent || 'Application';
+
+            return `
+                <div class="taskbar-item ${isActive ? 'active' : ''} ${isMinimized ? 'minimized' : ''}" 
+                     onclick="WindowManager.handleTaskbarClick('${win.id}')" 
+                     style="display:flex; align-items:center; gap:6px; cursor:pointer; padding:4px 10px; border-radius:6px; background:${isActive ? 'rgba(166,227,161,0.15)' : 'rgba(255,255,255,0.03)'}; border: 1px solid ${isActive ? '#a6e3a1' : 'transparent'}; opacity: ${isMinimized ? '0.5' : '1'}; transition: all 0.2s;">
+                    <i data-lucide="${icon}" style="width:14px; height:14px; color:${isActive ? '#a6e3a1' : 'var(--text)'}"></i>
+                    <span style="font-size: 11px; font-weight:${isActive ? 'bold' : 'normal'}; color:${isActive ? '#a6e3a1' : 'var(--text)'}">${title}</span>
+                </div>
+            `;
+        }).join('<span style="color:var(--surface2); margin:0 4px;">|</span>');
+
+        if (window.lucide) lucide.createIcons();
+    }
+
+    static handleTaskbarClick(id) {
+        const win = this.windows.find(w => w.id === id);
+        if (!win) return;
+
+        if (win.minimized) {
+            this.toggleMinimize(id);
+        } else if (this.activeWindow?.id === win.id) {
+            this.toggleMinimize(id);
+        } else {
+            this.focusWindow(win);
+        }
     }
 
     static tileWindows() {
-        const workspaceWindows = this.windows.filter(w => w.workspace === this.currentWorkspace);
+        const workspaceWindows = this.windows.filter(w => w.workspace === this.currentWorkspace && !w.minimized);
         const count = workspaceWindows.length;
         if (count === 0) return;
         const gap = 5;
@@ -315,18 +366,18 @@ class WindowManager {
             }
             let x, y, w, h;
             if (count === 1) { x = 0; y = 0; w = wC; h = hC; }
-            else if (count === 2) { w = (wC - gap) / 2; h = hC; x = index * (w + gap); y = 0; }
+            else if (count === 2) { w = Math.floor((wC - gap) / 2); h = hC; x = Math.floor(index * (w + gap)); y = 0; }
             else {
-                const masterW = (wC - gap) * 0.55;
+                const masterW = Math.floor((wC - gap) * 0.55);
                 const stackW = wC - masterW - gap;
                 if (index === 0) { x = 0; y = 0; w = masterW; h = hC; }
                 else {
                     const sCount = count - 1;
-                    const sH = (hC - (gap * (sCount - 1))) / sCount;
-                    x = masterW + gap; w = stackW; h = sH; y = (index - 1) * (sH + gap);
+                    const sH = Math.floor((hC - (gap * (sCount - 1))) / sCount);
+                    x = masterW + gap; w = stackW; h = sH; y = Math.floor((index - 1) * (sH + gap));
                 }
             }
-            win.el.style.width = `${w}px`; win.el.style.height = `${h}px`; win.el.style.transform = `translate(${x}px, ${y}px)`;
+            win.el.style.width = `${Math.floor(w)}px`; win.el.style.height = `${Math.floor(h)}px`; win.el.style.transform = `translate(${Math.floor(x)}px, ${Math.floor(y)}px)`;
         });
     }
 
@@ -787,9 +838,9 @@ class ImageViewerApp {
 class WelcomeApp {
     static launch() {
         WindowManager.openWindow('welcome', () => `
-            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:30px; background: linear-gradient(135deg, rgba(30,30,46,0.9), rgba(17,17,27,0.9)); overflow-y: auto;">
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:30px; background: rgba(15, 15, 25, 0.9); overflow-y: auto;">
                 <i data-lucide="monitor" style="width:64px; height:64px; color:var(--blue); margin-bottom:20px;"></i>
-                <h1 style="color:var(--mauve); margin-bottom:10px; font-size: 2rem;">Welcome to Vikash Arch</h1>
+                <h1 style="color:var(--primary-color); margin-bottom:10px; font-size: 2rem;">Welcome to Vikash Arch</h1>
                 <p style="color:var(--subtext0); margin-bottom:20px; max-width: 400px; line-height: 1.6;">
                     Interactive Portfolio OS <br>
                     Explore by double-clicking icons or using the terminal. Try <b>sudo pacman -S cava</b> for magic!
@@ -974,6 +1025,43 @@ class SoundManager {
     }
 }
 
+class DevToolsBlocker {
+    static init() {
+        // Prevent right-click context menu
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+
+        // Block specific keys: F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
+        document.addEventListener('keydown', (e) => {
+            const isInspectKey = 
+                e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) ||
+                (e.ctrlKey && e.key.toLowerCase() === 'u');
+
+            if (isInspectKey) {
+                e.preventDefault();
+                this.showWarning();
+            }
+
+            // Dismiss warning on Escape
+            if (e.key === 'Escape') {
+                const warning = document.getElementById('devtools-warning');
+                if (warning && warning.classList.contains('active')) {
+                    warning.classList.remove('active');
+                }
+            }
+        });
+    }
+
+    static showWarning() {
+        const warning = document.getElementById('devtools-warning');
+        if (warning) {
+            warning.classList.add('active');
+        }
+    }
+}
+
 window.addEventListener('load', () => {
     if (window.innerWidth <= 768) {
         document.body.innerHTML = '<div style="background:#1e1e2e; color:#cdd6f4; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;"><h1>Not Made for Mobile</h1><a href="https://vikash.is-a.dev" style="color:#89b4fa; margin-top:20px;">Visit Mobile Site</a></div>';
@@ -981,6 +1069,7 @@ window.addEventListener('load', () => {
     }
     const boot = new BootSequence();
     boot.start();
+    DevToolsBlocker.init();
     ShortcutManager.init();
     Rofi.init();
     SoundManager.init();

@@ -1,0 +1,779 @@
+/* ═══════════════════════════════════════════════════════════
+   GLASS.CSS — Liquid Glass Material System
+   Arch Linux Portfolio — Vikash Gupta
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Local Fonts ─────────────────────────────────────────── */
+@font-face {
+    font-family: 'Grcafon';
+    src: url('../assets/font/GrcafonRegular-8O1nn.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PrideCometh';
+    src: url('../assets/font/PrideCometh-XmX2.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Proxemic';
+    src: url('../assets/font/Proxemicdemo-GOndy.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Zeroarea';
+    src: url('../assets/font/ZeroareaRegular-8O1Pn.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-display: 'Grcafon', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+    --font-arch: 'PrideCometh', sans-serif;
+    --font-alt: 'Proxemic', sans-serif;
+    --font-zero: 'Zeroarea', monospace;
+
+    /* Green theme overrides */
+    --primary-color: #a6e3a1 !important;
+    --border-active: #a6e3a1 !important;
+}
+
+body {
+    font-family: var(--font-sans) !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, .window-title-box span {
+    font-family: var(--font-alt) !important;
+}
+
+pre, code, .terminal-window, .term-input, .prompt {
+    font-family: var(--font-mono) !important;
+}
+
+/* ── Typographic Mix ── */
+#clock {
+    font-family: var(--font-alt) !important; /* Use Proxemic instead of Zeroarea to remove watermark */
+    font-size: 14px;
+    letter-spacing: 0.05em;
+}
+
+#active-window-title .text {
+    font-family: var(--font-alt) !important;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+}
+
+.window-title-box span {
+    font-family: var(--font-alt) !important;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+}
+
+.rofi-input-box input {
+    font-family: var(--font-sans) !important;
+}
+
+.rofi-item {
+    font-family: var(--font-sans) !important;
+}
+
+.track-title {
+    font-family: var(--font-alt) !important;
+}
+
+.track-artist {
+    font-family: var(--font-sans) !important;
+}
+
+.fm-label {
+    font-family: var(--font-sans) !important;
+}
+
+.fm-path {
+    font-family: var(--font-mono) !important;
+}
+
+/* ── 0. Critical Overrides ────────────────────────────────── */
+
+/* FIX 1: Override windows.css positioning and constraints so tileWindows() works.
+   We do NOT use !important on width/height so inline JS styles can override them. */
+.window {
+    min-height: 0;
+    max-height: none;
+}
+
+/* windows.css has padding-bottom:80px on .window-content */
+.window-content {
+    padding-bottom: 0;
+    overflow: hidden;
+}
+
+/* FIX 2: Terminal — glass blur, transparent background */
+.terminal-window {
+    background: rgba(5, 5, 12, 0.45) !important;
+    backdrop-filter: blur(30px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(160%) !important;
+}
+
+/* Terminal content area also needs transparency */
+.window-content.terminal-content,
+.window[data-app="terminal"] .window-content {
+    background: transparent !important;
+    backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
+}
+
+/* Input line glass */
+.input-line {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
+
+.input-line:focus-within {
+    border-color: rgba(166, 227, 161, 0.5) !important;
+    background: rgba(166, 227, 161, 0.05) !important;
+}
+
+/* FIX 3: Remove orbs from wallpaper bg — add glow on windows instead */
+/* Subtle colored top-edge glow on every window */
+.window::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: rgba(137, 180, 250, 0.35);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Focused window gets a stronger mauve top-glow line */
+.window.focused::before {
+    background: rgba(166, 227, 161, 0.7);
+}
+
+/* Inner ambient glow on focused window — blue/purple tint at top-left corner */
+.window.focused::after {
+    content: '';
+    position: absolute;
+    top: -1px; left: -1px; right: -1px; bottom: -1px;
+    border-radius: inherit;
+    background: transparent;
+    box-shadow: inset 0 0 20px rgba(137, 180, 250, 0.08), inset 0 0 10px rgba(166, 227, 161, 0.06);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Reduce desktop orbs opacity — they were too dominant */
+.orb-1 { opacity: 0.06 !important; }
+.orb-2 { opacity: 0.06 !important; }
+.orb-3 { opacity: 0.04 !important; }
+.orb-4 { opacity: 0.04 !important; }
+
+/* ── 1. Glass Material Classes ───────────────────────────── */
+.glass {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(24px) saturate(180%) brightness(1.08);
+    -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.08);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.10),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+        0 8px 32px rgba(0, 0, 0, 0.55),
+        0 0 0 0.5px rgba(255, 255, 255, 0.04);
+}
+
+.glass-strong {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(40px) saturate(200%) brightness(1.12);
+    -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.12);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, 0.16),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.28),
+        0 20px 60px rgba(0, 0, 0, 0.75),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* ── 2. Ambient Wallpaper Layer ──────────────────────────── */
+.ambient-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0;
+    animation: orbFloat 22s ease-in-out infinite, orbFadeIn 2s ease forwards;
+}
+
+.orb-1 {
+    width: 700px;
+    height: 700px;
+    background: #a6e3a1;
+    top: -250px;
+    left: -180px;
+    opacity: 0.10;
+    animation-delay: 0s, 0.5s;
+}
+
+.orb-2 {
+    width: 600px;
+    height: 600px;
+    background: #89b4fa;
+    bottom: -200px;
+    right: -150px;
+    opacity: 0.10;
+    animation-delay: -8s, 1s;
+}
+
+.orb-3 {
+    width: 450px;
+    height: 450px;
+    background: #94e2d5;
+    top: 35%;
+    left: 42%;
+    opacity: 0.07;
+    animation-delay: -16s, 1.5s;
+}
+
+.orb-4 {
+    width: 350px;
+    height: 350px;
+    background: #74c7ec;
+    top: 10%;
+    right: 20%;
+    opacity: 0.07;
+    animation-delay: -5s, 2s;
+}
+
+@keyframes orbFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25%       { transform: translate(35px, -25px) scale(1.04); }
+    50%       { transform: translate(-20px, 30px) scale(0.97); }
+    75%       { transform: translate(15px, -10px) scale(1.02); }
+}
+
+/* ── 3. Desktop Background ───────────────────────────────── */
+.desktop {
+    background-image: url('../assets/images/wall-glass.png');
+    background-size: cover;
+    background-position: center;
+    background-color: #020208;
+}
+
+.wallpaper {
+    background: rgba(0, 0, 0, 0.35);
+    opacity: 1;
+}
+
+/* ── 4. Boot Screen Redesign ─────────────────────────────── */
+.boot-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 9999;
+    font-family: var(--font-mono);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    box-sizing: border-box;
+    transition: opacity 0.7s ease, filter 0.7s ease;
+}
+
+.boot-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+.arch-logo {
+    color: var(--blue);
+    font-size: 0.8rem;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+    align-self: center;
+    text-align: left;
+    white-space: pre;
+    display: inline-block;
+}
+
+.boot-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--subtext0);
+    text-align: left;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.boot-screen.fading {
+    opacity: 0;
+    filter: blur(12px);
+    pointer-events: none;
+}
+
+.boot-screen.hidden {
+    display: none !important;
+}
+
+/* Modern Arch Boot Logo — SVG-based triangle with glow */
+.arch-logo-modern {
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    animation: bootLogoFade 0.8s ease forwards;
+}
+
+@keyframes bootLogoFade {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.arch-triangle-svg {
+    filter: drop-shadow(0 0 18px rgba(137, 180, 250, 0.7));
+    animation: archGlow 3s ease-in-out infinite;
+}
+
+@keyframes archGlow {
+    0%, 100% { filter: drop-shadow(0 0 18px rgba(137, 180, 250, 0.7)); }
+    50%       { filter: drop-shadow(0 0 32px rgba(137, 180, 250, 1)); }
+}
+
+.arch-logo-text-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.arch-logo-title {
+    font-family: var(--font-arch), sans-serif;
+    font-size: 2.2rem;
+    font-weight: normal;
+    letter-spacing: 0.05em;
+    color: var(--blue);
+}
+
+.arch-logo-sub {
+    font-family: var(--font-sans), sans-serif;
+    font-size: 0.75rem;
+    color: #6c7086;
+    letter-spacing: 0.1em;
+}
+
+/* Boot lines with kernel timestamp feel */
+.boot-line {
+    font-size: 0.82rem;
+    font-family: var(--font-mono), monospace;
+    line-height: 1.6;
+    color: #a6adc8;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: bootLineSlide 0.15s ease forwards;
+}
+
+@keyframes bootLineSlide {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.boot-ts {
+    color: #45475a;
+    font-size: 0.75rem;
+    min-width: 80px;
+    flex-shrink: 0;
+}
+
+.boot-line .ok {
+    color: #a6e3a1;
+    font-weight: 700;
+    background: rgba(166, 227, 161, 0.08);
+    padding: 0 4px;
+    border-radius: 3px;
+}
+
+.boot-line .warn {
+    color: #f9e2af;
+    font-weight: 700;
+}
+
+/* Boot cursor blinking */
+.boot-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: #89b4fa;
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: blinkBoot 0.8s step-end infinite;
+}
+
+@keyframes blinkBoot {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+}
+
+/* ── 5. Glassmorphic Waybar ──────────────────────────────── */
+.waybar {
+    background: rgba(0, 0, 0, 0.45) !important;
+    backdrop-filter: blur(28px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(160%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.07) !important;
+    border-top: 1px solid rgba(166, 227, 161, 0.18) !important;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.05) inset,
+        0 8px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+.waybar-module {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.2s ease !important;
+}
+
+.waybar-module:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(166, 227, 161, 0.25) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Workspace dot glow pulse */
+@keyframes dotPulse {
+    0%, 100% { box-shadow: 0 0 6px rgba(166, 227, 161, 0.6), 0 0 0 1px rgba(166, 227, 161, 0.3); }
+    50%       { box-shadow: 0 0 14px rgba(166, 227, 161, 0.9), 0 0 0 1px rgba(166, 227, 161, 0.5); }
+}
+
+.workspace-dot.active {
+    animation: dotPulse 2.2s ease-in-out infinite !important;
+}
+
+/* Tray shimmer */
+.tray {
+    padding: 2px 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    height: 100% !important;
+}
+
+.tray-item {
+    border-radius: 6px !important;
+    padding: 2px 5px !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 24px !important;
+}
+
+.tray-item:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ── 6. Glassmorphic Windows ─────────────────────────────── */
+.window {
+    background: rgba(0, 0, 0, 0.50) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 12px 40px rgba(0, 0, 0, 0.65) !important;
+}
+
+.window.focused {
+    border-color: rgba(166, 227, 161, 0.45) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(166, 227, 161, 0.12),
+        0 0 0 1px rgba(166, 227, 161, 0.12),
+        0 0 35px rgba(166, 227, 161, 0.07),
+        0 20px 60px rgba(0, 0, 0, 0.75) !important;
+}
+
+.window-decoration {
+    background: rgba(255, 255, 255, 0.025) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.window-content {
+    background: rgba(0, 0, 0, 0.42) !important;
+}
+
+/* Window open animation upgrade */
+.window.opening {
+    animation: windowOpenGlass 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+}
+
+@keyframes windowOpenGlass {
+    from {
+        opacity: 0;
+        transform: scale(0.93) translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* ── 7. Glassmorphic Terminal ────────────────────────────── */
+.terminal-window {
+    background: rgba(0, 0, 0, 0.48) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+}
+
+.input-line {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border-radius: 8px;
+    padding: 10px 14px;
+    transition: border-color 0.2s ease, background 0.2s ease !important;
+}
+
+.input-line:focus-within {
+    border-color: rgba(166, 227, 161, 0.5) !important;
+    background: rgba(166, 227, 161, 0.04) !important;
+    box-shadow: 0 0 0 3px rgba(166, 227, 161, 0.06) !important;
+}
+
+/* ── 8. Glassmorphic Rofi Launcher ───────────────────────── */
+.rofi-overlay {
+    background: rgba(0, 0, 0, 0.55) !important;
+    backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
+}
+
+.rofi-window {
+    background: rgba(5, 5, 15, 0.82) !important;
+    backdrop-filter: blur(50px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(50px) saturate(200%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, 0.14),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+        0 30px 80px rgba(0, 0, 0, 0.85) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.rofi-window::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: rgba(166, 227, 161, 0.65);
+    pointer-events: none;
+}
+
+.rofi-window::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    box-shadow: inset 0 0 40px rgba(166, 227, 161, 0.04);
+    pointer-events: none;
+}
+
+.rofi-input-box {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    border-radius: 10px !important;
+}
+
+.rofi-input-box:focus-within {
+    border-color: rgba(137, 180, 250, 0.5) !important;
+    background: rgba(137, 180, 250, 0.04) !important;
+}
+
+.rofi-item {
+    transition: all 0.15s ease !important;
+    transform: translateX(0) !important;
+    border-left: 2px solid transparent !important;
+    border-radius: 6px !important;
+    padding: 10px 12px !important;
+}
+
+.rofi-item:hover,
+.rofi-item.selected {
+    background: rgba(166, 227, 161, 0.10) !important;
+    border-left-color: #a6e3a1 !important;
+    transform: translateX(5px) !important;
+}
+
+/* Rofi slide-in animation */
+@keyframes rofiSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-12px) scale(0.97);
+        filter: blur(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+.rofi-overlay:not(.hidden) .rofi-window {
+    animation: rofiSlideIn 0.22s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+}
+
+/* ── 9. Dynamic Island Glass ─────────────────────────────── */
+.dynamic-island.expanded {
+    background: rgba(8, 8, 18, 0.92) !important;
+    backdrop-filter: blur(40px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.10),
+        0 20px 60px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* ── 10. Mobile Block ────────────────────────────────────── */
+#mobile-block {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: var(--font-mono), monospace;
+    text-align: center;
+    padding: 2rem;
+}
+
+#mobile-block.active {
+    display: flex;
+}
+
+.mobile-block-logo {
+    margin-bottom: 2rem;
+    animation: archGlow 3s ease-in-out infinite;
+}
+
+.mobile-block-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #cba6f7;
+    letter-spacing: 0.1em;
+}
+
+.mobile-block-sub {
+    color: #6c7086;
+    font-size: 0.8rem;
+    max-width: 280px;
+    line-height: 1.7;
+}
+
+.mobile-block-cmd {
+    color: #89b4fa;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+}
+
+/* ── 11. Devtools Warning ────────────────────────────────── */
+#devtools-warning {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 99998;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    font-family: var(--font-mono), monospace;
+    color: #cba6f7;
+}
+
+#devtools-warning.active {
+    display: flex;
+}
+
+/* ── 12. Extra Polish ────────────────────────────────────── */
+
+/* Smooth scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(203, 166, 247, 0.35);
+}
+
+/* Focus ring override */
+*:focus-visible {
+    outline: 2px solid rgba(137, 180, 250, 0.5);
+    outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+    background: rgba(203, 166, 247, 0.25);
+    color: #cdd6f4;
+}
+
+/* ── 13. Waybar Taskbar ──────────────────────────────────── */
+#active-window-title {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    gap: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.taskbar-item {
+    transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.taskbar-item:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    transform: translateY(-1px);
+}
+
