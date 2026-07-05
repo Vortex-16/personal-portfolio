@@ -673,13 +673,13 @@ pre, code, .terminal-window, .term-input, .prompt {
 #mobile-block {
     position: fixed;
     inset: 0;
-    background: #000;
+    background: #0b0b14;
     z-index: 99999;
     display: none;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    font-family: var(--font-mono), monospace;
+    font-family: var(--font-sans), sans-serif;
     text-align: center;
     padding: 2rem;
 }
@@ -696,7 +696,7 @@ pre, code, .terminal-window, .term-input, .prompt {
 .mobile-block-title {
     font-size: 1.2rem;
     margin-bottom: 1rem;
-    color: #cba6f7;
+    color: #a6e3a1;
     letter-spacing: 0.1em;
 }
 
@@ -775,5 +775,17 @@ pre, code, .terminal-window, .term-input, .prompt {
 .taskbar-item:hover {
     background: rgba(255, 255, 255, 0.08) !important;
     transform: translateY(-1px);
+}
+
+/* Arch Logo Floating Pulsing Animation */
+@keyframes archGlow {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+        filter: drop-shadow(0 0 5px rgba(166, 227, 161, 0.2));
+    }
+    50% {
+        transform: translateY(-6px) scale(1.03);
+        filter: drop-shadow(0 0 20px rgba(166, 227, 161, 0.45));
+    }
 }
 

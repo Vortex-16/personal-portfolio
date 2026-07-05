@@ -1063,8 +1063,12 @@ class DevToolsBlocker {
 }
 
 window.addEventListener('load', () => {
-    if (window.innerWidth <= 768) {
-        document.body.innerHTML = '<div style="background:#1e1e2e; color:#cdd6f4; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;"><h1>Not Made for Mobile</h1><a href="https://vikash.is-a.dev" style="color:#89b4fa; margin-top:20px;">Visit Mobile Site</a></div>';
+    const isMobileUA = /Mobi|Android|iPhone|iPad|iPod|Windows Phone|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isIPadDesktop = (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isTouchDevice = (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) && window.innerWidth <= 1024;
+    
+    if (window.innerWidth <= 768 || isMobileUA || isIPadDesktop || isTouchDevice) {
+        document.getElementById('mobile-block').classList.add('active');
         return;
     }
     const boot = new BootSequence();
